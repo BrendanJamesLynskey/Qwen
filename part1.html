@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qwen 01 __TITLE__mdash; The Qwen Story</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-card: #0d1117;
+            --bg-code: #161b22;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --accent: #7B61FF;
+            --accent-dim: #7B61FF40;
+            --accent-glow: #7B61FF30;
+            --border: #21262d;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            --font-body: 'Inter', sans-serif;
+            --max-width: 900px;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 17px;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .hero > * { position: relative; z-index: 1; }
+        .series-label {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        .hero h1 .accent { color: var(--accent); }
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 640px;
+            margin-bottom: 2rem;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+        }
+        .tag {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            background: var(--accent-dim);
+            white-space: nowrap;
+        }
+        .pipeline {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+            max-width: var(--max-width);
+        }
+        .pipeline-step {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            padding: 0.3rem 0.7rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        .pipeline-arrow { color: var(--accent); font-size: 0.9rem; font-weight: 700; }
+        .slide {
+            min-height: 100vh;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .slide-number {
+            font-family: var(--font-display);
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--accent-dim);
+            position: absolute;
+            top: 2rem;
+            right: 1.5rem;
+            line-height: 1;
+            user-select: none;
+        }
+        .slide h2 {
+            font-family: var(--font-display);
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            line-height: 1.25;
+        }
+        .slide h3 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .slide p { margin-bottom: 1rem; color: var(--text-secondary); }
+        .slide p strong { color: var(--text-primary); }
+        .slide ul, .slide ol { margin-bottom: 1rem; padding-left: 1.5rem; color: var(--text-secondary); }
+        .slide li { margin-bottom: 0.4rem; }
+        .slide li strong { color: var(--text-primary); }
+        .slide code {
+            font-family: var(--font-mono);
+            font-size: 0.88em;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            padding: 0.05rem 0.35rem;
+            border-radius: 3px;
+            color: #c9d1d9;
+        }
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin: 1.25rem 0;
+            overflow: hidden;
+        }
+        .code-header {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            background: rgba(123, 97, 255, 0.08);
+            padding: 0.4rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .code-block pre { margin: 0; padding: 1rem; overflow-x: auto; }
+        .code-block code {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #c9d1d9;
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+        .kw { color: #ff7b72; }
+        .fn { color: #d2a8ff; }
+        .str { color: #a5d6ff; }
+        .cm { color: #8b949e; font-style: italic; }
+        .num { color: #79c0ff; }
+        .type { color: #ffa657; }
+        .dir { color: #ff7b72; }
+        .mac { color: #ffa657; }
+        .table-wrap {
+            overflow-x: auto;
+            margin: 1.25rem 0;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th {
+            background: var(--bg-code);
+            color: var(--accent);
+            font-weight: 600;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            font-family: var(--font-display);
+            white-space: nowrap;
+        }
+        td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:nth-child(even) td { background: rgba(13, 17, 23, 0.5); }
+        .diagram-flow {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .diagram-box {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            text-align: center;
+            white-space: nowrap;
+        }
+        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-box.dim { color: var(--text-secondary); border-color: var(--border); }
+        .diagram-arrow { color: var(--accent); font-size: 1.3rem; font-weight: 700; }
+        .diagram-vertical {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .diagram-vertical .diagram-arrow { font-size: 1.1rem; }
+        .hierarchy {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .hierarchy-level { display: flex; align-items: center; gap: 0.75rem; }
+        .hierarchy-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+            text-align: right;
+        }
+        .hierarchy-items { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+        .hierarchy-item {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-grid {
+            display: grid;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .diagram-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+        .diagram-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+        .diagram-panel {
+            padding: 1rem;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+        .diagram-panel.accent-border { border-left: 3px solid var(--accent); }
+        .diagram-panel h4 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        .diagram-panel p, .diagram-panel ul { font-size: 0.85rem; }
+        .callout {
+            background: var(--bg-card);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+            padding: 1rem 1.25rem;
+            margin: 1.25rem 0;
+        }
+        .callout p { margin-bottom: 0; }
+        .callout p + p { margin-top: 0.5rem; }
+        .callout .callout-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.3rem;
+        }
+        .contents-list { list-style: none; padding-left: 0; counter-reset: contents; }
+        .contents-list li {
+            counter-increment: contents;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .contents-list li:last-child { border-bottom: none; }
+        .contents-list li::before {
+            content: counter(contents, decimal-leading-zero);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            min-width: 2rem;
+        }
+        .contents-list a { color: var(--text-primary); text-decoration: none; transition: color 0.2s; }
+        .contents-list a:hover { color: var(--accent); }
+        .footer {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+        .footer a { color: var(--accent); text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+        .deck-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        .deck-nav a {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: border-color 0.15s, color 0.15s;
+        }
+        .deck-nav a:hover { border-color: var(--accent); color: var(--accent); }
+        .deck-nav a.next { margin-left: auto; }
+        .canvas-wrap {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.25rem 0;
+            overflow-x: auto;
+        }
+        .canvas-wrap canvas, .canvas-wrap svg { display: block; margin: 0 auto; max-width: 100%; }
+        .badge {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            padding: 0.1rem 0.45rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            vertical-align: middle;
+            margin-left: 0.3rem;
+        }
+        .badge.ok    { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+        .badge.warn  { border-color: #ffa657; color: #ffa657; background: rgba(255,166,87,0.08); }
+        .badge.bad   { border-color: #ff7b72; color: #ff7b72; background: rgba(255,123,114,0.08); }
+        @media (max-width: 640px) {
+            .slide { padding: 3rem 1rem; min-height: auto; }
+            .slide-number { font-size: 3rem; top: 1.5rem; right: 1rem; }
+            .slide h2 { font-size: 1.5rem; }
+            .diagram-grid.cols-2, .diagram-grid.cols-3 { grid-template-columns: 1fr; }
+            .pipeline { gap: 0.15rem; }
+            .pipeline-step { font-size: 0.6rem; padding: 0.2rem 0.4rem; }
+            .hero h1 { font-size: 1.8rem; }
+            table { font-size: 0.78rem; }
+        }
+    </style>
+</head>
+<body>
+<header class="hero">
+<div class="series-label">Qwen &middot; Part 01</div>
+<h1>Six Generations in <span class="accent">Three Years</span></h1>
+<p class="subtitle">Since August 2023 the Qwen team at Alibaba has shipped more open-weight frontier models than any other lab on earth &mdash; from a 7B research release to a 2.4-trillion-parameter mixture-of-experts. This deck is the map: the timeline, the naming scheme, the licence history, and the architectural through-line that explains where the family is heading.</p>
+<div class="tags">
+<span class="tag">Alibaba Cloud</span>
+<span class="tag">Tongyi Qianwen</span>
+<span class="tag">Apache 2.0</span>
+<span class="tag">Open Weights</span>
+<span class="tag">Dense + MoE</span>
+<span class="tag">Timeline</span>
+</div>
+<div class="pipeline">
+<span class="pipeline-step">Qwen</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">Qwen1.5</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">Qwen2</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">Qwen2.5</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">Qwen3</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">Qwen3.5</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">Qwen3.8</span>
+</div>
+</header>
+
+<section class="slide" id="slide-00">
+<div class="slide-number">00</div>
+<h2>Contents</h2>
+<ul class="contents-list">
+<li><a href="#slide-01">Why Qwen is the one open family you must know</a></li>
+<li><a href="#slide-02">The house that Tongyi built</a></li>
+<li><a href="#slide-03">The timeline, by product line</a></li>
+<li><a href="#slide-04">How to read a Qwen model name</a></li>
+<li><a href="#slide-05">The three-rung ladder: open weights, Plus, Max</a></li>
+<li><a href="#slide-06">Licensing &mdash; the long march to Apache 2.0</a></li>
+<li><a href="#slide-07">The architectural through-line</a></li>
+<li><a href="#slide-08">The ecosystem around the weights</a></li>
+<li><a href="#slide-09">What this series covers</a></li>
+</ul>
+<div class="callout">
+<div class="callout-label">As of</div>
+<p>This series is written as of <strong>10 August 2026</strong>. The Qwen line moves faster than almost any other; every factual claim about a specific model is dated, and anything still in flux &mdash; the Qwen3.8 open-weights drop in particular &mdash; is flagged as such rather than stated as settled.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-01">
+<div class="slide-number">01</div>
+<h2>Why Qwen is the one open family you must know</h2>
+<p>If you build on open weights, you almost certainly already depend on Qwen &mdash; possibly without knowing it. The family has become the default <strong>base model</strong> for the open fine-tuning ecosystem in the way Llama was in 2023&ndash;24, and for a specific set of reasons that are worth naming explicitly.</p>
+<h3>The four structural advantages</h3>
+<ul>
+<li><strong>Full size ladder, every generation.</strong> Qwen ships sub-1B through frontier-scale in one release, trained on one data pipeline with one tokenizer. You can prototype on a 4B, deploy a 30B, and escalate to a 400B without changing your prompt format, chat template, or tool-call schema.</li>
+<li><strong>Apache 2.0, consistently.</strong> Since Qwen2, the overwhelming majority of open Qwen weights carry a plain Apache 2.0 licence &mdash; no acceptable-use rider, no monthly-active-user threshold, no naming obligation. For commercial deployment that removes an entire class of legal review.</li>
+<li><strong>Same-week inference support.</strong> Qwen ships with vLLM and SGLang support landed or landing on day one, plus GGUF, MLX and AWQ/FP8 checkpoints. Compare that to families where community quantisation lags the release by weeks.</li>
+<li><strong>Genuine breadth.</strong> Text, code, vision, audio, omni, embeddings, rerankers, safety classifiers and image generation &mdash; all from one team, sharing a tokenizer and a chat template.</li>
+</ul>
+<div class="callout">
+<div class="callout-label">The scale of it</div>
+<p>Hugging Face now hosts on the order of <strong>200,000 derivative models</strong> built on Qwen bases &mdash; fine-tunes, merges, quantisations and distillations. Qwen3-VL-2B-Instruct alone has passed 18 million downloads. When a paper says "we fine-tuned a 7B open model", the odds are it was a Qwen.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-02">
+<div class="slide-number">02</div>
+<h2>The house that Tongyi built</h2>
+<p>Qwen is the model family of <strong>Alibaba Cloud's Tongyi Lab</strong>. The Chinese product name is <em>Tongyi Qianwen</em> (通义千问, roughly "truth from a thousand questions"); "Qwen" is the contraction used for the open-weight releases and the English-language brand. The distinction still matters in 2026, because the two names track two different distribution channels.</p>
+<div class="diagram-grid cols-2">
+<div class="diagram-panel accent-border">
+<h4>Tongyi Qianwen / Model Studio</h4>
+<p>The hosted, commercial side. Alibaba Cloud <strong>Model Studio</strong> (DashScope) serves the proprietary <code>-Plus</code> and <code>-Max</code> tiers over an OpenAI-compatible API, plus the consumer Qwen App and Qwen Chat. This is where the frontier lands first.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Qwen / Hugging Face &amp; ModelScope</h4>
+<p>The open-weight side. Checkpoints, technical reports and reference code published to Hugging Face, ModelScope and GitHub, almost always Apache 2.0, almost always with a same-day vLLM/SGLang recipe.</p>
+</div>
+</div>
+<p>The public timeline starts on <strong>11 April 2023</strong>, when Alibaba announced Tongyi Qianwen as a hosted assistant. The moment that actually mattered to engineers came four months later: on <strong>3 August 2023</strong> the team open-sourced <strong>Qwen-7B</strong> and <strong>Qwen-7B-Chat</strong>. At that point China had no credible open frontier-adjacent model; within eighteen months Qwen had become the reference base for a very large fraction of the world's open fine-tunes.</p>
+<p>Two organisational facts explain the release cadence. First, the team ships <strong>base and instruct checkpoints together</strong>, so the research community can build immediately. Second, they treat the open releases as a genuine product line rather than a marketing exercise &mdash; the open models get the technical reports, the benchmarks, and the serving support, not just a weights dump.</p>
+</section>
+
+<section class="slide" id="slide-03">
+<div class="slide-number">03</div>
+<h2>The timeline, by product line</h2>
+<p>Reading the Qwen release history as a single sequence is confusing, because five or six product lines run in parallel and each has its own cadence. Read it as swimlanes instead and the structure becomes obvious: a core LLM line that sets the architecture, specialist lines that fork off it, and &mdash; from late 2025 &mdash; a proprietary flagship tier that runs ahead of the open weights.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 430" width="720" height="430" xmlns="http://www.w3.org/2000/svg">
+<style>
+.p1t-lane{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p1t-lanelabel{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:10px;}
+.p1t-dot{fill:#7B61FF;}
+.p1t-dot2{fill:#8b949e;}
+.p1t-ev{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p1t-yr{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:10px;text-anchor:middle;}
+.p1t-grid{stroke:#21262d;stroke-width:1;stroke-dasharray:3,3;}
+.p1t-axis{stroke:#30363d;stroke-width:1;}
+.p1t-title{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12px;}
+</style>
+
+<text x="8" y="16" class="p1t-title">Qwen release swimlanes &mdash; Aug 2023 to Aug 2026</text>
+
+<line x1="173" y1="30" x2="173" y2="410" class="p1t-grid"/>
+<line x1="373" y1="30" x2="373" y2="410" class="p1t-grid"/>
+<line x1="573" y1="30" x2="573" y2="410" class="p1t-grid"/>
+<text x="123" y="42" class="p1t-yr">2023</text>
+<text x="273" y="42" class="p1t-yr">2024</text>
+<text x="473" y="42" class="p1t-yr">2025</text>
+<text x="646" y="42" class="p1t-yr">2026</text>
+<line x1="88" y1="48" x2="712" y2="48" class="p1t-axis"/>
+
+<rect x="88" y="56" width="624" height="62" rx="4" class="p1t-lane"/>
+<text x="8" y="80" class="p1t-lanelabel">Core LLM</text>
+<text x="8" y="93" class="p1t-lanelabel" fill="#8b949e" font-weight="400">open weights</text>
+<circle cx="90" cy="76" r="4" class="p1t-dot"/><text x="98" y="94" class="p1t-ev">Qwen</text>
+<circle cx="190" cy="76" r="4" class="p1t-dot"/><text x="190" y="94" class="p1t-ev">1.5</text>
+<circle cx="257" cy="76" r="4" class="p1t-dot"/><text x="257" y="94" class="p1t-ev">Qwen2</text>
+<circle cx="307" cy="76" r="4" class="p1t-dot"/><text x="313" y="108" class="p1t-ev">2.5</text>
+<circle cx="423" cy="76" r="4" class="p1t-dot"/><text x="423" y="94" class="p1t-ev">Qwen3</text>
+<circle cx="507" cy="76" r="4" class="p1t-dot"/><text x="509" y="108" class="p1t-ev">Qwen3-Next</text>
+<circle cx="590" cy="76" r="4" class="p1t-dot"/><text x="590" y="94" class="p1t-ev">3.5</text>
+<circle cx="623" cy="76" r="4" class="p1t-dot"/><text x="638" y="108" class="p1t-ev">3.6</text>
+
+<rect x="88" y="126" width="624" height="52" rx="4" class="p1t-lane"/>
+<text x="8" y="150" class="p1t-lanelabel">Coder</text>
+<circle cx="223" cy="146" r="4" class="p1t-dot"/><text x="223" y="164" class="p1t-ev">CodeQwen1.5</text>
+<circle cx="340" cy="146" r="4" class="p1t-dot"/><text x="343" y="164" class="p1t-ev">2.5-Coder</text>
+<circle cx="473" cy="146" r="4" class="p1t-dot"/><text x="473" y="164" class="p1t-ev">Qwen3-Coder</text>
+<circle cx="590" cy="146" r="4" class="p1t-dot"/><text x="600" y="164" class="p1t-ev">Coder-Next</text>
+
+<rect x="88" y="186" width="624" height="52" rx="4" class="p1t-lane"/>
+<text x="8" y="210" class="p1t-lanelabel">Vision / Omni</text>
+<circle cx="90" cy="206" r="4" class="p1t-dot"/><text x="103" y="224" class="p1t-ev">Qwen-VL</text>
+<circle cx="290" cy="206" r="4" class="p1t-dot"/><text x="290" y="224" class="p1t-ev">2-VL</text>
+<circle cx="373" cy="206" r="4" class="p1t-dot"/><text x="371" y="224" class="p1t-ev">2.5-VL</text>
+<circle cx="407" cy="206" r="4" class="p1t-dot"/><text x="424" y="236" class="p1t-ev">2.5-Omni</text>
+<circle cx="507" cy="206" r="4" class="p1t-dot"/><text x="513" y="224" class="p1t-ev">3-VL / 3-Omni</text>
+<circle cx="590" cy="206" r="4" class="p1t-dot2"/><text x="616" y="236" class="p1t-ev">folded into 3.5</text>
+
+<rect x="88" y="246" width="624" height="52" rx="4" class="p1t-lane"/>
+<text x="8" y="270" class="p1t-lanelabel">Reasoning</text>
+<circle cx="340" cy="266" r="4" class="p1t-dot"/><text x="336" y="284" class="p1t-ev">QwQ-Preview</text>
+<circle cx="407" cy="266" r="4" class="p1t-dot"/><text x="412" y="284" class="p1t-ev">QwQ-32B</text>
+<circle cx="470" cy="266" r="4" class="p1t-dot2"/><text x="560" y="284" class="p1t-ev">&rarr; merged into Qwen3 thinking mode</text>
+
+<rect x="88" y="306" width="624" height="52" rx="4" class="p1t-lane"/>
+<text x="8" y="330" class="p1t-lanelabel">Max tier</text>
+<text x="8" y="343" class="p1t-lanelabel" fill="#8b949e" font-weight="400">proprietary</text>
+<circle cx="507" cy="326" r="4" class="p1t-dot"/><text x="512" y="344" class="p1t-ev">Qwen3-Max</text>
+<circle cx="623" cy="326" r="4" class="p1t-dot"/><text x="623" y="344" class="p1t-ev">3.6-Max</text>
+<circle cx="640" cy="326" r="4" class="p1t-dot"/><text x="655" y="356" class="p1t-ev">3.7-Max</text>
+<circle cx="690" cy="326" r="4" class="p1t-dot"/><text x="686" y="344" class="p1t-ev">3.8-Max</text>
+
+<rect x="88" y="366" width="624" height="44" rx="4" class="p1t-lane"/>
+<text x="8" y="392" class="p1t-lanelabel">Retrieval</text>
+<circle cx="440" cy="386" r="4" class="p1t-dot"/><text x="452" y="403" class="p1t-ev">Qwen3-Embedding / Reranker</text>
+<circle cx="573" cy="386" r="4" class="p1t-dot"/><text x="600" y="403" class="p1t-ev">Qwen3-VL-Embedding</text>
+</svg>
+</div>
+<p>Two shapes stand out. The specialist lanes <strong>converge back into the core</strong> &mdash; QwQ's reasoning became Qwen3's thinking mode; the separate VL line was absorbed by natively multimodal Qwen3.5. And from September 2025 the <strong>Max tier runs ahead</strong>: the strongest Qwen is now announced as a hosted API first, with open weights following at a lag, if at all.</p>
+</section>
+
+<section class="slide" id="slide-04">
+<div class="slide-number">04</div>
+<h2>How to read a Qwen model name</h2>
+<p>Qwen model IDs are dense but entirely systematic. Once you can parse one you can infer the deployment footprint, the serving flags and the behaviour without opening the model card.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 268" width="720" height="268" xmlns="http://www.w3.org/2000/svg">
+<style>
+.p1n-name{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:19px;}
+.p1n-hl{fill:#7B61FF;font-family:'JetBrains Mono',monospace;font-size:19px;}
+.p1n-seg{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1;}
+.p1n-mk{fill:#7B61FF;font-family:'JetBrains Mono',monospace;font-size:9px;text-anchor:middle;}
+.p1n-mkc{fill:none;stroke:#7B61FF;stroke-width:1;}
+.p1n-lab{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:10.5px;}
+.p1n-sub{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:9px;}
+.p1n-tok{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:10px;}
+.p1n-rule{stroke:#21262d;stroke-width:1;}
+</style>
+
+<rect x="146" y="26" width="60" height="30" rx="4" class="p1n-seg"/>
+<rect x="212" y="26" width="60" height="30" rx="4" class="p1n-seg"/>
+<rect x="278" y="26" width="50" height="30" rx="4" class="p1n-seg"/>
+<rect x="334" y="26" width="50" height="30" rx="4" class="p1n-seg"/>
+<rect x="390" y="26" width="94" height="30" rx="4" class="p1n-seg"/>
+<rect x="490" y="26" width="42" height="30" rx="4" class="p1n-seg"/>
+
+<text x="150" y="48" class="p1n-hl">Qwen3</text><text x="206" y="48" class="p1n-name">-</text>
+<text x="216" y="48" class="p1n-hl">Coder</text><text x="272" y="48" class="p1n-name">-</text>
+<text x="282" y="48" class="p1n-hl">480B</text><text x="328" y="48" class="p1n-name">-</text>
+<text x="338" y="48" class="p1n-hl">A35B</text><text x="384" y="48" class="p1n-name">-</text>
+<text x="394" y="48" class="p1n-hl">Instruct</text><text x="484" y="48" class="p1n-name">-</text>
+<text x="494" y="48" class="p1n-hl">FP8</text>
+
+<circle cx="176" cy="72" r="8" class="p1n-mkc"/><text x="176" y="75.5" class="p1n-mk">1</text>
+<circle cx="242" cy="72" r="8" class="p1n-mkc"/><text x="242" y="75.5" class="p1n-mk">2</text>
+<circle cx="303" cy="72" r="8" class="p1n-mkc"/><text x="303" y="75.5" class="p1n-mk">3</text>
+<circle cx="359" cy="72" r="8" class="p1n-mkc"/><text x="359" y="75.5" class="p1n-mk">4</text>
+<circle cx="437" cy="72" r="8" class="p1n-mkc"/><text x="437" y="75.5" class="p1n-mk">5</text>
+<circle cx="511" cy="72" r="8" class="p1n-mkc"/><text x="511" y="75.5" class="p1n-mk">6</text>
+
+<line x1="8" y1="92" x2="712" y2="92" class="p1n-rule"/>
+
+<circle cx="20" cy="110" r="8" class="p1n-mkc"/><text x="20" y="113.5" class="p1n-mk">1</text>
+<text x="38" y="114" class="p1n-tok">Qwen3</text>
+<text x="120" y="114" class="p1n-lab">Generation</text>
+<text x="212" y="114" class="p1n-sub">3, 3.5, 3.6 &hellip; a higher number is a newer pre-training run</text>
+
+<circle cx="20" cy="138" r="8" class="p1n-mkc"/><text x="20" y="141.5" class="p1n-mk">2</text>
+<text x="38" y="142" class="p1n-tok">Coder</text>
+<text x="120" y="142" class="p1n-lab">Line</text>
+<text x="212" y="142" class="p1n-sub">absent = general; Coder / VL / Omni / Math / Embedding / Guard</text>
+
+<circle cx="20" cy="166" r="8" class="p1n-mkc"/><text x="20" y="169.5" class="p1n-mk">3</text>
+<text x="38" y="170" class="p1n-tok">480B</text>
+<text x="120" y="170" class="p1n-lab">Total params</text>
+<text x="212" y="170" class="p1n-sub">the weight footprint &mdash; what must fit in VRAM</text>
+
+<circle cx="20" cy="194" r="8" class="p1n-mkc"/><text x="20" y="197.5" class="p1n-mk">4</text>
+<text x="38" y="198" class="p1n-tok">A35B</text>
+<text x="120" y="198" class="p1n-lab">Active params</text>
+<text x="212" y="198" class="p1n-sub">present &rArr; MoE; sets FLOPs per token, and so decode speed</text>
+
+<circle cx="20" cy="222" r="8" class="p1n-mkc"/><text x="20" y="225.5" class="p1n-mk">5</text>
+<text x="38" y="226" class="p1n-tok">Instruct</text>
+<text x="120" y="226" class="p1n-lab">Post-training</text>
+<text x="212" y="226" class="p1n-sub">Base / Instruct (no CoT) / Thinking (always CoT)</text>
+
+<circle cx="20" cy="250" r="8" class="p1n-mkc"/><text x="20" y="253.5" class="p1n-mk">6</text>
+<text x="38" y="254" class="p1n-tok">FP8</text>
+<text x="120" y="254" class="p1n-lab">Numerics</text>
+<text x="212" y="254" class="p1n-sub">absent = BF16; FP8 / AWQ / GPTQ-Int4 / GGUF / MLX</text>
+</svg>
+</div>
+<h3>The two suffixes that change behaviour, not just size</h3>
+<ul>
+<li><strong><code>-2507</code>-style date stamps.</strong> A four-digit <em>YYMM</em> tag marks a re-post-trained refresh of an existing base &mdash; <code>Qwen3-235B-A22B-Instruct-2507</code> is July 2025's retrain. These are not minor: the 2507 line dropped hybrid thinking, doubled usable context to 262K, and materially changed benchmark standing.</li>
+<li><strong><code>-Next</code>.</strong> Reserved for architecture-preview models that break from the generation's standard design. <code>Qwen3-Next-80B-A3B</code> was where hybrid linear attention was proved out before it became the mainline design in Qwen3.5.</li>
+</ul>
+<div class="callout">
+<div class="callout-label">Rule of thumb</div>
+<p>For an MoE, <strong>total parameters buy you VRAM cost; active parameters buy you latency</strong>. Qwen3.6-35B-A3B holds 35B of weights but does 3B of work per token &mdash; roughly a 4090-class memory bill with a 3B-class token rate. That decoupling is the single most important thing to internalise about the modern Qwen line.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-05">
+<div class="slide-number">05</div>
+<h2>The three-rung ladder: open weights, Plus, Max</h2>
+<p>Since Qwen3-Max (September 2025) the family has been explicitly tiered. Knowing which rung a model sits on tells you its licence, its context limit and whether you can ever self-host it.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Tier</th><th>Distribution</th><th>Typical scale</th><th>Context</th><th>What it is for</th></tr></thead>
+<tbody>
+<tr><td><strong>Open weights</strong></td><td>Hugging Face / ModelScope, Apache 2.0</td><td>0.8B &ndash; 397B (MoE)</td><td>262K native</td><td>Self-hosting, fine-tuning, air-gapped and on-prem deployment, research</td></tr>
+<tr><td><strong>-Plus</strong></td><td>Model Studio API only</td><td>undisclosed</td><td>up to 1M</td><td>The cost-effective hosted workhorse &mdash; a tuned, tool-integrated serving of near-flagship quality</td></tr>
+<tr><td><strong>-Max</strong></td><td>Model Studio API only<span class="badge warn">3.8 pending</span></td><td>~1T &rarr; 2.4T</td><td>1M</td><td>Frontier agentic work &mdash; long-horizon coding, computer use, deep research</td></tr>
+</tbody>
+</table>
+</div>
+<h3>The 2026 tier ladder in practice</h3>
+<ul>
+<li><strong>Qwen3-Max</strong> (Sept 2025) &mdash; the first Qwen past a trillion parameters, and the first to be API-only.</li>
+<li><strong>Qwen3.6-Max-Preview</strong> (April 2026) &mdash; ~1T sparse MoE, 262K context, agentic-coding focused.</li>
+<li><strong>Qwen3.7-Max</strong> (May 2026) &mdash; ~1T total / ~24B active, 1M context. The agent-frontier flagship for a quarter.</li>
+<li><strong>Qwen3.8-Max</strong> (3 Aug 2026) &mdash; 2.4T total / 95B active, 1M context, native vision. Priced at $2 / $6 per million input / output tokens with $0.25 cached reads.</li>
+</ul>
+<div class="callout">
+<div class="callout-label">The open question of 2026</div>
+<p>Alibaba stated at the Qwen3.8-Max launch that weights for <strong>both Qwen3.8-Max and a Qwen3.8-27B sibling</strong> would be published &mdash; which would be the first open release at Max scale. As of this writing the repositories had not appeared and no licence had been named. Treat it as announced, not shipped. Part 10 covers what would change if it lands.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-06">
+<div class="slide-number">06</div>
+<h2>Licensing &mdash; the long march to Apache 2.0</h2>
+<p>Qwen's licence history is worth knowing because it determines whether models from a given era are usable commercially without review, and because it explains why so much downstream tooling standardised on Qwen specifically.</p>
+<div class="diagram-grid cols-3">
+<div class="diagram-panel accent-border">
+<h4>2023 &mdash; Tongyi Qianwen License</h4>
+<p>A bespoke source-available licence with a monthly-active-user threshold above which a separate commercial agreement was required. The 1.8B shipped under a research-only variant. Usable, but it needed a lawyer.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>2024 &mdash; the split</h4>
+<p>Qwen2 put the 57B-A14B, 7B, 1.5B and 0.5B under <strong>Apache 2.0</strong> while the 72B flagship stayed proprietary. Qwen2.5 kept the same pattern &mdash; most sizes Apache, the 3B under a research licence, the 72B restricted.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>2025&ndash;26 &mdash; Apache everywhere</h4>
+<p>From Qwen3 onwards <em>every</em> open-weight release, up to and including the 397B-A17B Qwen3.5 flagship, ships plain Apache 2.0. The restriction migrated from the licence to the tier: the strongest models simply are not released.</p>
+</div>
+</div>
+<p>That final move is the strategically interesting one. Rather than gating a released model with licence terms, Alibaba now gates by <strong>publication</strong>: everything published is maximally permissive, and commercial advantage is preserved in the unpublished Max tier. For an engineer that is a much cleaner contract &mdash; if you can download it, you can ship it.</p>
+<div class="callout">
+<div class="callout-label">Practical check</div>
+<p>Always read the <code>LICENSE</code> file in the specific repository rather than assuming from the generation. Legacy Qwen1/Qwen1.5/Qwen2-72B checkpoints are still on Hugging Face under the old terms, and derivative fine-tunes inherit whatever the base carried.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-07">
+<div class="slide-number">07</div>
+<h2>The architectural through-line</h2>
+<p>Strip away the model names and the family tells one clear story in three acts: a conventional dense transformer, a pivot to sparsity, and then a pivot to sub-quadratic attention. Each act was driven by a specific cost that had become the binding constraint.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 300" width="720" height="300" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="p1a-a" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#7B61FF"/></marker></defs>
+<style>
+.p1a-box{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p1a-boxa{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
+.p1a-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12px;text-anchor:middle;}
+.p1a-t{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p1a-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p1a-ar{stroke:#7B61FF;stroke-width:1.5;fill:none;marker-end:url(#p1a-a);}
+.p1a-cap{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p1a-ttl{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+</style>
+<text x="8" y="16" class="p1a-ttl">Three acts, three binding constraints</text>
+
+<rect x="20" y="34" width="200" height="150" rx="8" class="p1a-box"/>
+<text x="120" y="54" class="p1a-h">Act I &middot; Dense</text>
+<text x="120" y="72" class="p1a-s">Qwen &rarr; Qwen2.5</text>
+<rect x="42" y="86" width="156" height="24" rx="4" class="p1a-boxa"/><text x="120" y="102" class="p1a-t">full softmax attention</text>
+<rect x="42" y="116" width="156" height="24" rx="4" class="p1a-box"/><text x="120" y="132" class="p1a-t">GQA + SwiGLU + RoPE</text>
+<rect x="42" y="146" width="156" height="24" rx="4" class="p1a-box"/><text x="120" y="162" class="p1a-t">dense FFN, all params hot</text>
+
+<line x1="222" y1="109" x2="248" y2="109" class="p1a-ar"/>
+
+<rect x="252" y="34" width="200" height="150" rx="8" class="p1a-box"/>
+<text x="352" y="54" class="p1a-h">Act II &middot; Sparse</text>
+<text x="352" y="72" class="p1a-s">Qwen2-57B-A14B &rarr; Qwen3</text>
+<rect x="274" y="86" width="156" height="24" rx="4" class="p1a-box"/><text x="352" y="102" class="p1a-t">full softmax attention</text>
+<rect x="274" y="116" width="156" height="24" rx="4" class="p1a-boxa"/><text x="352" y="132" class="p1a-t">MoE FFN, top-k routing</text>
+<rect x="274" y="146" width="156" height="24" rx="4" class="p1a-box"/><text x="352" y="162" class="p1a-t">235B total / 22B active</text>
+
+<line x1="454" y1="109" x2="480" y2="109" class="p1a-ar"/>
+
+<rect x="484" y="34" width="216" height="150" rx="8" class="p1a-box"/>
+<text x="592" y="54" class="p1a-h">Act III &middot; Hybrid linear</text>
+<text x="592" y="72" class="p1a-s">Qwen3-Next &rarr; Qwen3.6</text>
+<rect x="506" y="86" width="172" height="24" rx="4" class="p1a-boxa"/><text x="592" y="102" class="p1a-t">3&times; Gated DeltaNet</text>
+<rect x="506" y="116" width="172" height="24" rx="4" class="p1a-boxa"/><text x="592" y="132" class="p1a-t">1&times; gated full attention</text>
+<rect x="506" y="146" width="172" height="24" rx="4" class="p1a-box"/><text x="592" y="162" class="p1a-t">high-sparsity MoE + MTP</text>
+
+<rect x="20" y="200" width="200" height="70" rx="6" class="p1a-box"/>
+<text x="30" y="220" class="p1a-cap">Constraint: raw capability.</text>
+<text x="30" y="234" class="p1a-cap">Scale parameters and tokens</text>
+<text x="30" y="248" class="p1a-cap">until quality arrives. 18T</text>
+<text x="30" y="262" class="p1a-cap">tokens by Qwen2.5.</text>
+
+<rect x="252" y="200" width="200" height="70" rx="6" class="p1a-box"/>
+<text x="262" y="220" class="p1a-cap">Constraint: FLOPs per token.</text>
+<text x="262" y="234" class="p1a-cap">Decouple knowledge capacity</text>
+<text x="262" y="248" class="p1a-cap">from inference cost by firing</text>
+<text x="262" y="262" class="p1a-cap">only a few experts.</text>
+
+<rect x="484" y="200" width="216" height="70" rx="6" class="p1a-box"/>
+<text x="494" y="220" class="p1a-cap">Constraint: the KV cache.</text>
+<text x="494" y="234" class="p1a-cap">Attention is O(n&sup2;) in compute</text>
+<text x="494" y="248" class="p1a-cap">and O(n) in memory. Replace</text>
+<text x="494" y="262" class="p1a-cap">3 of every 4 layers.</text>
+</svg>
+</div>
+<p>The Act III payoff is not subtle. Alibaba reports Qwen3.5 decoding roughly <strong>8.6&times; faster at 32K context and 19&times; faster at 256K</strong> than Qwen3-Max on identical hardware. When 90% of a coding agent's tokens are prefill over a large repository, that is the difference between a viable product and an unaffordable one.</p>
+</section>
+
+<section class="slide" id="slide-08">
+<div class="slide-number">08</div>
+<h2>The ecosystem around the weights</h2>
+<p>Weights alone do not make a family usable. Qwen's practical advantage is that the surrounding tooling is first-party, open, and released in lockstep with the models.</p>
+<div class="diagram-grid cols-2">
+<div class="diagram-panel accent-border">
+<h4>Qwen-Agent</h4>
+<p>The reference agent framework &mdash; function calling, MCP client support, a code interpreter, RAG and a browser extension. It is also the canonical implementation of Qwen's tool-call prompt format, which is useful even if you never import it.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Qwen Code</h4>
+<p>A terminal coding agent, originally adapted from Gemini CLI with a rewritten parser and tool layer, tuned specifically for the Qwen3-Coder function-call format. The Coder models also drop into Claude Code and Cline via an OpenAI-compatible endpoint.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Serving</h4>
+<p><strong>vLLM</strong> and <strong>SGLang</strong> are the first-party production targets, with official recipes per model. <strong>llama.cpp</strong>, <strong>Ollama</strong>, <strong>LM Studio</strong> and <strong>MLX</strong> cover local use. Part 11 is a deep dive on the vLLM path.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Fine-tuning</h4>
+<p>Qwen bases are first-class in Unsloth, LLaMA-Factory, Axolotl, TRL and ms-swift. New generations typically get Unsloth and LLaMA-Factory support within days, and quantised GGUF/AWQ conversions within hours.</p>
+</div>
+</div>
+<h3>Beyond the LLM</h3>
+<p>The family extends well past text generation, and these siblings share the tokenizer and chat conventions: <strong>Qwen3-Embedding</strong> and <strong>Qwen3-Reranker</strong> (0.6B&ndash;8B, topped the MTEB multilingual leaderboard on release), <strong>Qwen3-VL-Embedding</strong> for multimodal retrieval, <strong>Qwen3Guard</strong> for streaming safety classification, <strong>Qwen-Image</strong> for generation and editing with unusually strong text rendering, <strong>Qwen3-ASR</strong> and <strong>Qwen-Audio-3.0</strong> for speech, and <strong>Qwen-MT</strong> for translation across 92 languages.</p>
+</section>
+
+<section class="slide" id="slide-09">
+<div class="slide-number">09</div>
+<h2>What this series covers</h2>
+<p>Twelve decks, arranged so that the history builds the vocabulary you need for the current generation, and the last two decks turn all of it into deployment decisions.</p>
+<h3>Foundations</h3>
+<ul class="contents-list">
+<li><a href="part2.html">Part 02 &middot; Qwen 1.0 &amp; Qwen1.5 &mdash; the first open Chinese frontier</a></li>
+<li><a href="part3.html">Part 03 &middot; Qwen2 &amp; Qwen2.5 &mdash; the workhorse generation</a></li>
+<li><a href="part4.html">Part 04 &middot; QwQ &amp; QVQ &mdash; the reasoning detour</a></li>
+</ul>
+<h3>The Qwen3 generation</h3>
+<ul class="contents-list">
+<li><a href="part5.html">Part 05 &middot; Qwen3 &mdash; architecture and the hybrid-thinking experiment</a></li>
+<li><a href="part6.html">Part 06 &middot; Qwen3-Coder &mdash; the agentic coding deep dive</a></li>
+<li><a href="part7.html">Part 07 &middot; Qwen3-Next &mdash; the architecture pivot</a></li>
+<li><a href="part8.html">Part 08 &middot; Multimodal &amp; specialists &mdash; VL, Omni, Embedding, Guard</a></li>
+</ul>
+<h3>The 2026 line</h3>
+<ul class="contents-list">
+<li><a href="part9.html">Part 09 &middot; Qwen3.5 &mdash; hybrid attention goes mainline</a></li>
+<li><a href="part10.html">Part 10 &middot; Qwen3.6 to Qwen3.8 &mdash; dense returns, Max goes frontier</a></li>
+</ul>
+<h3>Running it</h3>
+<ul class="contents-list">
+<li><a href="part11.html">Part 11 &middot; Serving Qwen with vLLM &mdash; capability by capability</a></li>
+<li><a href="part12.html">Part 12 &middot; Choosing, sizing and deploying &mdash; the decision guide</a></li>
+</ul>
+<div class="callout">
+<div class="callout-label">Next</div>
+<p>Part 02 goes back to August 2023 and the 7B model that started it &mdash; what was actually in it, why the tokenizer choice mattered more than the architecture, and what Qwen1.5 fixed six months later.</p>
+</div>
+</section>
+
+<nav class="deck-nav"><a href="index.html">&larr; Series Index</a><a class="next" href="part2.html">Part 02 &middot; Qwen 1.0 &amp; Qwen1.5 &rarr;</a></nav>
+<footer class="footer"><p>Part of the <a href="index.html">Qwen</a> presentation series &mdash; a deep exploration of Alibaba's open-weight model family.</p><p style="margin-top:0.5rem;font-size:0.8rem;"><a href="index.html">Back to Series Index</a></p></footer>
+
+<script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.slide').forEach(slide => {
+        slide.style.opacity = '0';
+        slide.style.transform = 'translateY(30px)';
+        slide.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(slide);
+    });
+</script>
+</body>
+</html>

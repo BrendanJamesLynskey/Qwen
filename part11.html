@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qwen 11 __TITLE__mdash; Serving Qwen with vLLM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-card: #0d1117;
+            --bg-code: #161b22;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --accent: #7B61FF;
+            --accent-dim: #7B61FF40;
+            --accent-glow: #7B61FF30;
+            --border: #21262d;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            --font-body: 'Inter', sans-serif;
+            --max-width: 900px;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 17px;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .hero > * { position: relative; z-index: 1; }
+        .series-label {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        .hero h1 .accent { color: var(--accent); }
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 640px;
+            margin-bottom: 2rem;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+        }
+        .tag {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            background: var(--accent-dim);
+            white-space: nowrap;
+        }
+        .pipeline {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+            max-width: var(--max-width);
+        }
+        .pipeline-step {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            padding: 0.3rem 0.7rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        .pipeline-arrow { color: var(--accent); font-size: 0.9rem; font-weight: 700; }
+        .slide {
+            min-height: 100vh;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .slide-number {
+            font-family: var(--font-display);
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--accent-dim);
+            position: absolute;
+            top: 2rem;
+            right: 1.5rem;
+            line-height: 1;
+            user-select: none;
+        }
+        .slide h2 {
+            font-family: var(--font-display);
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            line-height: 1.25;
+        }
+        .slide h3 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .slide p { margin-bottom: 1rem; color: var(--text-secondary); }
+        .slide p strong { color: var(--text-primary); }
+        .slide ul, .slide ol { margin-bottom: 1rem; padding-left: 1.5rem; color: var(--text-secondary); }
+        .slide li { margin-bottom: 0.4rem; }
+        .slide li strong { color: var(--text-primary); }
+        .slide code {
+            font-family: var(--font-mono);
+            font-size: 0.88em;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            padding: 0.05rem 0.35rem;
+            border-radius: 3px;
+            color: #c9d1d9;
+        }
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin: 1.25rem 0;
+            overflow: hidden;
+        }
+        .code-header {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            background: rgba(123, 97, 255, 0.08);
+            padding: 0.4rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .code-block pre { margin: 0; padding: 1rem; overflow-x: auto; }
+        .code-block code {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #c9d1d9;
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+        .kw { color: #ff7b72; }
+        .fn { color: #d2a8ff; }
+        .str { color: #a5d6ff; }
+        .cm { color: #8b949e; font-style: italic; }
+        .num { color: #79c0ff; }
+        .type { color: #ffa657; }
+        .dir { color: #ff7b72; }
+        .mac { color: #ffa657; }
+        .table-wrap {
+            overflow-x: auto;
+            margin: 1.25rem 0;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th {
+            background: var(--bg-code);
+            color: var(--accent);
+            font-weight: 600;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            font-family: var(--font-display);
+            white-space: nowrap;
+        }
+        td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:nth-child(even) td { background: rgba(13, 17, 23, 0.5); }
+        .diagram-flow {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .diagram-box {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            text-align: center;
+            white-space: nowrap;
+        }
+        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-box.dim { color: var(--text-secondary); border-color: var(--border); }
+        .diagram-arrow { color: var(--accent); font-size: 1.3rem; font-weight: 700; }
+        .diagram-vertical {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .diagram-vertical .diagram-arrow { font-size: 1.1rem; }
+        .hierarchy {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .hierarchy-level { display: flex; align-items: center; gap: 0.75rem; }
+        .hierarchy-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+            text-align: right;
+        }
+        .hierarchy-items { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+        .hierarchy-item {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-grid {
+            display: grid;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .diagram-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+        .diagram-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+        .diagram-panel {
+            padding: 1rem;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+        .diagram-panel.accent-border { border-left: 3px solid var(--accent); }
+        .diagram-panel h4 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        .diagram-panel p, .diagram-panel ul { font-size: 0.85rem; }
+        .callout {
+            background: var(--bg-card);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+            padding: 1rem 1.25rem;
+            margin: 1.25rem 0;
+        }
+        .callout p { margin-bottom: 0; }
+        .callout p + p { margin-top: 0.5rem; }
+        .callout .callout-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.3rem;
+        }
+        .contents-list { list-style: none; padding-left: 0; counter-reset: contents; }
+        .contents-list li {
+            counter-increment: contents;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .contents-list li:last-child { border-bottom: none; }
+        .contents-list li::before {
+            content: counter(contents, decimal-leading-zero);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            min-width: 2rem;
+        }
+        .contents-list a { color: var(--text-primary); text-decoration: none; transition: color 0.2s; }
+        .contents-list a:hover { color: var(--accent); }
+        .footer {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+        .footer a { color: var(--accent); text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+        .deck-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        .deck-nav a {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: border-color 0.15s, color 0.15s;
+        }
+        .deck-nav a:hover { border-color: var(--accent); color: var(--accent); }
+        .deck-nav a.next { margin-left: auto; }
+        .canvas-wrap {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.25rem 0;
+            overflow-x: auto;
+        }
+        .canvas-wrap canvas, .canvas-wrap svg { display: block; margin: 0 auto; max-width: 100%; }
+        .badge {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            padding: 0.1rem 0.45rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            vertical-align: middle;
+            margin-left: 0.3rem;
+        }
+        .badge.ok    { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+        .badge.warn  { border-color: #ffa657; color: #ffa657; background: rgba(255,166,87,0.08); }
+        .badge.bad   { border-color: #ff7b72; color: #ff7b72; background: rgba(255,123,114,0.08); }
+        @media (max-width: 640px) {
+            .slide { padding: 3rem 1rem; min-height: auto; }
+            .slide-number { font-size: 3rem; top: 1.5rem; right: 1rem; }
+            .slide h2 { font-size: 1.5rem; }
+            .diagram-grid.cols-2, .diagram-grid.cols-3 { grid-template-columns: 1fr; }
+            .pipeline { gap: 0.15rem; }
+            .pipeline-step { font-size: 0.6rem; padding: 0.2rem 0.4rem; }
+            .hero h1 { font-size: 1.8rem; }
+            table { font-size: 0.78rem; }
+        }
+    </style>
+</head>
+<body>
+<header class="hero">
+<div class="series-label">Qwen &middot; Part 11</div>
+<h1>Serving Qwen with <span class="accent">vLLM</span></h1>
+<p class="subtitle">Capability by capability: which architectures are supported, which parser goes with which model, how to shard a 512-expert mixture, where the memory actually goes, what long context really costs, when quantisation is safe, and what to do when it breaks. The deck to keep open while you write the launch command.</p>
+<div class="tags">
+<span class="tag">Parsers</span>
+<span class="tag">TP / PP / EP / DP</span>
+<span class="tag">KV cache</span>
+<span class="tag">FP8 / AWQ</span>
+<span class="tag">YaRN</span>
+<span class="tag">MTP</span>
+<span class="tag">Multimodal</span>
+</div>
+<div class="pipeline">
+<span class="pipeline-step">pick architecture</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">pick parsers</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">pick parallelism</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">size the KV cache</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">tune</span>
+</div>
+</header>
+
+<section class="slide" id="slide-00">
+<div class="slide-number">00</div>
+<h2>Contents</h2>
+<ul class="contents-list">
+<li><a href="#slide-01">Why vLLM, and the first check to run</a></li>
+<li><a href="#slide-02">The architecture support matrix</a></li>
+<li><a href="#slide-03">Parsers &mdash; the most error-prone thing in the stack</a></li>
+<li><a href="#slide-04">Parallelism: TP, PP, EP and DP</a></li>
+<li><a href="#slide-05">Where the memory goes</a></li>
+<li><a href="#slide-06">Long context in practice</a></li>
+<li><a href="#slide-07">Quantisation</a></li>
+<li><a href="#slide-08">Speculative decoding and MTP</a></li>
+<li><a href="#slide-09">Multimodal, embedding and scoring</a></li>
+<li><a href="#slide-10">Diagnostics &mdash; symptom, cause, fix</a></li>
+</ul>
+</section>
+
+<section class="slide" id="slide-01">
+<div class="slide-number">01</div>
+<h2>Why vLLM, and the first check to run</h2>
+<p>vLLM and SGLang are Qwen's two first-party production targets. Both get official recipes per model; both usually land support on or near release day. This deck focuses on vLLM, but the concepts and most flags map directly onto SGLang.</p>
+<div class="diagram-grid cols-2">
+<div class="diagram-panel accent-border">
+<h4>What vLLM gives you for Qwen specifically</h4>
+<ul>
+<li><strong>PagedAttention</strong> &mdash; KV cache in fixed blocks, so no per-sequence over-allocation. The reason 262K contexts are servable at all.</li>
+<li><strong>Continuous batching</strong> &mdash; requests join and leave the batch per step rather than per request.</li>
+<li><strong>Automatic prefix caching</strong> &mdash; shared prompt prefixes computed once. Enormous for agents, which re-send system prompts and tool schemas every turn.</li>
+<li><strong>Chunked prefill</strong> &mdash; a 200K-token prompt is split so it cannot block every other request in the queue.</li>
+<li><strong>Qwen-specific parsers and kernels</strong>, contributed alongside the model releases.</li>
+</ul>
+</div>
+<div class="diagram-panel accent-border">
+<h4>The version question, first</h4>
+<p>Qwen ships new architectures frequently, and each needs code in vLLM. Before anything else, check the model card's stated minimum version &mdash; and pin it.</p>
+<div class="code-block" style="margin-top:0.6rem">
+<pre><code><span class="cm"># indicative minimums from model cards</span>
+Qwen3          &rarr; any recent vLLM
+Qwen3-VL       &rarr; &ge; 0.11.0
+Qwen3-Next     &rarr; nightly at launch, now stable
+Qwen3-Coder-Next &rarr; &ge; 0.15.0
+Qwen3.5 / 3.6  &rarr; &ge; 0.17.0</code></pre>
+</div>
+<p>If <code>vllm serve</code> fails with <em>&ldquo;Model architectures [...] are not supported&rdquo;</em>, that is a version problem, not a configuration problem. Upgrade &mdash; and be aware new architectures sometimes land in nightly weeks before stable.</p>
+</div>
+</div>
+<div class="callout">
+<div class="callout-label">Operational advice</div>
+<p><strong>Pin your vLLM version and test upgrades deliberately.</strong> Hybrid-attention models, MoE kernels and tool parsers are all comparatively young code. Tracking latest gets you new capability and new regressions in the same commit; the Qwen recipes exist precisely because the version matters.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-02">
+<div class="slide-number">02</div>
+<h2>The architecture support matrix</h2>
+<p>The <code>architectures</code> field in a checkpoint's <code>config.json</code> is what vLLM matches on. Knowing the class tells you which code path &mdash; and which features &mdash; you get.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Family</th><th>Architecture class</th><th>Shape</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Qwen / Qwen1.5 / Qwen2 / Qwen2.5 / Qwen3 dense</td><td><code>Qwen2ForCausalLM</code>, <code>Qwen3ForCausalLM</code></td><td>dense decoder</td><td>The most mature paths. Everything works: LoRA, quantisation, PP, speculation</td></tr>
+<tr><td>Qwen2-57B-A14B, Qwen3-30B-A3B, Qwen3-235B-A22B, Qwen3-Coder</td><td><code>Qwen2MoeForCausalLM</code>, <code>Qwen3MoeForCausalLM</code></td><td>sparse MoE</td><td>Fused MoE kernels; add <code>--enable-expert-parallel</code> for multi-GPU</td></tr>
+<tr><td>Qwen3-Next, Qwen3-Coder-Next</td><td>the <code>qwen3_next</code> model path</td><td>hybrid linear + MoE</td><td>Needs the hybrid KV-cache manager and Flash Linear Attention kernels; supports MTP</td></tr>
+<tr><td>Qwen3-VL dense / MoE</td><td><code>Qwen3VLForConditionalGeneration</code>, <code>Qwen3VLMoeForConditionalGeneration</code></td><td>vision-language</td><td>Requires <code>--limit-mm-per-prompt</code> discipline</td></tr>
+<tr><td>Qwen3.5 / Qwen3.6</td><td>the <code>qwen3_5</code> model path (dense and MoE variants)</td><td>hybrid + native multimodal</td><td>vLLM &ge; 0.17.0; <code>--language-model-only</code> available for text-only use</td></tr>
+<tr><td>Qwen3-Embedding, Qwen3-VL-Embedding</td><td>pooling models</td><td>encoder-style task</td><td>Served with <code>--task embed</code> on <code>/v1/embeddings</code></td></tr>
+<tr><td>Qwen3-Reranker, Qwen3-VL-Reranker</td><td>scoring models</td><td>cross-encoder</td><td>Served with <code>--task score</code>; different endpoint, not a chat model</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout">
+<div class="callout-label">Ascend and non-NVIDIA targets</div>
+<p>The <code>vllm-ascend</code> project tracks Qwen closely for Huawei Ascend NPUs, but on its own version cadence &mdash; Qwen3.5-27B first appeared in one release series and Qwen3.6-27B in the next. If you are not on CUDA, check the platform-specific project rather than assuming parity with upstream vLLM.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-03">
+<div class="slide-number">03</div>
+<h2>Parsers &mdash; the most error-prone thing in the stack</h2>
+<p>Two independent parsers sit between the model's raw token stream and your API response. Choosing them wrongly produces failures that look like model failures, and they are the single most common Qwen deployment mistake.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 220" width="720" height="220" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="p11p-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<style>
+.p11p-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p11p-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
+.p11p-bt{fill:rgba(31,158,142,0.10);stroke:#1F9E8E;stroke-width:1.2;}
+.p11p-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p11p-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p11p-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p11p-ar{stroke:#7B61FF;stroke-width:1.3;fill:none;marker-end:url(#p11p-a);}
+</style>
+<text x="8" y="16" class="p11p-h">Raw tokens &rarr; two parsers &rarr; three response fields</text>
+
+<rect x="12" y="34" width="150" height="60" rx="5" class="p11p-b"/>
+<text x="87" y="56" class="p11p-l">raw token stream</text>
+<text x="87" y="74" class="p11p-s">&lt;think&gt;&hellip;&lt;/think&gt; plus</text>
+<text x="87" y="88" class="p11p-s">tool markup plus prose</text>
+<line x1="166" y1="64" x2="192" y2="64" class="p11p-ar"/>
+
+<rect x="196" y="26" width="180" height="36" rx="5" class="p11p-ba"/>
+<text x="286" y="48" class="p11p-l">--reasoning-parser</text>
+<rect x="196" y="70" width="180" height="36" rx="5" class="p11p-bt"/>
+<text x="286" y="92" class="p11p-l">--tool-call-parser</text>
+<text x="286" y="120" class="p11p-s">plus --enable-auto-tool-choice</text>
+
+<line x1="380" y1="44" x2="406" y2="44" class="p11p-ar"/>
+<line x1="380" y1="88" x2="406" y2="88" class="p11p-ar"/>
+
+<rect x="410" y="26" width="298" height="30" rx="4" class="p11p-b"/><text x="559" y="45" class="p11p-l">reasoning_content &mdash; the trace, for logging or a UI</text>
+<rect x="410" y="62" width="298" height="30" rx="4" class="p11p-b"/><text x="559" y="81" class="p11p-l">tool_calls[] &mdash; structured, ready to dispatch</text>
+<rect x="410" y="98" width="298" height="30" rx="4" class="p11p-b"/><text x="559" y="117" class="p11p-l">content &mdash; what you show the user</text>
+
+<line x1="8" y1="146" x2="712" y2="146" stroke="#21262d" stroke-width="1"/>
+<text x="8" y="166" class="p11p-h">Set neither and both failures are silent</text>
+<text x="8" y="186" class="p11p-s" style="text-anchor:start">&bull; No reasoning parser &rArr; the whole &lt;think&gt; trace arrives inside content. Your JSON parser fails, your UI shows the model's inner monologue.</text>
+<text x="8" y="202" class="p11p-s" style="text-anchor:start">&bull; No tool-call parser &rArr; tool_calls is empty and the call sits in content as text. The agent silently does nothing, and no error is raised.</text>
+</svg>
+</div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Model</th><th><code>--reasoning-parser</code></th><th><code>--tool-call-parser</code></th></tr></thead>
+<tbody>
+<tr><td>Qwen2.5 (all)</td><td>&mdash; none</td><td><code>hermes</code></td></tr>
+<tr><td>QwQ-32B</td><td><code>deepseek_r1</code></td><td><code>hermes</code></td></tr>
+<tr><td>Qwen3 (thinking-capable)</td><td><code>qwen3</code> <span class="badge">or <code>deepseek_r1</code> pre-0.9</span></td><td><code>hermes</code></td></tr>
+<tr><td>Qwen3-*-Instruct-2507</td><td>&mdash; none <span class="badge warn">no think blocks</span></td><td><code>hermes</code></td></tr>
+<tr><td>Qwen3-*-Thinking-2507</td><td><code>qwen3</code></td><td><code>hermes</code></td></tr>
+<tr><td>Qwen3-Coder (all)</td><td>&mdash; none <span class="badge warn">no think blocks</span></td><td><code>qwen3_coder</code></td></tr>
+<tr><td>Qwen3-Next-Instruct</td><td>&mdash; none</td><td><code>hermes</code> / <code>qwen3_xml</code></td></tr>
+<tr><td>Qwen3-Next-Thinking</td><td><code>qwen3</code></td><td><code>hermes</code> / <code>qwen3_xml</code></td></tr>
+<tr><td>Qwen3.5 / Qwen3.6</td><td><code>qwen3</code></td><td><code>qwen3_xml</code></td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout">
+<div class="callout-label">A real bug worth knowing</div>
+<p>There is a reported failure where a model emits XML tool-call markup <em>inside</em> its <code>&lt;think&gt;</code> region: the reasoning parser claims the whole region, the tool parser never sees the markup, and you get populated <code>reasoning_content</code> with an empty <code>tool_calls</code> array &mdash; no error anywhere. If tool calls vanish intermittently on a thinking model, this is the first thing to check, and the fix is usually a version pin or a parser swap.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-04">
+<div class="slide-number">04</div>
+<h2>Parallelism: TP, PP, EP and DP</h2>
+<p>Four independent axes, each solving a different problem. Choosing the wrong one for a 512-expert model can cost you most of the performance you paid for.</p>
+<div class="diagram-grid cols-2">
+<div class="diagram-panel accent-border">
+<h4>Tensor parallel &mdash; <code>--tensor-parallel-size</code></h4>
+<p>Split every weight matrix across GPUs; every GPU participates in every layer. All-reduce at each layer, so it wants fast interconnect (NVLink). <strong>The default choice</strong> for dense models too large for one card. Latency improves; communication cost grows with the degree.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Pipeline parallel &mdash; <code>--pipeline-parallel-size</code></h4>
+<p>Split by <em>layer</em>: GPU 0 holds layers 1&ndash;20, GPU 1 holds 21&ndash;40. Communication is a single activation hand-off per boundary, so it tolerates slow interconnect &mdash; the right axis <strong>across nodes</strong>. Costs pipeline bubbles unless the batch is large.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Expert parallel &mdash; <code>--enable-expert-parallel</code></h4>
+<p>Split by <em>expert</em>: each GPU owns a subset of the experts, and tokens are routed to the GPU that holds theirs. <strong>The right topology for high-sparsity MoE</strong> &mdash; a 512-expert model split by tensor parallelism has every GPU holding a sliver of every expert, which is all communication and no locality. Composes with TP.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Data parallel &mdash; <code>--data-parallel-size</code></h4>
+<p>Replicate the model and split the <em>requests</em>. Pure throughput scaling with no communication, when the model fits on one device. For small Qwens this beats tensor parallelism outright: four independent 9B replicas serve far more traffic than one 9B sharded four ways.</p>
+</div>
+</div>
+<div class="code-block">
+<div class="code-header">The decision, as a rule</div>
+<pre><code><span class="cm"># Fits on one GPU?                    &rarr; replicate, don't shard</span>
+vllm serve Qwen/Qwen3.5-9B --data-parallel-size 4
+
+<span class="cm"># Dense, too big for one GPU, one node &rarr; tensor parallel</span>
+vllm serve Qwen/Qwen3.6-27B --tensor-parallel-size 2
+
+<span class="cm"># Sparse MoE, one node                &rarr; tensor parallel + expert parallel</span>
+vllm serve Qwen/Qwen3.5-397B-A17B --tensor-parallel-size 8 --enable-expert-parallel
+
+<span class="cm"># Too big for one node                &rarr; pipeline across nodes, tensor within</span>
+vllm serve Qwen/Qwen3-Coder-480B-A35B-Instruct \
+  --tensor-parallel-size 8 --pipeline-parallel-size 2 --enable-expert-parallel</code></pre>
+</div>
+<div class="callout">
+<div class="callout-label">The most common mistake</div>
+<p>Reaching for tensor parallelism on a model that already fits. Sharding a 9B across four GPUs makes each token <em>slightly</em> faster and your aggregate throughput <em>much</em> worse, because you have added an all-reduce to every layer for no memory benefit. Shard only when you must.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-05">
+<div class="slide-number">05</div>
+<h2>Where the memory goes</h2>
+<p>Almost every vLLM problem is a memory problem, and almost every memory problem is the KV cache. Being able to compute it in your head is the most useful skill in this deck.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 294" width="720" height="294" xmlns="http://www.w3.org/2000/svg">
+<style>
+.p11m-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p11m-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p11m-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;}
+.p11m-eq{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:11px;}
+.p11m-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p11m-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
+</style>
+<text x="8" y="16" class="p11m-h">The KV cache formula &mdash; memorise this one</text>
+<rect x="8" y="26" width="704" height="34" rx="5" class="p11m-ba"/>
+<text x="24" y="48" class="p11m-eq">bytes_per_token  =  2 &times; num_layers &times; num_kv_heads &times; head_dim &times; bytes_per_element</text>
+
+<text x="8" y="82" class="p11m-h">Worked examples, FP16 cache</text>
+
+<rect x="8" y="92" width="230" height="86" rx="5" class="p11m-b"/>
+<text x="20" y="112" class="p11m-l">Qwen3.5-9B</text>
+<text x="20" y="130" class="p11m-s">assume 36 layers, 8 KV heads, dim 128</text>
+<text x="20" y="146" class="p11m-s">2&times;36&times;8&times;128&times;2 = 144 KiB/token</text>
+<text x="20" y="166" class="p11m-s">262K context &rarr; ~36 GiB per sequence</text>
+
+<rect x="246" y="92" width="230" height="86" rx="5" class="p11m-b"/>
+<text x="258" y="112" class="p11m-l">&hellip; but it is hybrid</text>
+<text x="258" y="130" class="p11m-s">only 1 layer in 4 keeps a KV cache</text>
+<text x="258" y="146" class="p11m-s">9 attention layers, not 36</text>
+<text x="258" y="166" class="p11m-s">262K context &rarr; ~9 GiB per sequence</text>
+
+<rect x="484" y="92" width="228" height="86" rx="5" class="p11m-b"/>
+<text x="496" y="112" class="p11m-l">Qwen3-Coder-480B</text>
+<text x="496" y="130" class="p11m-s">62 layers, 8 KV heads, dim 128, all full</text>
+<text x="496" y="146" class="p11m-s">2&times;62&times;8&times;128&times;2 = 248 KiB/token</text>
+<text x="496" y="166" class="p11m-s">262K context &rarr; ~62 GiB per sequence</text>
+
+<text x="8" y="204" class="p11m-h">The four consumers, and the knob for each</text>
+<text x="8" y="224" class="p11m-s">weights &mdash; fixed. Only quantisation helps: FP8 halves it, INT4 quarters it.</text>
+<text x="8" y="240" class="p11m-s">KV cache &mdash; --max-model-len (per sequence) and --max-num-seqs (how many). This is your main lever.</text>
+<text x="8" y="256" class="p11m-s">activations &mdash; --max-num-batched-tokens caps the prefill working set.</text>
+<text x="8" y="270" class="p11m-s">everything else &mdash; --gpu-memory-utilization sets the fraction vLLM may claim (default 0.9);</text>
+<text x="8" y="284" class="p11m-s">--enforce-eager drops CUDA-graph memory, at a latency cost.</text>
+</svg>
+</div>
+<div class="callout">
+<div class="callout-label">Why hybrid attention changes your capacity planning</div>
+<p>Compare the first two boxes. The same nominal 262K context costs roughly <strong>four times less KV cache</strong> on a hybrid model, because three quarters of the layers hold a constant-size recurrent state instead. Concurrency scales with that saving. If you sized a cluster using a Qwen2.5-era spreadsheet, a 2026 model will comfortably beat your estimate &mdash; verify before you buy hardware.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-06">
+<div class="slide-number">06</div>
+<h2>Long context in practice</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Mechanism</th><th>How to enable</th><th>What it costs</th></tr></thead>
+<tbody>
+<tr><td><strong>Native window</strong></td><td><code>--max-model-len 262144</code></td><td>KV cache only. Always prefer this &mdash; trained context is real context</td></tr>
+<tr><td><strong>YaRN extension</strong></td><td><code>--rope-scaling '{"rope_type":"yarn","factor":4.0,"original_max_position_embeddings":262144}'</code></td><td>Applied <em>statically to every request</em>, so short prompts pay a small quality cost too</td></tr>
+<tr><td><strong>Chunked prefill</strong></td><td>on by default; tune <code>--max-num-batched-tokens</code></td><td>Nothing meaningful &mdash; it stops one huge prompt monopolising the scheduler</td></tr>
+<tr><td><strong>Prefix caching</strong></td><td>on by default</td><td>A little memory for the cache; disable alongside MTP for minimum latency</td></tr>
+</tbody>
+</table>
+</div>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 200" width="720" height="200" xmlns="http://www.w3.org/2000/svg">
+<style>
+.p11l-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p11l-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p11l-hit{fill:rgba(31,158,142,0.30);stroke:#1F9E8E;stroke-width:1;}
+.p11l-new{fill:rgba(123,97,255,0.25);stroke:#7B61FF;stroke-width:1;}
+.p11l-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+</style>
+<text x="8" y="16" class="p11l-h">Why prefix caching is the highest-value flag for agentic Qwen workloads</text>
+
+<text x="8" y="40" class="p11l-s">agent turn 1</text>
+<rect x="110" y="30" width="180" height="16" rx="3" class="p11l-new"/><text x="200" y="42" class="p11l-l">system + tool schemas</text>
+<rect x="292" y="30" width="220" height="16" rx="3" class="p11l-new"/><text x="402" y="42" class="p11l-l">repository context</text>
+<rect x="514" y="30" width="70" height="16" rx="3" class="p11l-new"/><text x="549" y="42" class="p11l-l">query</text>
+<text x="594" y="42" class="p11l-s">all computed</text>
+
+<text x="8" y="70" class="p11l-s">agent turn 2</text>
+<rect x="110" y="60" width="180" height="16" rx="3" class="p11l-hit"/><text x="200" y="72" class="p11l-l">cache hit</text>
+<rect x="292" y="60" width="220" height="16" rx="3" class="p11l-hit"/><text x="402" y="72" class="p11l-l">cache hit</text>
+<rect x="514" y="60" width="110" height="16" rx="3" class="p11l-new"/><text x="569" y="72" class="p11l-l">tool result + query</text>
+<text x="634" y="72" class="p11l-s">~5% recomputed</text>
+
+<text x="8" y="100" class="p11l-s">agent turn 3</text>
+<rect x="110" y="90" width="180" height="16" rx="3" class="p11l-hit"/><text x="200" y="102" class="p11l-l">cache hit</text>
+<rect x="292" y="90" width="220" height="16" rx="3" class="p11l-hit"/><text x="402" y="102" class="p11l-l">cache hit</text>
+<rect x="514" y="90" width="70" height="16" rx="3" class="p11l-hit"/><text x="549" y="102" class="p11l-l">cache hit</text>
+<rect x="586" y="90" width="70" height="16" rx="3" class="p11l-new"/><text x="621" y="102" class="p11l-l">new</text>
+
+<line x1="8" y1="124" x2="712" y2="124" stroke="#21262d" stroke-width="1"/>
+<text x="8" y="144" class="p11l-s">A 30-turn session over a 150K-token repository would re-prefill 4.5M tokens without caching.</text>
+<text x="8" y="160" class="p11l-s">With it, roughly 150K once plus the deltas. Design prompts to exploit this: everything stable</text>
+<text x="8" y="176" class="p11l-s">FIRST, everything variable LAST. A single changed byte near the start invalidates the whole</text>
+<text x="8" y="192" class="p11l-s">cached prefix &mdash; a timestamp at the top of a system prompt is a classic self-inflicted 0% hit rate.</text>
+</svg>
+</div>
+</section>
+
+<section class="slide" id="slide-07">
+<div class="slide-number">07</div>
+<h2>Quantisation</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Format</th><th>Memory</th><th>Quality</th><th>When to use it</th></tr></thead>
+<tbody>
+<tr><td><strong>BF16</strong></td><td>2 bytes/param</td><td>reference</td><td>The baseline. Use it if it fits</td></tr>
+<tr><td><strong>FP8</strong></td><td>1 byte/param</td><td>near-lossless</td><td>The default for large Qwens. Official FP8 checkpoints exist for the big MoEs. Native on Hopper and newer; emulated on Ampere in recent vLLM</td></tr>
+<tr><td><strong>AWQ (4-bit)</strong></td><td>~0.5 byte/param</td><td>small loss</td><td>Activation-aware; protects salient weight channels. The best 4-bit option for quality</td></tr>
+<tr><td><strong>GPTQ-Int4</strong></td><td>~0.5 byte/param</td><td>small loss</td><td>Widely available community checkpoints; slightly behind AWQ typically</td></tr>
+<tr><td><strong>GGUF</strong></td><td>varies</td><td>varies</td><td>llama.cpp / Ollama territory, not vLLM's primary path</td></tr>
+</tbody>
+</table>
+</div>
+<div class="diagram-grid cols-2">
+<div class="diagram-panel accent-border">
+<h4>The MoE caveat</h4>
+<p>Quantising a mixture-of-experts is not the same as quantising a dense model. The <strong>router</strong> is a small matrix whose outputs determine which experts fire &mdash; a quantisation error there does not perturb an activation slightly, it selects a <em>different expert</em>. Good MoE quantisation keeps the router and the shared expert at higher precision. Prefer official or well-tested community checkpoints over rolling your own for MoE.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>What quantisation does not fix</h4>
+<p>It shrinks <strong>weights</strong>, not the <strong>KV cache</strong>. If you are OOM at 262K context on a model whose weights already fit, 4-bit will not help &mdash; you need a shorter <code>--max-model-len</code>, fewer concurrent sequences, or KV-cache quantisation, which is a separate feature with its own quality trade-off.</p>
+</div>
+</div>
+<div class="callout">
+<div class="callout-label">A structural advantage in the 2026 models</div>
+<p>Qwen3-Next onwards use zero-centred RMSNorm with weight decay and gated attention outputs specifically to suppress activation outliers (Part 07, slide 05). Outliers are the main thing that makes post-training quantisation lossy &mdash; so these models quantise better than their predecessors almost as a side effect of being trainable at all.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-08">
+<div class="slide-number">08</div>
+<h2>Speculative decoding and MTP</h2>
+<p>Decoding is memory-bandwidth bound: each step reads the entire active parameter set to produce one token. Speculation amortises that read across several tokens.</p>
+<div class="diagram-grid cols-2">
+<div class="diagram-panel accent-border">
+<h4>MTP &mdash; the model drafts for itself</h4>
+<p>Qwen3-Next, Qwen3.5 and Qwen3.6 are trained with multi-token-prediction heads, so no separate draft model is needed. Acceptance rates are high because the drafter <em>is</em> the model.</p>
+<div class="code-block" style="margin-top:0.6rem">
+<pre><code><span class="cm"># Qwen3.5 / 3.6</span>
+--speculative-config <span class="str">'{"method":"mtp",
+   "num_speculative_tokens":1}'</span>
+
+<span class="cm"># Qwen3-Next</span>
+--speculative-config <span class="str">'{"method":"qwen3_next_mtp",
+   "num_speculative_tokens":2}'</span></code></pre>
+</div>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Draft-model speculation &mdash; for models without MTP</h4>
+<p>Pair a large model with a small one from the same family and tokenizer: a Qwen3-0.6B drafting for a Qwen3-32B. Works, but acceptance is lower than MTP and you must match tokenizers exactly &mdash; which rules out mixing a Qwen3-Coder (retokenised) with a Qwen3, or a Qwen3 with a Qwen3.5 (250K vocabulary).</p>
+</div>
+</div>
+<div class="callout">
+<div class="callout-label">When to enable it, and when not</div>
+<p><strong>Enable</strong> for low-concurrency, latency-sensitive endpoints &mdash; an interactive coding agent, a voice front-end, anything a human is waiting on. It reduces time-per-output-token with a high acceptance rate. <strong>Disable</strong> for high-throughput batch workloads: verification work competes with real work, and aggregate tokens per second falls. The vLLM recipes also suggest turning prefix caching off alongside MTP when chasing minimum latency &mdash; measure both ways on your own traffic.</p>
+</div>
+<div class="callout">
+<div class="callout-label">Correctness</div>
+<p>Speculative decoding is <strong>distributionally exact</strong>. Rejected drafts are discarded and resampled by a scheme that preserves the target model's output distribution &mdash; so this is a pure latency optimisation, not a quality trade. If output changes when you enable it, that is a bug, not a design property.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-09">
+<div class="slide-number">09</div>
+<h2>Multimodal, embedding and scoring</h2>
+<div class="code-block">
+<div class="code-header">Three different runners, three different endpoints</div>
+<pre><code><span class="cm"># 1. Generative multimodal &mdash; /v1/chat/completions with image_url content parts</span>
+vllm serve Qwen/Qwen3-VL-8B-Instruct \
+  --limit-mm-per-prompt <span class="str">'{"image": 4, "video": 1}'</span> \
+  --max-model-len 65536
+
+<span class="cm"># 1b. A natively multimodal Qwen3.5/3.6 used for text only &mdash; skip the vision tower</span>
+vllm serve Qwen/Qwen3.6-27B --language-model-only
+
+<span class="cm"># 2. Embeddings &mdash; a pooling model on /v1/embeddings</span>
+vllm serve Qwen/Qwen3-Embedding-0.6B --task embed
+
+<span class="cm"># 3. Reranking &mdash; a scoring model on /v1/score</span>
+vllm serve Qwen/Qwen3-Reranker-4B --task score</code></pre>
+</div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Capability</th><th>Support</th><th>The thing that bites</th></tr></thead>
+<tbody>
+<tr><td>Images in chat</td><td><span class="badge ok">excellent</span></td><td>Token count scales with resolution &mdash; a user's 12MP photo is thousands of tokens you did not budget for</td></tr>
+<tr><td>Video</td><td><span class="badge ok">good</span></td><td>By far the most expensive input. Cap frames and always set a video limit</td></tr>
+<tr><td><code>--limit-mm-per-prompt</code></td><td><span class="badge ok">essential</span></td><td>Set it on every multimodal endpoint. There have been reported cases of it being ineffective on specific version/model pairings &mdash; verify empirically rather than assuming</td></tr>
+<tr><td>Embeddings</td><td><span class="badge ok">excellent</span></td><td>Remember Qwen3-Embedding is instruction-aware &mdash; prepend the task description, and keep it identical between indexing and querying</td></tr>
+<tr><td>Reranking</td><td><span class="badge ok">good</span></td><td>Cost is linear in candidates. Rerank ~100, not ~1,000</td></tr>
+<tr><td>Matryoshka dimensions</td><td><span class="badge ok">good</span></td><td>Truncating vectors is a client-side choice; fix the dimension before you build the index</td></tr>
+<tr><td>LoRA serving</td><td><span class="badge ok">good</span></td><td>Mature for dense models; attention-only adapters are the safe choice on MoE</td></tr>
+<tr><td>Structured output</td><td><span class="badge ok">good</span></td><td>Guided JSON and grammars work, but can interact awkwardly with tool-call parsing &mdash; use one or the other per endpoint</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section class="slide" id="slide-10">
+<div class="slide-number">10</div>
+<h2>Diagnostics &mdash; symptom, cause, fix</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Symptom</th><th>Likely cause</th><th>Fix</th></tr></thead>
+<tbody>
+<tr><td>&ldquo;Model architectures [...] are not supported&rdquo;</td><td>vLLM predates the architecture</td><td>Upgrade to the version in the model card; try nightly for a brand-new release</td></tr>
+<tr><td><code>KeyError</code> on load, Coder models</td><td><code>transformers</code> older than 4.51.0</td><td>Upgrade transformers; clear any cached tokenizer</td></tr>
+<tr><td>OOM at startup</td><td>Weights plus reserved KV cache exceed HBM</td><td>Lower <code>--max-model-len</code> first, then <code>--gpu-memory-utilization</code>, then quantise</td></tr>
+<tr><td>OOM after running fine for a while</td><td>Concurrency grew; KV cache is per-sequence</td><td>Lower <code>--max-num-seqs</code>; check for leaked long-lived sessions</td></tr>
+<tr><td>Thinking trace appears in <code>content</code></td><td>No reasoning parser</td><td><code>--reasoning-parser qwen3</code></td></tr>
+<tr><td>Tool calls never dispatch</td><td>Missing <code>--enable-auto-tool-choice</code>, or wrong parser</td><td>Set both flags; check the pairing table on slide 03</td></tr>
+<tr><td>Empty <code>tool_calls</code>, populated <code>reasoning_content</code></td><td>Tool markup emitted inside the think region</td><td>Known parser interaction &mdash; pin a working version or swap parser</td></tr>
+<tr><td>Model repeats itself / loops</td><td>Greedy decoding on a thinking model</td><td>Use the card's sampling; never <code>temperature=0</code> in thinking mode</td></tr>
+<tr><td>CUDA graph capture failure (hybrid models)</td><td>Too many kernels captured</td><td>Reduce <code>--max-cudagraph-capture-size</code>; <code>--enforce-eager</code> as a last resort</td></tr>
+<tr><td>Poor quality at very long context</td><td>Static YaRN degrading short prompts, or genuine extrapolation limits</td><td>Run a separate long-context endpoint; do not apply YaRN globally</td></tr>
+<tr><td>Prefix cache hit rate near zero</td><td>Variable content early in the prompt</td><td>Move timestamps, IDs and per-request data to the end of the prompt</td></tr>
+<tr><td>Throughput dropped after enabling MTP</td><td>Speculation costs throughput under load</td><td>Enable MTP only on low-concurrency endpoints</td></tr>
+<tr><td>VLM OOM on some requests only</td><td>No multimodal cap</td><td><code>--limit-mm-per-prompt</code>; cap resolution client-side too</td></tr>
+<tr><td>MoE much slower than expected</td><td>Tensor parallelism without expert parallelism</td><td>Add <code>--enable-expert-parallel</code></td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout">
+<div class="callout-label">Next</div>
+<p>Part 12 closes the series: choosing a model for a given job, sizing the hardware, an explicit decision matrix across the whole family, the fine-tuning options, and a short list of the things most likely to bite you in production.</p>
+</div>
+</section>
+
+<nav class="deck-nav"><a href="part10.html">&larr; Part 10 &middot; Qwen3.6 to Qwen3.8</a><a class="next" href="part12.html">Part 12 &middot; Choosing &amp; Deploying &rarr;</a></nav>
+<footer class="footer"><p>Part of the <a href="index.html">Qwen</a> presentation series &mdash; a deep exploration of Alibaba's open-weight model family.</p><p style="margin-top:0.5rem;font-size:0.8rem;"><a href="index.html">Back to Series Index</a></p></footer>
+
+<script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.slide').forEach(slide => {
+        slide.style.opacity = '0';
+        slide.style.transform = 'translateY(30px)';
+        slide.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(slide);
+    });
+</script>
+</body>
+</html>

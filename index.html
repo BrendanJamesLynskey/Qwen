@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qwen &mdash; Presentation Series</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a; --bg-card: #0d1117; --bg-code: #161b22;
+            --text-primary: #e6edf3; --text-secondary: #8b949e;
+            --accent: #7B61FF; --accent-dim: #7B61FF40; --accent-glow: #7B61FF30;
+            --border: #21262d;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            --font-body: 'Inter', sans-serif;
+            --max-width: 960px;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg-primary); color: var(--text-primary);
+               font-family: var(--font-body); font-size: 17px; line-height: 1.7;
+               overflow-x: hidden; }
+        .hero { min-height: 62vh; display: flex; flex-direction: column;
+                justify-content: center; align-items: center;
+                padding: 4rem 1.5rem 3rem; text-align: center; position: relative; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 50%;
+                        transform: translateX(-50%); width: 640px; height: 640px;
+                        background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+                        pointer-events: none; z-index: 0; }
+        .hero > * { position: relative; z-index: 1; }
+        .series-label { font-family: var(--font-mono); font-size: 0.85rem;
+                        color: var(--accent); letter-spacing: 0.15em;
+                        text-transform: uppercase; margin-bottom: 1rem; }
+        .hero h1 { font-family: var(--font-display);
+                   font-size: clamp(2rem, 5vw, 3.1rem); font-weight: 700;
+                   color: var(--text-primary); line-height: 1.15; margin-bottom: 1rem; }
+        .hero h1 .accent { color: var(--accent); }
+        .hero .subtitle { font-size: 1.1rem; color: var(--text-secondary);
+                          max-width: 760px; margin-bottom: 1.5rem; }
+        .tags { display: flex; flex-wrap: wrap; gap: 0.5rem;
+                justify-content: center; margin-bottom: 1rem; }
+        .tag { font-family: var(--font-mono); font-size: 0.75rem;
+               padding: 0.25rem 0.75rem; border-radius: 999px;
+               border: 1px solid var(--accent); color: var(--accent);
+               background: var(--accent-dim); white-space: nowrap; }
+        .pipeline { display: flex; flex-wrap: wrap; align-items: center;
+                    justify-content: center; gap: 0.25rem; margin-top: 0.5rem;
+                    max-width: var(--max-width); }
+        .pipeline-step { font-family: var(--font-mono); font-size: 0.68rem;
+                         padding: 0.3rem 0.65rem; background: var(--bg-card);
+                         border: 1px solid var(--border); border-radius: 4px;
+                         color: var(--text-secondary); white-space: nowrap; }
+        .pipeline-arrow { color: var(--accent); font-size: 0.85rem; font-weight: 700; }
+        .container { max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem; }
+        h2 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700;
+             color: var(--accent); margin: 1rem 0 1.25rem; }
+        h3 { font-family: var(--font-display); font-size: 1.15rem; font-weight: 600;
+             color: var(--text-primary); margin: 2rem 0 0.5rem;
+             padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
+        h3 .sec-num { font-family: var(--font-mono); font-size: 0.8rem;
+                      color: var(--accent); margin-right: 0.6rem; }
+        h3 .sec-note { font-family: var(--font-mono); font-size: 0.72rem;
+                       color: var(--text-secondary); font-weight: 400;
+                       margin-left: 0.5rem; }
+        .lead { color: var(--text-secondary); margin-bottom: 1.5rem; }
+        .lead strong { color: var(--text-primary); }
+        .deck-list { display: flex; flex-direction: column; gap: 0.6rem;
+                     list-style: none; padding: 0; margin-top: 0.9rem; }
+        .deck-card { display: flex; gap: 1rem; padding: 1rem 1.25rem;
+                     background: var(--bg-card); border: 1px solid var(--border);
+                     border-left: 3px solid var(--accent); border-radius: 6px;
+                     transition: border-color 0.15s, transform 0.15s;
+                     text-decoration: none; }
+        .deck-card:hover { border-color: var(--accent); transform: translateX(3px); }
+        .deck-card .num { font-family: var(--font-mono); font-size: 0.8rem;
+                          color: var(--accent); min-width: 2rem; padding-top: 0.15rem; }
+        .deck-card .body { flex: 1; min-width: 0; }
+        .deck-card .deck-title { font-family: var(--font-display); font-size: 1.05rem;
+                                 font-weight: 600; color: var(--text-primary);
+                                 margin-bottom: 0.2rem; }
+        .deck-card:hover .deck-title { color: var(--accent); }
+        .deck-card .desc { font-size: 0.92rem; color: var(--text-secondary); }
+        .deck-card .meta { font-family: var(--font-mono); font-size: 0.7rem;
+                           color: var(--text-secondary); margin-top: 0.4rem;
+                           display: flex; gap: 0.6rem; flex-wrap: wrap; }
+        .badge { display: inline-block; font-family: var(--font-mono);
+                 font-size: 0.65rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+                 border: 1px solid var(--border); color: var(--text-secondary); }
+        .badge.live { border-color: var(--accent); color: var(--accent);
+                      background: var(--accent-dim); }
+        .callout { background: var(--bg-card); border-left: 3px solid var(--accent);
+                   border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin: 1.75rem 0; }
+        .callout p { margin-bottom: 0; color: var(--text-secondary); }
+        .callout p + p { margin-top: 0.5rem; }
+        .callout p strong { color: var(--text-primary); }
+        .callout .callout-label { font-family: var(--font-mono); font-size: 0.75rem;
+                   color: var(--accent); text-transform: uppercase;
+                   letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+        .footer { text-align: center; padding: 3rem 1.5rem;
+                  color: var(--text-secondary); font-size: 0.85rem;
+                  border-top: 1px solid var(--border); max-width: var(--max-width);
+                  margin: 3rem auto 0; }
+        .footer a { color: var(--accent); text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 1.8rem; }
+            .deck-card { flex-direction: column; gap: 0.3rem; }
+            .pipeline-step { font-size: 0.58rem; padding: 0.2rem 0.4rem; }
+        }
+    </style>
+</head>
+<body>
+<header class="hero">
+    <div class="series-label">Qwen &mdash; Presentation Series</div>
+    <h1>The <span class="accent">Qwen</span> Models</h1>
+    <p class="subtitle">Alibaba's open-weight model family, from the 7B research release of August 2023 to a 2.4-trillion-parameter flagship three years later. Twelve deep-dive decks covering every generation and the models within each &mdash; architecture, benchmarks, abilities, flags, honest strengths and weaknesses, and exactly how well each is served by vLLM. Written for engineers who have to choose, deploy and operate these models.</p>
+    <div class="tags"><span class="tag">Qwen &rarr; Qwen3.8</span><span class="tag">Dense + MoE</span><span class="tag">Gated DeltaNet</span><span class="tag">Coder / VL / Omni</span><span class="tag">vLLM serving</span><span class="tag">Apache 2.0</span><span class="tag">12 decks</span></div>
+    <div class="pipeline">
+        <span class="pipeline-step">Qwen</span><span class="pipeline-arrow">&rarr;</span>
+        <span class="pipeline-step">Qwen1.5</span><span class="pipeline-arrow">&rarr;</span>
+        <span class="pipeline-step">Qwen2</span><span class="pipeline-arrow">&rarr;</span>
+        <span class="pipeline-step">Qwen2.5</span><span class="pipeline-arrow">&rarr;</span>
+        <span class="pipeline-step">QwQ</span><span class="pipeline-arrow">&rarr;</span>
+        <span class="pipeline-step">Qwen3</span><span class="pipeline-arrow">&rarr;</span>
+        <span class="pipeline-step">Qwen3-Next</span><span class="pipeline-arrow">&rarr;</span>
+        <span class="pipeline-step">Qwen3.5</span><span class="pipeline-arrow">&rarr;</span>
+        <span class="pipeline-step">Qwen3.6</span><span class="pipeline-arrow">&rarr;</span>
+        <span class="pipeline-step">Qwen3.8</span>
+    </div>
+</header>
+<main class="container">
+    <h2>The Series</h2>
+    <p class="lead">Five sections. The first three walk the family forward in time, so that each architectural idea arrives with the problem it was built to solve. The last two turn all of it into deployment decisions. Every deck stands alone &mdash; if you only need <strong>Qwen3-Coder</strong> or the <strong>vLLM</strong> reference, start there.</p>
+
+    <h3><span class="sec-num">A</span>Orientation</h3>
+    <ol class="deck-list">
+        <a class="deck-card" href="part1.html"><div class="num">01</div><div class="body"><div class="deck-title">The Qwen Story &rarr;</div><div class="desc">Six generations in three years. The timeline as swimlanes, how to parse a Qwen model name, the open/Plus/Max tier ladder, the licence history from a bespoke source-available licence to blanket Apache 2.0, and the architectural through-line from dense to sparse to hybrid linear attention.</div><div class="meta"><span class="badge live">live</span><span>Map of the whole family</span></div></div></a>
+    </ol>
+
+    <h3><span class="sec-num">B</span>Foundations<span class="sec-note">2023 &ndash; early 2025</span></h3>
+    <ol class="deck-list">
+        <a class="deck-card" href="part2.html"><div class="num">02</div><div class="body"><div class="deck-title">Qwen 1.0 &amp; Qwen1.5 &rarr;</div><div class="desc">The first open Chinese frontier models. What was actually in Qwen-7B, why the 151,936-entry tokenizer mattered more than the architecture, the three stacked context-extension tricks, Qwen-VL and Qwen-Audio, the compatibility release that made Qwen the default base, and the 14.3B mixture-of-experts that proved sparsity.</div><div class="meta"><span class="badge live">live</span><span>Where the conventions were set</span></div></div></a>
+        <a class="deck-card" href="part3.html"><div class="num">03</div><div class="body"><div class="deck-title">Qwen2 &amp; Qwen2.5 &mdash; the workhorse generation &rarr;</div><div class="desc">Grouped-query attention everywhere and the KV-cache arithmetic that justifies it; 18 trillion pre-training tokens; long context done properly with YaRN and dual chunk attention; Qwen2.5-Coder, Qwen2.5-Math and tool-integrated reasoning, Qwen2.5-VL's dynamic resolution, and the Thinker&ndash;Talker split in Qwen2.5-Omni.</div><div class="meta"><span class="badge live">live</span><span>Still the most-deployed generation</span></div></div></a>
+        <a class="deck-card" href="part4.html"><div class="num">04</div><div class="body"><div class="deck-title">QwQ &amp; QVQ &mdash; the reasoning detour &rarr;</div><div class="desc">Sixteen weeks in which a 32B matched a 671B on reasoning. What a <code>&lt;think&gt;</code> block actually is, reinforcement learning with verifiable rewards, the test-time compute curve and its knee, visual reasoning in QVQ, why serving a reasoning model breaks your assumptions &mdash; and why the whole line was absorbed into Qwen3.</div><div class="meta"><span class="badge live">live</span><span>Reasoning is post-training, not scale</span></div></div></a>
+    </ol>
+
+    <h3><span class="sec-num">C</span>The Qwen3 Generation<span class="sec-note">Apr 2025 &ndash; Feb 2026</span></h3>
+    <ol class="deck-list">
+        <a class="deck-card" href="part5.html"><div class="num">05</div><div class="body"><div class="deck-title">Qwen3 &mdash; architecture &amp; the hybrid-thinking experiment &rarr;</div><div class="desc">Eight open models from 0.6B to 235B-A22B with the exact spec table; QK-Norm and the removal of QKV bias; inside the 128-expert MoE block; three pre-training stages over 36 trillion tokens; hybrid thinking and its three controls; four-stage post-training and strong-to-weak distillation; and the 2507 split that admitted the experiment had failed.</div><div class="meta"><span class="badge live">live</span><span>The generation everything else references</span></div></div></a>
+        <a class="deck-card" href="part6.html"><div class="num">06</div><div class="body"><div class="deck-title">Qwen3-Coder &mdash; agentic coding deep dive &rarr;</div><div class="desc">The 480B-A35B specified in full; the 20,000-parallel-environment reinforcement-learning system that taught it to recover from its own mistakes; benchmarks with the harness caveat that most comparisons ignore; every ability and every option worth setting; an honest list of strengths and weaknesses; a capability-by-capability vLLM assessment; and the Coder-Next rewrite that matched it at a twelfth of the cost.</div><div class="meta"><span class="badge live">live</span><span>Pros, cons, benchmarks, flags, vLLM</span></div></div></a>
+        <a class="deck-card" href="part7.html"><div class="num">07</div><div class="body"><div class="deck-title">Qwen3-Next &mdash; the architecture pivot &rarr;</div><div class="desc">Gated DeltaNet explained from the state-update equation up: gating for forgetting, the delta rule for retrieval. The 3:1 hybrid stack and what it does to the KV cache; 512 experts at a 1:50 activation ratio; the stability toolkit that also makes it quantise well; multi-token prediction; and the hybrid KV-cache manager and Triton kernels vLLM had to build to serve it.</div><div class="meta"><span class="badge live">live</span><span>The design behind every current Qwen</span></div></div></a>
+        <a class="deck-card" href="part8.html"><div class="num">08</div><div class="body"><div class="deck-title">Multimodal &amp; specialists &rarr;</div><div class="desc">Qwen3-VL's DeepStack, interleaved M-RoPE and text-timestamp alignment, and how to serve a VLM without running out of memory; Qwen3-Omni; the Embedding and Reranker pair as a retrieval cascade; Qwen3Guard's three-tier streaming safety; Qwen-Image's text rendering and the speech stack &mdash; then all of it composed into one system.</div><div class="meta"><span class="badge live">live</span><span>The rest of the fleet</span></div></div></a>
+    </ol>
+
+    <h3><span class="sec-num">D</span>The 2026 Line<span class="sec-note">Feb &ndash; Aug 2026</span></h3>
+    <ol class="deck-list">
+        <a class="deck-card" href="part9.html"><div class="num">09</div><div class="body"><div class="deck-title">Qwen3.5 &mdash; hybrid attention goes mainline &rarr;</div><div class="desc">Eight models from 0.8B to 397B-A17B, every one hybrid-attention and natively multimodal. The flagship specified; early fusion versus late fusion; 201 languages and the tokenizer break that ends three years of continuity; thinking and non-thinking finally reconciled; the benchmark position including a general model beating the dedicated coder; where it is still weak; and the vLLM recipe.</div><div class="meta"><span class="badge live">live</span><span>Where the threads converge</span></div></div></a>
+        <a class="deck-card" href="part10.html"><div class="num">10</div><div class="body"><div class="deck-title">Qwen3.6 to Qwen3.8 &mdash; dense returns, Max goes frontier &rarr;</div><div class="desc">A 27B dense model beating the 397B on agentic coding, and why dense wins that workload; thinking preservation across turns; the closed Max tier from Qwen3-Max to the 2.4-trillion-parameter Qwen3.8-Max; the open-weights release that is announced but not yet shipped; and what the trajectory implies for a decision you make today.</div><div class="meta"><span class="badge live">live</span><span>The last four months</span></div></div></a>
+    </ol>
+
+    <h3><span class="sec-num">E</span>Running It</h3>
+    <ol class="deck-list">
+        <a class="deck-card" href="part11.html"><div class="num">11</div><div class="body"><div class="deck-title">Serving Qwen with vLLM &rarr;</div><div class="desc">The architecture support matrix; the reasoning/tool-call parser pairing table and the silent failures a mismatch causes; tensor, pipeline, expert and data parallelism and when each is right; the KV-cache formula and where the memory actually goes; long context, prefix caching and prompt ordering; quantisation and the MoE router caveat; MTP speculative decoding; multimodal and pooling endpoints; and a symptom-to-fix diagnostic table.</div><div class="meta"><span class="badge live">live</span><span>Keep it open while you write the command</span></div></div></a>
+        <a class="deck-card" href="part12.html"><div class="num">12</div><div class="body"><div class="deck-title">Choosing, sizing &amp; deploying &rarr;</div><div class="desc">A decision tree and a selection matrix by workload; weight and KV-cache sizing for every model in the family; a dense-versus-sparse rule that actually works; the self-host versus API break-even done honestly; when to fine-tune and when not to; a migration procedure for generation upgrades; a production checklist; and how to verify any claim in this series for yourself.</div><div class="meta"><span class="badge live">live</span><span>Turning eleven decks into decisions</span></div></div></a>
+    </ol>
+
+    <div class="callout">
+        <div class="callout-label">How to read this series</div>
+        <p>Read <strong>Part 01</strong> first for the map. Parts 02&ndash;04 build the vocabulary &mdash; tokenizers, grouped-query attention, mixtures of experts, reasoning traces &mdash; that the later decks assume. <strong>Part 05</strong> is the pivot: Qwen3 is the generation everything since is defined against. <strong>Part 07</strong> is the most important architectural deck; understand the 3:1 hybrid stack and you understand every current Qwen. <strong>Parts 11 and 12</strong> are reference material rather than narrative, and are worth returning to.</p>
+        <p>If you are here for one thing: <strong>Qwen3-Coder is Part 06</strong>, <strong>vLLM serving is Part 11</strong>, and <strong>which model should I use is Part 12</strong>.</p>
+    </div>
+
+    <div class="callout">
+        <div class="callout-label">As of 10 August 2026</div>
+        <p>The Qwen line moves faster than any document about it. Architecture and flag claims come from model cards and technical reports; figures for the closed Max tier are vendor-reported and flagged as such. The announced Qwen3.8 open-weights release had <strong>not yet appeared</strong> when this was written &mdash; Part 12 explains how to verify every class of claim here for yourself.</p>
+    </div>
+</main>
+<footer class="footer">
+    <p>Part of the <a href="https://github.com/BrendanJamesLynskey/LLMs">LLMs hub</a> &mdash; an index of presentation series for AI / LLM engineers. Primary sources: the <a href="https://qwenlm.github.io/blog/">Qwen blog</a>, <a href="https://huggingface.co/Qwen">Qwen on Hugging Face</a>, <a href="https://github.com/QwenLM">github.com/QwenLM</a> and the <a href="https://docs.vllm.ai/">vLLM documentation</a>.</p>
+    <p style="margin-top:0.5rem;font-size:0.8rem;"><a href="https://github.com/BrendanJamesLynskey/Qwen">View this repository on GitHub</a></p>
+</footer>
+</body>
+</html>

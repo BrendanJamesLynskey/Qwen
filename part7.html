@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qwen 07 __TITLE__mdash; Qwen3-Next</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-card: #0d1117;
+            --bg-code: #161b22;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --accent: #7B61FF;
+            --accent-dim: #7B61FF40;
+            --accent-glow: #7B61FF30;
+            --border: #21262d;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            --font-body: 'Inter', sans-serif;
+            --max-width: 900px;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 17px;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .hero > * { position: relative; z-index: 1; }
+        .series-label {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        .hero h1 .accent { color: var(--accent); }
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 640px;
+            margin-bottom: 2rem;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+        }
+        .tag {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            background: var(--accent-dim);
+            white-space: nowrap;
+        }
+        .pipeline {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+            max-width: var(--max-width);
+        }
+        .pipeline-step {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            padding: 0.3rem 0.7rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        .pipeline-arrow { color: var(--accent); font-size: 0.9rem; font-weight: 700; }
+        .slide {
+            min-height: 100vh;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .slide-number {
+            font-family: var(--font-display);
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--accent-dim);
+            position: absolute;
+            top: 2rem;
+            right: 1.5rem;
+            line-height: 1;
+            user-select: none;
+        }
+        .slide h2 {
+            font-family: var(--font-display);
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            line-height: 1.25;
+        }
+        .slide h3 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .slide p { margin-bottom: 1rem; color: var(--text-secondary); }
+        .slide p strong { color: var(--text-primary); }
+        .slide ul, .slide ol { margin-bottom: 1rem; padding-left: 1.5rem; color: var(--text-secondary); }
+        .slide li { margin-bottom: 0.4rem; }
+        .slide li strong { color: var(--text-primary); }
+        .slide code {
+            font-family: var(--font-mono);
+            font-size: 0.88em;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            padding: 0.05rem 0.35rem;
+            border-radius: 3px;
+            color: #c9d1d9;
+        }
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin: 1.25rem 0;
+            overflow: hidden;
+        }
+        .code-header {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            background: rgba(123, 97, 255, 0.08);
+            padding: 0.4rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .code-block pre { margin: 0; padding: 1rem; overflow-x: auto; }
+        .code-block code {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #c9d1d9;
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+        .kw { color: #ff7b72; }
+        .fn { color: #d2a8ff; }
+        .str { color: #a5d6ff; }
+        .cm { color: #8b949e; font-style: italic; }
+        .num { color: #79c0ff; }
+        .type { color: #ffa657; }
+        .dir { color: #ff7b72; }
+        .mac { color: #ffa657; }
+        .table-wrap {
+            overflow-x: auto;
+            margin: 1.25rem 0;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th {
+            background: var(--bg-code);
+            color: var(--accent);
+            font-weight: 600;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            font-family: var(--font-display);
+            white-space: nowrap;
+        }
+        td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:nth-child(even) td { background: rgba(13, 17, 23, 0.5); }
+        .diagram-flow {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .diagram-box {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            text-align: center;
+            white-space: nowrap;
+        }
+        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-box.dim { color: var(--text-secondary); border-color: var(--border); }
+        .diagram-arrow { color: var(--accent); font-size: 1.3rem; font-weight: 700; }
+        .diagram-vertical {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .diagram-vertical .diagram-arrow { font-size: 1.1rem; }
+        .hierarchy {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .hierarchy-level { display: flex; align-items: center; gap: 0.75rem; }
+        .hierarchy-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+            text-align: right;
+        }
+        .hierarchy-items { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+        .hierarchy-item {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-grid {
+            display: grid;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .diagram-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+        .diagram-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+        .diagram-panel {
+            padding: 1rem;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+        .diagram-panel.accent-border { border-left: 3px solid var(--accent); }
+        .diagram-panel h4 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        .diagram-panel p, .diagram-panel ul { font-size: 0.85rem; }
+        .callout {
+            background: var(--bg-card);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+            padding: 1rem 1.25rem;
+            margin: 1.25rem 0;
+        }
+        .callout p { margin-bottom: 0; }
+        .callout p + p { margin-top: 0.5rem; }
+        .callout .callout-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.3rem;
+        }
+        .contents-list { list-style: none; padding-left: 0; counter-reset: contents; }
+        .contents-list li {
+            counter-increment: contents;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .contents-list li:last-child { border-bottom: none; }
+        .contents-list li::before {
+            content: counter(contents, decimal-leading-zero);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            min-width: 2rem;
+        }
+        .contents-list a { color: var(--text-primary); text-decoration: none; transition: color 0.2s; }
+        .contents-list a:hover { color: var(--accent); }
+        .footer {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+        .footer a { color: var(--accent); text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+        .deck-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        .deck-nav a {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: border-color 0.15s, color 0.15s;
+        }
+        .deck-nav a:hover { border-color: var(--accent); color: var(--accent); }
+        .deck-nav a.next { margin-left: auto; }
+        .canvas-wrap {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.25rem 0;
+            overflow-x: auto;
+        }
+        .canvas-wrap canvas, .canvas-wrap svg { display: block; margin: 0 auto; max-width: 100%; }
+        .badge {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            padding: 0.1rem 0.45rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            vertical-align: middle;
+            margin-left: 0.3rem;
+        }
+        .badge.ok    { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+        .badge.warn  { border-color: #ffa657; color: #ffa657; background: rgba(255,166,87,0.08); }
+        .badge.bad   { border-color: #ff7b72; color: #ff7b72; background: rgba(255,123,114,0.08); }
+        @media (max-width: 640px) {
+            .slide { padding: 3rem 1rem; min-height: auto; }
+            .slide-number { font-size: 3rem; top: 1.5rem; right: 1rem; }
+            .slide h2 { font-size: 1.5rem; }
+            .diagram-grid.cols-2, .diagram-grid.cols-3 { grid-template-columns: 1fr; }
+            .pipeline { gap: 0.15rem; }
+            .pipeline-step { font-size: 0.6rem; padding: 0.2rem 0.4rem; }
+            .hero h1 { font-size: 1.8rem; }
+            table { font-size: 0.78rem; }
+        }
+    </style>
+</head>
+<body>
+<header class="hero">
+<div class="series-label">Qwen &middot; Part 07</div>
+<h1>Qwen3-Next &mdash; the <span class="accent">Architecture Pivot</span></h1>
+<p class="subtitle">September 2025. Eighty billion parameters, three billion active, 512 experts, and three quarters of the attention layers replaced with a linear-time recurrence. Trained for a tenth of Qwen3-32B's cost and ten times faster past 32K context. Labelled a preview &mdash; and then made the mainline design of every Qwen since.</p>
+<div class="tags">
+<span class="tag">80B-A3B</span>
+<span class="tag">Gated DeltaNet</span>
+<span class="tag">3:1 hybrid</span>
+<span class="tag">512 experts</span>
+<span class="tag">MTP</span>
+<span class="tag">262K &rarr; 1M</span>
+</div>
+<div class="pipeline">
+<span class="pipeline-step">GatedDeltaNet</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">GatedDeltaNet</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">GatedDeltaNet</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">Gated Attention</span><span class="pipeline-arrow">&times;12</span>
+</div>
+</header>
+
+<section class="slide" id="slide-00">
+<div class="slide-number">00</div>
+<h2>Contents</h2>
+<ul class="contents-list">
+<li><a href="#slide-01">The problem: attention does not scale, and everyone knew it</a></li>
+<li><a href="#slide-02">Gated DeltaNet &mdash; a recurrence that can actually retrieve</a></li>
+<li><a href="#slide-03">The 3:1 hybrid stack</a></li>
+<li><a href="#slide-04">Extreme sparsity &mdash; 512 experts, 10 active</a></li>
+<li><a href="#slide-05">The stability toolkit</a></li>
+<li><a href="#slide-06">Multi-token prediction</a></li>
+<li><a href="#slide-07">What vLLM had to build</a></li>
+<li><a href="#slide-08">The numbers that justified the pivot</a></li>
+<li><a href="#slide-09">Why a &ldquo;preview&rdquo; became the mainline</a></li>
+</ul>
+</section>
+
+<section class="slide" id="slide-01">
+<div class="slide-number">01</div>
+<h2>The problem: attention does not scale, and everyone knew it</h2>
+<p>Softmax attention has two costs, and by 2025 both had become binding for agentic workloads.</p>
+<div class="diagram-grid cols-2">
+<div class="diagram-panel accent-border">
+<h4>Compute: O(n&sup2;)</h4>
+<p>Every token attends to every previous token. Doubling the context quadruples the prefill work. Reading a 256K-token repository costs sixteen times what reading a 64K subset costs &mdash; and prefill is where an agent spends most of its FLOPs.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Memory: O(n) per sequence, forever</h4>
+<p>The KV cache grows linearly and is never released while the sequence lives. It is per-sequence, so it caps concurrency directly. GQA cut the constant; it did not change the growth.</p>
+</div>
+</div>
+<p>The workload that broke the compromise is the coding agent: a 200K-token repository context, re-prefilled or cached across dozens of turns, with dozens of concurrent sessions. Under full attention that is either impossibly slow or impossibly expensive, and usually both.</p>
+<h3>Why the obvious fixes were not enough</h3>
+<ul>
+<li><strong>Sparse attention</strong> (windowed, strided, learned) drops interactions the model may need. It works well until the task requires exactly the interaction you dropped &mdash; and retrieval tasks are precisely that.</li>
+<li><strong>Pure linear attention / SSMs</strong> (Mamba and relatives) are O(n) and have a constant-size state. But a fixed-size state cannot hold arbitrary detail: they are measurably weaker at in-context recall, which is the one thing long context is for.</li>
+<li><strong>Sliding-window hybrids</strong> help, but still keep quadratic behaviour in the global layers.</li>
+</ul>
+<div class="callout">
+<div class="callout-label">The insight</div>
+<p>You do not need every layer to be capable of arbitrary retrieval &mdash; you need <em>some</em> layers to be. Qwen3-Next keeps one full-attention layer in every four and makes the other three a linear recurrence. Retrieval capability is preserved by the 25%; cost is dominated by the 75%.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-02">
+<div class="slide-number">02</div>
+<h2>Gated DeltaNet &mdash; a recurrence that can actually retrieve</h2>
+<p>Gated DeltaNet comes from the 2024 paper <em>Gated Delta Networks: Improving Mamba2 with Delta Rule</em>. It is a linear-attention layer whose state is a fixed-size <strong>matrix memory</strong>, updated per token by two mechanisms that pull in opposite directions.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 290" width="720" height="290" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="p7d-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<style>
+.p7d-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p7d-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
+.p7d-bt{fill:rgba(31,158,142,0.10);stroke:#1F9E8E;stroke-width:1.2;}
+.p7d-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p7d-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p7d-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p7d-ar{stroke:#7B61FF;stroke-width:1.3;fill:none;marker-end:url(#p7d-a);}
+.p7d-eq{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:12px;}
+</style>
+<text x="8" y="16" class="p7d-h">The state update &mdash; decay what is stale, correct what is wrong</text>
+
+<rect x="150" y="30" width="420" height="40" rx="6" class="p7d-b"/>
+<text x="176" y="56" class="p7d-eq">S<tspan font-size="9" dy="3">t</tspan><tspan dy="-3"> = </tspan><tspan fill="#B87C22">&alpha;</tspan><tspan font-size="9" dy="3">t</tspan><tspan dy="-3"> S</tspan><tspan font-size="9" dy="3">t-1</tspan><tspan dy="-3"> + </tspan><tspan fill="#1F9E8E">&beta;</tspan><tspan font-size="9" dy="3">t</tspan><tspan dy="-3"> (v</tspan><tspan font-size="9" dy="3">t</tspan><tspan dy="-3"> &minus; S</tspan><tspan font-size="9" dy="3">t-1</tspan><tspan dy="-3">k</tspan><tspan font-size="9" dy="3">t</tspan><tspan dy="-3">) k</tspan><tspan font-size="9" dy="3">t</tspan><tspan dy="-3">&#7488;</tspan></text>
+
+<line x1="230" y1="74" x2="200" y2="100" class="p7d-ar"/>
+<line x1="400" y1="74" x2="430" y2="100" class="p7d-ar"/>
+
+<rect x="30" y="104" width="316" height="96" rx="6" class="p7d-b" stroke="#B87C22"/>
+<text x="188" y="126" class="p7d-l">gating &mdash; the Mamba2 half</text>
+<text x="188" y="146" class="p7d-s">&alpha; is a learned, input-dependent decay in (0,1)</text>
+<text x="188" y="162" class="p7d-s">old memory fades exponentially, so the fixed-size</text>
+<text x="188" y="178" class="p7d-s">state never saturates on a long sequence</text>
+<text x="188" y="194" class="p7d-s">&mdash; it forgets, deliberately</text>
+
+<rect x="374" y="104" width="316" height="96" rx="6" class="p7d-bt"/>
+<text x="532" y="126" class="p7d-l">the delta rule &mdash; the retrieval half</text>
+<text x="532" y="146" class="p7d-s">(v &minus; S k) is a prediction error: what the memory</text>
+<text x="532" y="162" class="p7d-s">would have returned for key k, versus the truth v</text>
+<text x="532" y="178" class="p7d-s">the update writes only the correction &mdash; targeted,</text>
+<text x="532" y="194" class="p7d-s">associative, and it overwrites rather than accumulates</text>
+
+<line x1="8" y1="218" x2="712" y2="218" stroke="#21262d" stroke-width="1"/>
+<text x="8" y="238" class="p7d-h">Two more pieces make it work in a transformer stack</text>
+<text x="8" y="258" class="p7d-s" style="text-anchor:start">&bull; A causal 1D convolution supplies short-range local context, doing the job RoPE does in an attention layer.</text>
+<text x="8" y="274" class="p7d-s" style="text-anchor:start">&bull; L2 normalisation on Q and K bounds the update magnitude, replacing the normalising role of softmax.</text>
+</svg>
+</div>
+<div class="callout">
+<div class="callout-label">Why the delta rule is the difference</div>
+<p>A plain gated recurrence (Mamba-style) <em>accumulates</em>: every token adds to the state, and old associations are diluted rather than replaced. The delta rule makes the update an <strong>error correction</strong>, so writing a new value for a key genuinely overwrites the old one. That is what turns a fixed-size state into something resembling an associative memory &mdash; and it is why Gated DeltaNet holds up on in-context recall where earlier linear-attention designs collapsed.</p>
+</div>
+<p>Cost, per token, is <em>constant</em>: the state is a fixed-size matrix regardless of sequence length. There is no KV cache in these layers &mdash; only the recurrent state.</p>
+</section>
+
+<section class="slide" id="slide-03">
+<div class="slide-number">03</div>
+<h2>The 3:1 hybrid stack</h2>
+<p>Qwen3-Next-80B-A3B is 48 layers arranged as twelve identical blocks. The model card states the layout precisely: <code>12 &times; (3 &times; (Gated DeltaNet &rarr; MoE) &rarr; 1 &times; (Gated Attention &rarr; MoE))</code>.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 300" width="720" height="300" xmlns="http://www.w3.org/2000/svg">
+<style>
+.p7h-dn{fill:rgba(31,158,142,0.14);stroke:#1F9E8E;stroke-width:1;}
+.p7h-at{fill:rgba(123,97,255,0.20);stroke:#7B61FF;stroke-width:1.2;}
+.p7h-moe{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p7h-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p7h-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p7h-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p7h-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+</style>
+<text x="8" y="16" class="p7h-h">One repeating block, twelve times &mdash; 36 linear layers, 12 attention layers</text>
+
+<rect x="20" y="28" width="300" height="140" rx="6" class="p7h-b"/>
+<text x="170" y="46" class="p7h-l">block k (of 12)</text>
+<rect x="36" y="56" width="268" height="22" rx="3" class="p7h-dn"/><text x="170" y="71" class="p7h-l">Gated DeltaNet &rarr; MoE</text>
+<rect x="36" y="82" width="268" height="22" rx="3" class="p7h-dn"/><text x="170" y="97" class="p7h-l">Gated DeltaNet &rarr; MoE</text>
+<rect x="36" y="108" width="268" height="22" rx="3" class="p7h-dn"/><text x="170" y="123" class="p7h-l">Gated DeltaNet &rarr; MoE</text>
+<rect x="36" y="134" width="268" height="22" rx="3" class="p7h-at"/><text x="170" y="149" class="p7h-l">Gated Attention &rarr; MoE</text>
+
+<rect x="344" y="28" width="176" height="140" rx="6" class="p7h-b"/>
+<text x="432" y="46" class="p7h-l">Gated DeltaNet layer</text>
+<text x="432" y="66" class="p7h-s" style="text-anchor:middle">32 V heads / 16 QK heads</text>
+<text x="432" y="82" class="p7h-s" style="text-anchor:middle">head dim 128</text>
+<text x="432" y="102" class="p7h-s" style="text-anchor:middle">state: fixed-size matrix</text>
+<text x="432" y="118" class="p7h-s" style="text-anchor:middle">KV cache: none</text>
+<text x="432" y="138" class="p7h-s" style="text-anchor:middle">cost per token: O(1)</text>
+<text x="432" y="156" class="p7h-s" style="text-anchor:middle">&mdash; independent of context</text>
+
+<rect x="536" y="28" width="176" height="140" rx="6" class="p7h-b"/>
+<text x="624" y="46" class="p7h-l">Gated Attention layer</text>
+<text x="624" y="66" class="p7h-s" style="text-anchor:middle">16 Q heads / 2 KV heads</text>
+<text x="624" y="82" class="p7h-s" style="text-anchor:middle">head dim 256</text>
+<text x="624" y="102" class="p7h-s" style="text-anchor:middle">partial RoPE &mdash; only 64 of</text>
+<text x="624" y="116" class="p7h-s" style="text-anchor:middle">256 dims get rotary</text>
+<text x="624" y="138" class="p7h-s" style="text-anchor:middle">output gate suppresses</text>
+<text x="624" y="152" class="p7h-s" style="text-anchor:middle">attention-sink artefacts</text>
+
+<line x1="8" y1="188" x2="712" y2="188" stroke="#21262d" stroke-width="1"/>
+<text x="8" y="208" class="p7h-h">What the ratio does to the KV cache</text>
+<text x="8" y="230" class="p7h-s">Full-attention 48-layer model:</text>
+<rect x="230" y="220" width="370" height="14" rx="3" fill="#7B61FF"/>
+<text x="606" y="231" class="p7h-s">48 layers cached</text>
+<text x="8" y="256" class="p7h-s">Qwen3-Next:</text>
+<rect x="230" y="246" width="93" height="14" rx="3" fill="#7B61FF"/>
+<rect x="327" y="246" width="273" height="14" rx="3" fill="#1F9E8E" opacity="0.35"/>
+<text x="333" y="257" class="p7h-s">36 layers: recurrent state, no cache</text>
+<text x="8" y="284" class="p7h-s">A 75% cut in cached layers, on top of an already aggressive 8:1 GQA ratio &mdash; which is why context past 32K stops dominating cost.</text>
+</svg>
+</div>
+<p>Two details in the attention layer are worth noting. <strong>Partial RoPE</strong> &mdash; rotary embeddings applied to only 64 of the 256 head dimensions &mdash; leaves most of the head space position-agnostic, which improves extrapolation to contexts far beyond the trained length. And the <strong>output gate</strong> suppresses attention sinks and massive activations, the pathologies that make very long-context attention numerically awkward and hard to quantise.</p>
+</section>
+
+<section class="slide" id="slide-04">
+<div class="slide-number">04</div>
+<h2>Extreme sparsity &mdash; 512 experts, 10 active</h2>
+<p>Qwen3's MoE used 128 experts with 8 active. Qwen3-Next quadruples the expert count and adds back a shared expert: <strong>512 routed experts, 10 activated per token, plus 1 always-on shared expert</strong>, with an expert intermediate dimension of just 512.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th></th><th>Qwen3-30B-A3B</th><th>Qwen3-235B-A22B</th><th>Qwen3-Next-80B-A3B</th></tr></thead>
+<tbody>
+<tr><td>Total / active</td><td>30B / 3B</td><td>235B / 22B</td><td>80B / 3B</td></tr>
+<tr><td>Activation ratio</td><td>10%</td><td>9.4%</td><td><strong>~3.7% (&asymp;1:50)</strong></td></tr>
+<tr><td>Experts total / active</td><td>128 / 8</td><td>128 / 8</td><td>512 / 10 + 1 shared</td></tr>
+<tr><td>Expert width</td><td>wide</td><td>wide</td><td>intermediate dim 512 &mdash; very narrow</td></tr>
+<tr><td>Layers</td><td>48</td><td>94</td><td>48 (36 linear + 12 attention)</td></tr>
+<tr><td>Attention</td><td>full, 32 Q / 4 KV</td><td>full, 64 Q / 4 KV</td><td>hybrid, 16 Q / 2 KV on 1 in 4 layers</td></tr>
+</tbody>
+</table>
+</div>
+<h3>Why more, narrower experts</h3>
+<ul>
+<li><strong>Routing resolution.</strong> Selecting 10 of 512 gives astronomically more distinct expert combinations than 8 of 128, so specialisation can be much finer-grained.</li>
+<li><strong>Better parameter-to-FLOP ratio.</strong> Narrow experts mean you can hold far more total knowledge for the same per-token compute &mdash; 80B of capacity for 3B of work.</li>
+<li><strong>The shared expert returns.</strong> With 512 narrow experts, common knowledge would otherwise be duplicated across hundreds of them. One always-on shared expert holds it once. This is the Qwen1.5-MoE idea, dropped in Qwen3, reinstated when the expert count grew.</li>
+</ul>
+<div class="callout">
+<div class="callout-label">The cost of extreme sparsity</div>
+<p>All 512 experts must be resident in memory, so this is still an 80B-weight model &mdash; roughly 160GB at BF16. And routing 10 of 512 makes <strong>expert parallelism</strong> nearly mandatory at scale: with tensor parallelism alone, every GPU holds a slice of every expert and the all-to-all traffic dominates. <code>--enable-expert-parallel</code> is not a tuning flag here, it is the intended topology.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-05">
+<div class="slide-number">05</div>
+<h2>The stability toolkit</h2>
+<p>Training a 48-layer hybrid with 512 experts at 3B active is numerically hostile. Qwen3-Next carries a set of explicit stabilisation measures, and they are worth knowing because they explain some of the model's quantisation behaviour too.</p>
+<div class="diagram-grid cols-2">
+<div class="diagram-panel accent-border">
+<h4>Zero-centred RMSNorm with weight decay</h4>
+<p>Standard RMSNorm learns a per-channel gain that can drift to extreme values, producing activation outliers. Centring the gain at zero and applying weight decay to it keeps the scale bounded. Fewer outliers means more stable training <em>and</em> a much friendlier target for FP8 and INT4 quantisation.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Attention output gating</h4>
+<p>A learned gate on the attention output suppresses attention sinks &mdash; the degenerate pattern where heads dump probability mass on the first token &mdash; and the massive activations that accompany them.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Global-batch load balancing</h4>
+<p>Carried over from Qwen3. With 512 experts, router collapse is a much bigger risk: if traffic concentrates on 30 experts, 94% of the parameter budget is dead weight.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Normalised router initialisation</h4>
+<p>Initialising the router so that all experts start unbiased prevents the rich-get-richer dynamic in the first few thousand steps, when an accidental early preference can become permanent.</p>
+</div>
+</div>
+<div class="callout">
+<div class="callout-label">Why this matters downstream</div>
+<p>Activation outliers are the main reason post-training quantisation degrades quality: a single channel with a huge range forces a coarse scale on everything sharing that tensor. A model architected to avoid outliers quantises better almost for free &mdash; which is a large part of why the 2026 Qwen models ship credible FP8 checkpoints as a matter of course.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-06">
+<div class="slide-number">06</div>
+<h2>Multi-token prediction</h2>
+<p>Qwen3-Next was trained with an <strong>MTP</strong> objective: alongside the usual next-token head, additional heads predict tokens two and three positions ahead. This helps pre-training slightly, and helps inference a great deal.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 250" width="720" height="250" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="p7m-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<style>
+.p7m-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p7m-ok{fill:rgba(31,158,142,0.18);stroke:#1F9E8E;stroke-width:1;}
+.p7m-no{fill:rgba(209,77,72,0.15);stroke:#D14D48;stroke-width:1;}
+.p7m-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9px;text-anchor:middle;}
+.p7m-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p7m-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p7m-ar{stroke:#7B61FF;stroke-width:1.3;fill:none;marker-end:url(#p7m-a);}
+</style>
+<text x="8" y="16" class="p7m-h">Self-speculation: the model drafts its own next few tokens, then verifies them in one pass</text>
+
+<text x="8" y="42" class="p7m-s">step 1 &mdash; MTP heads draft</text>
+<rect x="200" y="30" width="90" height="24" rx="3" class="p7m-b"/><text x="245" y="46" class="p7m-l">t+1</text>
+<rect x="294" y="30" width="90" height="24" rx="3" class="p7m-b"/><text x="339" y="46" class="p7m-l">t+2 (draft)</text>
+<rect x="388" y="30" width="90" height="24" rx="3" class="p7m-b"/><text x="433" y="46" class="p7m-l">t+3 (draft)</text>
+<text x="494" y="46" class="p7m-s">cheap &mdash; small extra heads, one forward pass</text>
+
+<line x1="360" y1="58" x2="360" y2="76" class="p7m-ar"/>
+
+<text x="8" y="96" class="p7m-s">step 2 &mdash; the full model verifies all three positions in ONE forward pass</text>
+<rect x="200" y="104" width="90" height="24" rx="3" class="p7m-ok"/><text x="245" y="120" class="p7m-l">accept</text>
+<rect x="294" y="104" width="90" height="24" rx="3" class="p7m-ok"/><text x="339" y="120" class="p7m-l">accept</text>
+<rect x="388" y="104" width="90" height="24" rx="3" class="p7m-no"/><text x="433" y="120" class="p7m-l">reject &rarr; resample</text>
+<text x="494" y="120" class="p7m-s">3 tokens emitted for the cost of ~1 pass</text>
+
+<line x1="8" y1="148" x2="712" y2="148" stroke="#21262d" stroke-width="1"/>
+<text x="8" y="168" class="p7m-h">Why this is worth more than it looks</text>
+<text x="8" y="188" class="p7m-s">Decoding is memory-bandwidth bound, not compute bound: each step reads the whole active parameter set to emit one token.</text>
+<text x="8" y="204" class="p7m-s">Verifying three candidate positions costs almost the same bandwidth as generating one &mdash; so accepted drafts are nearly free.</text>
+<text x="8" y="224" class="p7m-s">Output is provably identical in distribution to standard decoding: rejected drafts are discarded and resampled correctly.</text>
+<text x="8" y="240" class="p7m-s">Trade-off: it lowers time-per-output-token at low concurrency, and lowers total throughput under heavy batching.</text>
+</svg>
+</div>
+<div class="code-block">
+<div class="code-header">Turning MTP on in vLLM &mdash; no application changes required</div>
+<pre><code>vllm serve Qwen/Qwen3-Next-80B-A3B-Instruct \
+  --port 8000 --tensor-parallel-size 4 --max-model-len 262144 \
+  --speculative-config <span class="str">'{"method":"qwen3_next_mtp","num_speculative_tokens":2}'</span>
+
+<span class="cm"># SGLang uses its NEXTN speculative path for the same mechanism</span>
+python -m sglang.launch_server --model-path Qwen/Qwen3-Next-80B-A3B-Instruct \
+  --port 30000 --tp-size 4 --context-length 262144 --mem-fraction-static 0.8 \
+  --speculative-algo NEXTN --speculative-num-steps 3 \
+  --speculative-eagle-topk 1 --speculative-num-draft-tokens 4</code></pre>
+</div>
+<div class="callout">
+<div class="callout-label">Tuning rule</div>
+<p>Enable MTP for <strong>latency-sensitive, low-concurrency</strong> workloads &mdash; an interactive coding agent, a voice front-end. Disable it for <strong>throughput-oriented batch</strong> workloads, where the verification overhead eats into aggregate tokens per second. The vLLM recipes also suggest disabling prefix caching alongside MTP for the lowest-latency configuration.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-07">
+<div class="slide-number">07</div>
+<h2>What vLLM had to build</h2>
+<p>A hybrid model is genuinely awkward to serve, because half the layers have a KV cache that grows with the sequence and half have a fixed-size recurrent state. vLLM's paged-memory design assumes the former. Three pieces of engineering closed the gap, and they shipped alongside the model.</p>
+<div class="diagram-grid cols-3">
+<div class="diagram-panel accent-border">
+<h4>Hybrid KV cache manager</h4>
+<p>Full-attention layers use paged KV blocks; linear layers hold a constant-size state. The manager auto-tunes the logical block size of the attention layers so their physical memory footprint aligns with the linear layers' state &mdash; keeping one uniform allocator and avoiding fragmentation.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Flash Linear Attention kernels</h4>
+<p>Gated DeltaNet needs chunked-parallel scan kernels that do not exist in cuDNN or FlashAttention. vLLM adopted the Triton kernels from the Flash Linear Attention project rather than writing its own.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Full CUDA graph mode by default</h4>
+<p>Triton kernels carry noticeable per-launch CPU overhead, and a hybrid layer stack means many more launches per forward pass. Capturing the whole decode step as a CUDA graph removes that overhead &mdash; essential for decode-only batches where the GPU work per launch is tiny.</p>
+</div>
+</div>
+<div class="code-block">
+<div class="code-header">Serving Qwen3-Next</div>
+<pre><code><span class="cm"># At release this needed a nightly wheel; it is in stable vLLM now.</span>
+vllm serve Qwen/Qwen3-Next-80B-A3B-Instruct --tensor-parallel-size 4
+
+<span class="cm"># Thinking variant &mdash; add the reasoning parser</span>
+vllm serve Qwen/Qwen3-Next-80B-A3B-Thinking \
+  --tensor-parallel-size 4 --reasoning-parser qwen3 \
+  --max-model-len 262144
+
+<span class="cm"># High-sparsity MoE: prefer expert parallelism over pure tensor parallelism</span>
+vllm serve Qwen/Qwen3-Next-80B-A3B-Instruct \
+  --tensor-parallel-size 4 --enable-expert-parallel</code></pre>
+</div>
+<p>The practical lesson for anyone evaluating a novel architecture: <strong>check serving support before you check benchmarks</strong>. A model that needs a nightly build, an unmerged kernel and a custom memory manager is not deployable, however good its scores are. Qwen3-Next was usable in vLLM within a day of release because the Qwen team and the vLLM team did the work in parallel &mdash; and that co-development is now the normal pattern for the family.</p>
+</section>
+
+<section class="slide" id="slide-08">
+<div class="slide-number">08</div>
+<h2>The numbers that justified the pivot</h2>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 264" width="720" height="264" xmlns="http://www.w3.org/2000/svg">
+<style>
+.p7n-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p7n-v{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;text-anchor:middle;}
+.p7n-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p7n-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p7n-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p7n-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
+</style>
+<text x="8" y="16" class="p7n-h">Qwen3-Next-80B-A3B versus Qwen3-32B-Base &mdash; as reported by the Qwen team</text>
+
+<rect x="14" y="30" width="222" height="96" rx="6" class="p7n-ba"/>
+<text x="125" y="70" class="p7n-v">10%</text>
+<text x="125" y="94" class="p7n-l">of the training cost</text>
+<text x="125" y="112" class="p7n-s">GPU hours to reach better</text>
+
+<rect x="248" y="30" width="222" height="96" rx="6" class="p7n-ba"/>
+<text x="359" y="70" class="p7n-v">10&times;</text>
+<text x="359" y="94" class="p7n-l">inference throughput</text>
+<text x="359" y="112" class="p7n-s">at context beyond 32K</text>
+
+<rect x="482" y="30" width="224" height="96" rx="6" class="p7n-ba"/>
+<text x="594" y="70" class="p7n-v">15T</text>
+<text x="594" y="94" class="p7n-l">pre-training tokens</text>
+<text x="594" y="112" class="p7n-s">a subset of Qwen3's 36T corpus</text>
+
+<rect x="14" y="138" width="222" height="80" rx="6" class="p7n-b"/>
+<text x="125" y="162" class="p7n-l">262,144</text>
+<text x="125" y="182" class="p7n-s">native context length</text>
+<text x="125" y="200" class="p7n-s">1,010,000 with YaRN</text>
+
+<rect x="248" y="138" width="222" height="80" rx="6" class="p7n-b"/>
+<text x="359" y="162" class="p7n-l">79B non-embedding</text>
+<text x="359" y="182" class="p7n-s">80B total / 3B activated</text>
+<text x="359" y="200" class="p7n-s">~160GB BF16 resident</text>
+
+<rect x="482" y="138" width="224" height="80" rx="6" class="p7n-b"/>
+<text x="594" y="162" class="p7n-l">Instruct + Thinking</text>
+<text x="594" y="182" class="p7n-s">two checkpoints, no hybrid switch</text>
+<text x="594" y="200" class="p7n-s">Apache 2.0</text>
+
+<text x="8" y="242" class="p7n-s" style="text-anchor:start">Read the first two together: better quality than a dense 32B, trained for a tenth of the cost, and served an order of</text>
+<text x="8" y="256" class="p7n-s" style="text-anchor:start">magnitude faster in the long-context regime that agentic work actually lives in.</text>
+</svg>
+</div>
+<h3>Where the throughput comes from</h3>
+<ul>
+<li><strong>Prefill</strong> &mdash; 36 of 48 layers are linear, so prefill work grows nearly linearly with context rather than quadratically. This is the dominant win for repository-scale prompts.</li>
+<li><strong>Decode</strong> &mdash; only 3B parameters are read per token, and only 12 layers consult a KV cache, so per-step memory traffic is small and roughly context-independent.</li>
+<li><strong>Concurrency</strong> &mdash; a 75% smaller cached-layer count means far more sequences fit in the same HBM, which multiplies aggregate throughput on top of the per-request gains.</li>
+<li><strong>MTP</strong> &mdash; a further multiplier on top, at low concurrency.</li>
+</ul>
+</section>
+
+<section class="slide" id="slide-09">
+<div class="slide-number">09</div>
+<h2>Why a &ldquo;preview&rdquo; became the mainline</h2>
+<p>Qwen3-Next was framed as an experiment in next-generation architecture. Five months later, the design is the entire product line.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 216" width="720" height="216" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="p7f-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<style>
+.p7f-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p7f-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
+.p7f-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p7f-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p7f-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p7f-ar{stroke:#7B61FF;stroke-width:1.4;fill:none;marker-end:url(#p7f-a);}
+</style>
+<text x="8" y="16" class="p7f-h">The 3:1 Gated DeltaNet layout, from preview to standard</text>
+
+<rect x="12" y="34" width="150" height="70" rx="6" class="p7f-ba"/>
+<text x="87" y="58" class="p7f-l">Qwen3-Next</text><text x="87" y="76" class="p7f-s">Sept 2025</text><text x="87" y="92" class="p7f-s">&ldquo;preview&rdquo;, 80B-A3B</text>
+<line x1="166" y1="69" x2="192" y2="69" class="p7f-ar"/>
+
+<rect x="196" y="34" width="150" height="70" rx="6" class="p7f-ba"/>
+<text x="271" y="58" class="p7f-l">Qwen3-Coder-Next</text><text x="271" y="76" class="p7f-s">Feb 2026</text><text x="271" y="92" class="p7f-s">same layout, coding</text>
+<line x1="350" y1="69" x2="376" y2="69" class="p7f-ar"/>
+
+<rect x="380" y="34" width="150" height="70" rx="6" class="p7f-ba"/>
+<text x="455" y="58" class="p7f-l">Qwen3.5</text><text x="455" y="76" class="p7f-s">Feb 2026</text><text x="455" y="92" class="p7f-s">whole family, 0.8B&ndash;397B</text>
+<line x1="534" y1="69" x2="560" y2="69" class="p7f-ar"/>
+
+<rect x="564" y="34" width="144" height="70" rx="6" class="p7f-ba"/>
+<text x="636" y="58" class="p7f-l">Qwen3.6</text><text x="636" y="76" class="p7f-s">Apr 2026</text><text x="636" y="92" class="p7f-s">dense and MoE alike</text>
+
+<text x="8" y="136" class="p7f-s" style="text-anchor:start">Qwen3.6-35B-A3B's model card describes its 40 layers as: 10 &times; (3 &times; (Gated DeltaNet &rarr; MoE) &rarr; 1 &times; (Gated Attention &rarr; MoE)).</text>
+<text x="8" y="152" class="p7f-s" style="text-anchor:start">That is character-for-character the Qwen3-Next formula, seven months and two generations later. The preview was the product.</text>
+<text x="8" y="178" class="p7f-s" style="text-anchor:start">Wider context: by 2026 the field had split on attention. Qwen and MiniMax went hybrid-linear; GLM-5 paired multi-head</text>
+<text x="8" y="192" class="p7f-s" style="text-anchor:start">latent attention with sparse attention; MiniMax-M2.5 stayed with plain multi-head attention for reliability.</text>
+<text x="8" y="206" class="p7f-s" style="text-anchor:start">Nobody agrees on attention any more &mdash; but Qwen committed hardest.</text>
+</svg>
+</div>
+<div class="callout">
+<div class="callout-label">What to take from this deck</div>
+<p>If you understand the 3:1 hybrid, the 512-expert MoE and MTP, you understand the architecture of <em>every</em> current Qwen model. Parts 09 and 10 are largely about what changes around that core: native multimodality, more languages, better post-training, and scale.</p>
+</div>
+<div class="callout">
+<div class="callout-label">Next</div>
+<p>Part 08 covers the specialist lines of the Qwen3 generation &mdash; <strong>Qwen3-VL</strong> with DeepStack and interleaved M-RoPE, <strong>Qwen3-Omni</strong>, the <strong>Embedding and Reranker</strong> models that topped MTEB, <strong>Qwen3Guard</strong>, <strong>Qwen-Image</strong> and the speech line &mdash; and how each is served.</p>
+</div>
+</section>
+
+<nav class="deck-nav"><a href="part6.html">&larr; Part 06 &middot; Qwen3-Coder</a><a class="next" href="part8.html">Part 08 &middot; Multimodal &amp; Specialists &rarr;</a></nav>
+<footer class="footer"><p>Part of the <a href="index.html">Qwen</a> presentation series &mdash; a deep exploration of Alibaba's open-weight model family.</p><p style="margin-top:0.5rem;font-size:0.8rem;"><a href="index.html">Back to Series Index</a></p></footer>
+
+<script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.slide').forEach(slide => {
+        slide.style.opacity = '0';
+        slide.style.transform = 'translateY(30px)';
+        slide.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(slide);
+    });
+</script>
+</body>
+</html>

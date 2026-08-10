@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qwen 08 __TITLE__mdash; Multimodal __TITLE__amp; Specialists</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-card: #0d1117;
+            --bg-code: #161b22;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --accent: #7B61FF;
+            --accent-dim: #7B61FF40;
+            --accent-glow: #7B61FF30;
+            --border: #21262d;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            --font-body: 'Inter', sans-serif;
+            --max-width: 900px;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 17px;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .hero > * { position: relative; z-index: 1; }
+        .series-label {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        .hero h1 .accent { color: var(--accent); }
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 640px;
+            margin-bottom: 2rem;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+        }
+        .tag {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            background: var(--accent-dim);
+            white-space: nowrap;
+        }
+        .pipeline {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+            max-width: var(--max-width);
+        }
+        .pipeline-step {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            padding: 0.3rem 0.7rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        .pipeline-arrow { color: var(--accent); font-size: 0.9rem; font-weight: 700; }
+        .slide {
+            min-height: 100vh;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .slide-number {
+            font-family: var(--font-display);
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--accent-dim);
+            position: absolute;
+            top: 2rem;
+            right: 1.5rem;
+            line-height: 1;
+            user-select: none;
+        }
+        .slide h2 {
+            font-family: var(--font-display);
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            line-height: 1.25;
+        }
+        .slide h3 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .slide p { margin-bottom: 1rem; color: var(--text-secondary); }
+        .slide p strong { color: var(--text-primary); }
+        .slide ul, .slide ol { margin-bottom: 1rem; padding-left: 1.5rem; color: var(--text-secondary); }
+        .slide li { margin-bottom: 0.4rem; }
+        .slide li strong { color: var(--text-primary); }
+        .slide code {
+            font-family: var(--font-mono);
+            font-size: 0.88em;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            padding: 0.05rem 0.35rem;
+            border-radius: 3px;
+            color: #c9d1d9;
+        }
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin: 1.25rem 0;
+            overflow: hidden;
+        }
+        .code-header {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            background: rgba(123, 97, 255, 0.08);
+            padding: 0.4rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .code-block pre { margin: 0; padding: 1rem; overflow-x: auto; }
+        .code-block code {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #c9d1d9;
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+        .kw { color: #ff7b72; }
+        .fn { color: #d2a8ff; }
+        .str { color: #a5d6ff; }
+        .cm { color: #8b949e; font-style: italic; }
+        .num { color: #79c0ff; }
+        .type { color: #ffa657; }
+        .dir { color: #ff7b72; }
+        .mac { color: #ffa657; }
+        .table-wrap {
+            overflow-x: auto;
+            margin: 1.25rem 0;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th {
+            background: var(--bg-code);
+            color: var(--accent);
+            font-weight: 600;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            font-family: var(--font-display);
+            white-space: nowrap;
+        }
+        td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:nth-child(even) td { background: rgba(13, 17, 23, 0.5); }
+        .diagram-flow {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .diagram-box {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            text-align: center;
+            white-space: nowrap;
+        }
+        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-box.dim { color: var(--text-secondary); border-color: var(--border); }
+        .diagram-arrow { color: var(--accent); font-size: 1.3rem; font-weight: 700; }
+        .diagram-vertical {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .diagram-vertical .diagram-arrow { font-size: 1.1rem; }
+        .hierarchy {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .hierarchy-level { display: flex; align-items: center; gap: 0.75rem; }
+        .hierarchy-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+            text-align: right;
+        }
+        .hierarchy-items { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+        .hierarchy-item {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-grid {
+            display: grid;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .diagram-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+        .diagram-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+        .diagram-panel {
+            padding: 1rem;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+        .diagram-panel.accent-border { border-left: 3px solid var(--accent); }
+        .diagram-panel h4 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        .diagram-panel p, .diagram-panel ul { font-size: 0.85rem; }
+        .callout {
+            background: var(--bg-card);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+            padding: 1rem 1.25rem;
+            margin: 1.25rem 0;
+        }
+        .callout p { margin-bottom: 0; }
+        .callout p + p { margin-top: 0.5rem; }
+        .callout .callout-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.3rem;
+        }
+        .contents-list { list-style: none; padding-left: 0; counter-reset: contents; }
+        .contents-list li {
+            counter-increment: contents;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .contents-list li:last-child { border-bottom: none; }
+        .contents-list li::before {
+            content: counter(contents, decimal-leading-zero);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            min-width: 2rem;
+        }
+        .contents-list a { color: var(--text-primary); text-decoration: none; transition: color 0.2s; }
+        .contents-list a:hover { color: var(--accent); }
+        .footer {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+        .footer a { color: var(--accent); text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+        .deck-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        .deck-nav a {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: border-color 0.15s, color 0.15s;
+        }
+        .deck-nav a:hover { border-color: var(--accent); color: var(--accent); }
+        .deck-nav a.next { margin-left: auto; }
+        .canvas-wrap {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.25rem 0;
+            overflow-x: auto;
+        }
+        .canvas-wrap canvas, .canvas-wrap svg { display: block; margin: 0 auto; max-width: 100%; }
+        .badge {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            padding: 0.1rem 0.45rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            vertical-align: middle;
+            margin-left: 0.3rem;
+        }
+        .badge.ok    { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+        .badge.warn  { border-color: #ffa657; color: #ffa657; background: rgba(255,166,87,0.08); }
+        .badge.bad   { border-color: #ff7b72; color: #ff7b72; background: rgba(255,123,114,0.08); }
+        @media (max-width: 640px) {
+            .slide { padding: 3rem 1rem; min-height: auto; }
+            .slide-number { font-size: 3rem; top: 1.5rem; right: 1rem; }
+            .slide h2 { font-size: 1.5rem; }
+            .diagram-grid.cols-2, .diagram-grid.cols-3 { grid-template-columns: 1fr; }
+            .pipeline { gap: 0.15rem; }
+            .pipeline-step { font-size: 0.6rem; padding: 0.2rem 0.4rem; }
+            .hero h1 { font-size: 1.8rem; }
+            table { font-size: 0.78rem; }
+        }
+    </style>
+</head>
+<body>
+<header class="hero">
+<div class="series-label">Qwen &middot; Part 08</div>
+<h1>The <span class="accent">Specialist</span> Lines</h1>
+<p class="subtitle">Qwen is not one model, it is a fleet. Vision-language from 2B to 235B-A22B, an omni-modal model that speaks, embedding and reranking models that topped MTEB, a streaming safety classifier, an image generator with unusually good text rendering, and a speech stack. This deck covers what each is for, how it works, and how it is served.</p>
+<div class="tags">
+<span class="tag">Qwen3-VL</span>
+<span class="tag">Qwen3-Omni</span>
+<span class="tag">Embedding / Reranker</span>
+<span class="tag">Qwen3Guard</span>
+<span class="tag">Qwen-Image</span>
+<span class="tag">Qwen3-ASR</span>
+</div>
+<div class="pipeline">
+<span class="pipeline-step">see</span><span class="pipeline-arrow">&middot;</span>
+<span class="pipeline-step">hear</span><span class="pipeline-arrow">&middot;</span>
+<span class="pipeline-step">speak</span><span class="pipeline-arrow">&middot;</span>
+<span class="pipeline-step">retrieve</span><span class="pipeline-arrow">&middot;</span>
+<span class="pipeline-step">rerank</span><span class="pipeline-arrow">&middot;</span>
+<span class="pipeline-step">guard</span><span class="pipeline-arrow">&middot;</span>
+<span class="pipeline-step">draw</span>
+</div>
+</header>
+
+<section class="slide" id="slide-00">
+<div class="slide-number">00</div>
+<h2>Contents</h2>
+<ul class="contents-list">
+<li><a href="#slide-01">The specialist zoo, at a glance</a></li>
+<li><a href="#slide-02">Qwen3-VL &mdash; the lineup and the three innovations</a></li>
+<li><a href="#slide-03">What Qwen3-VL is actually used for</a></li>
+<li><a href="#slide-04">Serving a VLM without running out of memory</a></li>
+<li><a href="#slide-05">Qwen3-Omni &mdash; one model, every modality</a></li>
+<li><a href="#slide-06">Qwen3-Embedding and Qwen3-Reranker</a></li>
+<li><a href="#slide-07">Qwen3Guard &mdash; safety on the token stream</a></li>
+<li><a href="#slide-08">Qwen-Image and the speech stack</a></li>
+<li><a href="#slide-09">Composing the fleet into one system</a></li>
+</ul>
+</section>
+
+<section class="slide" id="slide-01">
+<div class="slide-number">01</div>
+<h2>The specialist zoo, at a glance</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Line</th><th>First shipped</th><th>Sizes</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td><strong>Qwen3-VL</strong></td><td>Sept 2025</td><td>2B, 4B, 8B, 32B dense; 30B-A3B, 235B-A22B MoE</td><td>Images, documents, video, GUI screenshots &rarr; text. Instruct and Thinking editions of each</td></tr>
+<tr><td><strong>Qwen3-Omni</strong></td><td>Sept 2025</td><td>30B-A3B</td><td>Text, image, audio, video in; text and streaming speech out</td></tr>
+<tr><td><strong>Qwen3-Embedding</strong></td><td>June 2025</td><td>0.6B, 4B, 8B</td><td>Text embeddings for retrieval; the 8B topped the MTEB multilingual leaderboard on release</td></tr>
+<tr><td><strong>Qwen3-Reranker</strong></td><td>June 2025</td><td>0.6B, 4B, 8B</td><td>Cross-encoder reranking of retrieved candidates</td></tr>
+<tr><td><strong>Qwen3-VL-Embedding / Reranker</strong></td><td>Jan 2026</td><td>&mdash;</td><td>The same two jobs over images and documents as well as text</td></tr>
+<tr><td><strong>Qwen3Guard</strong></td><td>Sept 2025</td><td>0.6B, 4B, 8B</td><td>Safety classification of prompts and responses, including on a live token stream</td></tr>
+<tr><td><strong>Qwen-Image</strong></td><td>Aug 2025</td><td>20B MMDiT</td><td>Image generation and editing, with unusually strong text rendering</td></tr>
+<tr><td><strong>Qwen3-ASR / Qwen-Audio-3.0</strong></td><td>2025&ndash;26</td><td>&mdash;</td><td>Multilingual speech recognition; TTS across 16 languages</td></tr>
+<tr><td><strong>Qwen-MT</strong></td><td>July 2025</td><td>&mdash;</td><td>Translation across 92 languages and major dialects</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout">
+<div class="callout-label">The unifying design decision</div>
+<p>Every model here shares the Qwen tokenizer, the Qwen chat template and (where applicable) a Qwen3 backbone. That is what makes the fleet composable: a Qwen3-Embedding vector, a Qwen3-VL caption and a Qwen3Guard verdict can be assembled into one pipeline without translation layers between them. It is also why prompt-engineering intuitions transfer across the whole set.</p>
+</div>
+<div class="callout">
+<div class="callout-label">And the 2026 twist</div>
+<p>Qwen3.5 made the base model <strong>natively multimodal</strong>, absorbing the separate VL line into the mainline. The Qwen3-VL models remain the right choice when you want a small, dedicated, cheap vision model &mdash; a 2B or 4B for OCR at volume &mdash; but the flagship vision capability now lives in the general family. Part 09 covers that shift.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-02">
+<div class="slide-number">02</div>
+<h2>Qwen3-VL &mdash; the lineup and the three innovations</h2>
+<p>Qwen3-VL spans 2B to 235B-A22B, dense and MoE, each in Instruct and Thinking editions, with a native <strong>256K context covering text and interleaved multimodal input alike</strong>. Three named architectural changes distinguish it from Qwen2.5-VL.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 280" width="720" height="280" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="p8v-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<style>
+.p8v-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p8v-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
+.p8v-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p8v-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p8v-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p8v-ar{stroke:#7B61FF;stroke-width:1.3;fill:none;marker-end:url(#p8v-a);}
+.p8v-vit{fill:#0d1117;stroke:#30363d;stroke-width:0.8;}
+</style>
+<text x="8" y="16" class="p8v-h">DeepStack &mdash; fuse features from several ViT depths, not just the last</text>
+
+<rect x="20" y="28" width="60" height="100" rx="4" class="p8v-b"/><text x="50" y="82" class="p8v-l">image</text>
+<line x1="84" y1="78" x2="106" y2="78" class="p8v-ar"/>
+<rect x="110" y="28" width="150" height="100" rx="5" class="p8v-b"/>
+<text x="185" y="46" class="p8v-l">vision transformer</text>
+<rect x="124" y="54" width="122" height="16" rx="2" class="p8v-vit"/><text x="185" y="66" class="p8v-s">early &mdash; edges, texture</text>
+<rect x="124" y="74" width="122" height="16" rx="2" class="p8v-vit"/><text x="185" y="86" class="p8v-s">middle &mdash; parts, layout</text>
+<rect x="124" y="94" width="122" height="16" rx="2" class="p8v-vit"/><text x="185" y="106" class="p8v-s">late &mdash; semantics</text>
+<path d="M250,62 L288,62" class="p8v-ar"/>
+<path d="M250,82 L288,82" class="p8v-ar"/>
+<path d="M250,102 L288,102" class="p8v-ar"/>
+<rect x="292" y="44" width="140" height="72" rx="5" class="p8v-ba"/>
+<text x="362" y="70" class="p8v-l">DeepStack fusion</text>
+<text x="362" y="88" class="p8v-s">multi-level features into</text>
+<text x="362" y="102" class="p8v-s">the visual token stream</text>
+<line x1="436" y1="80" x2="458" y2="80" class="p8v-ar"/>
+<rect x="462" y="44" width="240" height="72" rx="5" class="p8v-b"/>
+<text x="582" y="70" class="p8v-l">the LLM sees fine detail AND semantics</text>
+<text x="576" y="90" class="p8v-s">small glyphs and thin lines survive &mdash;</text>
+<text x="582" y="104" class="p8v-s">which is exactly what dense OCR and charts need</text>
+
+<line x1="8" y1="140" x2="712" y2="140" stroke="#21262d" stroke-width="1"/>
+
+<text x="8" y="162" class="p8v-h">Interleaved-MRoPE &mdash; full-frequency allocation across time, width and height</text>
+<text x="8" y="182" class="p8v-s" style="text-anchor:start">Qwen2-VL's M-RoPE split the rotary dimensions into contiguous blocks: one range for time, one for height, one for</text>
+<text x="8" y="196" class="p8v-s" style="text-anchor:start">width. That gave the time axis only low-frequency components &mdash; fine for a short clip, poor for reasoning over a long</text>
+<text x="8" y="210" class="p8v-s" style="text-anchor:start">video. Interleaving gives every axis the full spectrum, so time is resolved as sharply as space across long horizons.</text>
+
+<text x="8" y="238" class="p8v-h">Text-Timestamp Alignment &mdash; ground events on real clock times</text>
+<text x="8" y="258" class="p8v-s" style="text-anchor:start">Rather than relying on positional encoding alone, timestamps are aligned to text during training. &ldquo;What happens at 03:47?&rdquo; becomes a lookup</text>
+<text x="8" y="272" class="p8v-s" style="text-anchor:start">rather than an estimate &mdash; the capability that makes video search and surveillance-style analytics workable.</text>
+</svg>
+</div>
+</section>
+
+<section class="slide" id="slide-03">
+<div class="slide-number">03</div>
+<h2>What Qwen3-VL is actually used for</h2>
+<div class="diagram-grid cols-2">
+<div class="diagram-panel accent-border">
+<h4>Document intelligence</h4>
+<p>The dominant production use. Dense OCR across dozens of languages, table and chart extraction with structure preserved, multi-page reasoning within the 256K window. For a great many teams a Qwen3-VL-8B replaced an entire pipeline of layout detection, OCR engine and post-processing rules.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>GUI and computer-use agents</h4>
+<p>Trained to localise UI elements and emit actions. Combined with a tool layer that clicks and types, this is the perception half of a computer-use agent &mdash; and the grounding coordinates are stable enough to act on.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Visual coding</h4>
+<p>Screenshot or design mock in, working HTML/CSS/JS out. A genuinely useful party trick that turns out to matter: it is the fastest way to convert a legacy interface or a whiteboard sketch into a working prototype.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Video understanding</h4>
+<p>Long-form video with timestamp-grounded event localisation. Summarise an hour of footage, find the moment something happened, or caption a stream &mdash; with the caveat that video is by far the most token-expensive input you can send.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Spatial and 3D grounding</h4>
+<p>Bounding boxes, points and relative spatial relationships, extended toward 3D reasoning about scenes. Useful for robotics perception and for any task where "which one" matters as much as "what".</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Edge OCR at volume</h4>
+<p>The 2B is the sleeper. It has passed 18 million downloads because it is small enough to run at scale on cheap hardware while still reading documents competently &mdash; the highest-volume vision workload there is.</p>
+</div>
+</div>
+<div class="callout">
+<div class="callout-label">Instruct or Thinking?</div>
+<p>Use <strong>Instruct</strong> for extraction, OCR, captioning and any high-volume perception task &mdash; you want a fast, literal reading of the image. Use <strong>Thinking</strong> when the question requires inference over what is seen: a physics diagram, a chart that needs arithmetic, a multi-step deduction from a schematic. Sending an OCR job to a Thinking model wastes a great many tokens for no accuracy gain.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-04">
+<div class="slide-number">04</div>
+<h2>Serving a VLM without running out of memory</h2>
+<p>Vision-language models are the most common cause of surprise OOM in vLLM, for one structural reason: <strong>you no longer control the token count from the prompt</strong>. A user uploading a 4000&times;3000 photograph decides your memory budget for you.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 210" width="720" height="210" xmlns="http://www.w3.org/2000/svg">
+<style>
+.p8m-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p8m-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p8m-bar{fill:#7B61FF;}
+.p8m-bar2{fill:#B87C22;}
+.p8m-bar3{fill:#1F9E8E;}
+.p8m-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9px;}
+</style>
+<text x="8" y="16" class="p8m-h">Where the HBM goes on a VLM server &mdash; and which knob fixes each</text>
+
+<text x="8" y="46" class="p8m-l">model weights</text>
+<rect x="180" y="34" width="180" height="18" rx="3" class="p8m-bar"/>
+<text x="372" y="47" class="p8m-s">fixed &mdash; only quantisation helps (--quantization, W8A8 checkpoints)</text>
+
+<text x="8" y="80" class="p8m-l">KV cache</text>
+<rect x="180" y="68" width="300" height="18" rx="3" class="p8m-bar2"/>
+<text x="492" y="81" class="p8m-s">--max-model-len, --max-num-seqs</text>
+
+<text x="8" y="114" class="p8m-l">multimodal preprocess</text>
+<rect x="180" y="102" width="220" height="18" rx="3" class="p8m-bar3"/>
+<text x="412" y="115" class="p8m-s">--limit-mm-per-prompt, image resolution caps</text>
+
+<text x="8" y="148" class="p8m-l">activation / batching</text>
+<rect x="180" y="136" width="130" height="18" rx="3" fill="#30363d"/>
+<text x="322" y="149" class="p8m-s">--max-num-batched-tokens, --gpu-memory-utilization</text>
+
+<line x1="8" y1="170" x2="712" y2="170" stroke="#21262d" stroke-width="1"/>
+<text x="8" y="190" class="p8m-s">A single high-resolution image can expand to thousands of visual tokens. Ten in one request is a 40K prompt you never wrote.</text>
+<text x="8" y="204" class="p8m-s">Set --limit-mm-per-prompt on every VLM endpoint. It is the difference between a bounded service and one a single user can crash.</text>
+</svg>
+</div>
+<div class="code-block">
+<div class="code-header">A defensively-configured Qwen3-VL endpoint</div>
+<pre><code><span class="cm"># vLLM &ge; 0.11.0 is required for Qwen3-VL</span>
+vllm serve Qwen/Qwen3-VL-8B-Instruct \
+  --max-model-len 65536 \
+  --limit-mm-per-prompt <span class="str">'{"image": 4, "video": 1}'</span> \
+  --max-num-seqs 16 \
+  --gpu-memory-utilization 0.90
+
+<span class="cm"># The MoE flagship &mdash; expert parallelism across four GPUs</span>
+vllm serve Qwen/Qwen3-VL-235B-A22B-Instruct \
+  --tensor-parallel-size 4 --enable-expert-parallel \
+  --limit-mm-per-prompt <span class="str">'{"image": 8, "video": 2}'</span>
+
+<span class="cm"># Text-only workload on a VL checkpoint? Switch the vision path off entirely.</span>
+vllm serve Qwen/Qwen3-VL-8B-Instruct --limit-mm-per-prompt <span class="str">'{"image": 0, "video": 0}'</span></code></pre>
+</div>
+<p>The architecture names to look for in vLLM's supported-model list are <code>Qwen3VLForConditionalGeneration</code> (dense) and <code>Qwen3VLMoeForConditionalGeneration</code> (MoE). If you hit OOM, the ordered remedy is: lower <code>--limit-mm-per-prompt</code>, then <code>--max-model-len</code>, then <code>--max-num-seqs</code>, then <code>--max-num-batched-tokens</code>, and only then reach for a quantised checkpoint.</p>
+</section>
+
+<section class="slide" id="slide-05">
+<div class="slide-number">05</div>
+<h2>Qwen3-Omni &mdash; one model, every modality</h2>
+<p>September 2025. <strong>Qwen3-Omni-30B-A3B</strong> takes text, images, audio and video, and produces text and streaming speech. It carries forward the Thinker&ndash;Talker split from Qwen2.5-Omni onto a Qwen3 MoE backbone.</p>
+<div class="diagram-grid cols-2">
+<div class="diagram-panel accent-border">
+<h4>What it enables</h4>
+<ul>
+<li>Live voice and video conversation, with interruption &mdash; the Talker begins speaking from the Thinker's hidden states before the sentence is finished</li>
+<li>Broad multilingual coverage: text across the full Qwen3 language set, with speech input and output supported over a smaller subset</li>
+<li>A dedicated captioner variant for detailed audio description</li>
+<li>Because it is 30B-A3B, real-time interaction is achievable on a single node</li>
+</ul>
+</div>
+<div class="diagram-panel accent-border">
+<h4>What it costs you</h4>
+<ul>
+<li><strong>The hardest thing in the fleet to serve.</strong> Audio encoding, video decoding, LLM inference and a streaming speech decoder in one request path</li>
+<li>Streaming speech output means the response is not a single generation to be batched &mdash; it is a real-time pipeline with its own latency budget</li>
+<li>Serving-stack support is thinner than for text or VL models; check your runtime's coverage before designing around it</li>
+<li>Text-only quality is competitive but not the family's best &mdash; multimodality costs something</li>
+</ul>
+</div>
+</div>
+<div class="callout">
+<div class="callout-label">When to use Omni, and when not to</div>
+<p>Use it when the <strong>interaction</strong> is inherently multimodal and low-latency: a voice assistant, a live translator, an accessibility tool. Do not use it as a general text model that happens to accept audio &mdash; a pipeline of Qwen3-ASR &rarr; Qwen3.6 &rarr; a TTS model is usually cheaper, easier to serve, easier to debug and better at each individual step. Omni's advantage is end-to-end latency and cross-modal grounding, and if you are not buying those, you are paying for them anyway.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-06">
+<div class="slide-number">06</div>
+<h2>Qwen3-Embedding and Qwen3-Reranker</h2>
+<p>Released June 2025 in 0.6B, 4B and 8B, built on Qwen3 bases. The 8B embedding model took the top position on the MTEB multilingual leaderboard on release with a score of 70.58 &mdash; and the pair are designed to be used together, as the two stages of a retrieval cascade.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 292" width="720" height="292" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="p8e-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<style>
+.p8e-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p8e-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
+.p8e-bt{fill:rgba(31,158,142,0.10);stroke:#1F9E8E;stroke-width:1.2;}
+.p8e-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p8e-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p8e-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p8e-ar{stroke:#7B61FF;stroke-width:1.3;fill:none;marker-end:url(#p8e-a);}
+</style>
+<text x="8" y="16" class="p8e-h">The cascade &mdash; a bi-encoder narrows, a cross-encoder decides</text>
+
+<rect x="12" y="34" width="120" height="60" rx="5" class="p8e-b"/>
+<text x="72" y="58" class="p8e-l">query</text><text x="72" y="78" class="p8e-s">+ task instruction</text>
+<line x1="136" y1="64" x2="162" y2="64" class="p8e-ar"/>
+
+<rect x="166" y="30" width="200" height="118" rx="6" class="p8e-ba"/>
+<text x="266" y="50" class="p8e-l">Qwen3-Embedding</text>
+<text x="266" y="70" class="p8e-s">bi-encoder: query and document</text>
+<text x="266" y="84" class="p8e-s">encoded SEPARATELY</text>
+<text x="266" y="104" class="p8e-s">documents pre-embedded offline,</text>
+<text x="266" y="118" class="p8e-s">query embedded once at runtime</text>
+<text x="266" y="138" class="p8e-s">ANN search over millions &rarr; top 100</text>
+<line x1="370" y1="88" x2="396" y2="88" class="p8e-ar"/>
+
+<rect x="400" y="30" width="200" height="118" rx="6" class="p8e-bt"/>
+<text x="500" y="50" class="p8e-l">Qwen3-Reranker</text>
+<text x="500" y="70" class="p8e-s">cross-encoder: query and document</text>
+<text x="500" y="84" class="p8e-s">encoded TOGETHER</text>
+<text x="500" y="104" class="p8e-s">every pair is a forward pass, so it</text>
+<text x="500" y="118" class="p8e-s">cannot be precomputed</text>
+<text x="500" y="138" class="p8e-s">100 candidates &rarr; top 5, accurately</text>
+<line x1="604" y1="88" x2="630" y2="88" class="p8e-ar"/>
+<rect x="634" y="58" width="74" height="60" rx="5" class="p8e-b"/>
+<text x="671" y="84" class="p8e-l">context</text><text x="671" y="102" class="p8e-s">for the LLM</text>
+
+<line x1="8" y1="170" x2="712" y2="170" stroke="#21262d" stroke-width="1"/>
+<text x="8" y="190" class="p8e-h">Two features worth exploiting</text>
+<text x="8" y="208" class="p8e-s" style="text-anchor:start">&bull; Instruction awareness &mdash; prepend a task description to the query and the embeddings shift accordingly.</text>
+<text x="8" y="222" class="p8e-s" style="text-anchor:start">&nbsp;&nbsp;One model therefore serves search, classification, clustering and semantic similarity.</text>
+<text x="8" y="240" class="p8e-s" style="text-anchor:start">&bull; Matryoshka representation learning &mdash; truncate the vector and it degrades gracefully, so you can</text>
+<text x="8" y="254" class="p8e-s" style="text-anchor:start">&nbsp;&nbsp;choose your own dimension to cut index size and ANN latency.</text>
+<text x="8" y="276" class="p8e-s" style="text-anchor:start">Sizing rule: the 0.6B for embedding (it runs over the whole corpus), the 4B or 8B for reranking (only ~100 candidates).</text>
+</svg>
+</div>
+<div class="code-block">
+<div class="code-header">Both models in vLLM &mdash; different runners, not just different weights</div>
+<pre><code><span class="cm"># Embedding: a pooling model, exposed on /v1/embeddings</span>
+vllm serve Qwen/Qwen3-Embedding-0.6B --task embed
+
+<span class="cm"># Reranker: a scoring model, exposed on /v1/score (or /rerank)</span>
+vllm serve Qwen/Qwen3-Reranker-4B --task score</code></pre>
+</div>
+<p>In January 2026 the pair gained multimodal siblings &mdash; <strong>Qwen3-VL-Embedding</strong> and <strong>Qwen3-VL-Reranker</strong> &mdash; which embed and rank images and document pages alongside text, so a scanned page can be retrieved without an OCR step in the ingestion pipeline.</p>
+</section>
+
+<section class="slide" id="slide-07">
+<div class="slide-number">07</div>
+<h2>Qwen3Guard &mdash; safety on the token stream</h2>
+<p>Released September 2025 in 0.6B, 4B and 8B. Its distinguishing feature is in the subtitle of the announcement: <em>real-time safety for your token stream</em>. Two variants exist, and the streaming one is the interesting engineering.</p>
+<div class="diagram-grid cols-2">
+<div class="diagram-panel accent-border">
+<h4>Qwen3Guard-Gen</h4>
+<p>The classical shape. A complete prompt or a complete response goes in; a classification comes out. Simple to reason about, easy to log, and adds one full model call of latency at each end of the conversation.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Qwen3Guard-Stream</h4>
+<p>Classifies <em>as the response is generated</em>, token by token. An unsafe completion can be cut off part-way rather than being generated in full and then discarded. That matters enormously in a streaming UI, where the user has already read what you were about to redact.</p>
+</div>
+</div>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 212" width="720" height="212" xmlns="http://www.w3.org/2000/svg">
+<style>
+.p8g-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p8g-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p8g-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p8g-ok{fill:rgba(31,158,142,0.16);stroke:#1F9E8E;stroke-width:1;}
+.p8g-mid{fill:rgba(184,124,34,0.16);stroke:#B87C22;stroke-width:1;}
+.p8g-bad{fill:rgba(209,77,72,0.16);stroke:#D14D48;stroke-width:1;}
+.p8g-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+</style>
+<text x="8" y="16" class="p8g-h">Three tiers, not two &mdash; the design decision that makes it usable</text>
+
+<rect x="20" y="32" width="210" height="72" rx="6" class="p8g-ok"/>
+<text x="125" y="58" class="p8g-l">safe</text>
+<text x="125" y="78" class="p8g-s" style="text-anchor:middle">pass through</text>
+<text x="125" y="94" class="p8g-s" style="text-anchor:middle">no action</text>
+
+<rect x="248" y="32" width="210" height="72" rx="6" class="p8g-mid"/>
+<text x="353" y="58" class="p8g-l">controversial</text>
+<text x="353" y="78" class="p8g-s" style="text-anchor:middle">policy-dependent &mdash; your call</text>
+<text x="353" y="94" class="p8g-s" style="text-anchor:middle">allow, warn, or escalate</text>
+
+<rect x="476" y="32" width="224" height="72" rx="6" class="p8g-bad"/>
+<text x="588" y="58" class="p8g-l">unsafe</text>
+<text x="588" y="78" class="p8g-s" style="text-anchor:middle">block or truncate</text>
+<text x="588" y="94" class="p8g-s" style="text-anchor:middle">plus a category label</text>
+
+<text x="8" y="134" class="p8g-s">A binary safe/unsafe classifier forces one global threshold on every deployment. A medical assistant, a children's</text>
+<text x="8" y="148" class="p8g-s">product and an internal security tool have irreconcilably different tolerances. The middle tier moves that decision</text>
+<text x="8" y="162" class="p8g-s">out of the model and into your policy layer, where it belongs.</text>
+<text x="8" y="186" class="p8g-s">Coverage spans the full Qwen3 language set, so the safety layer does not become the weakest link in a multilingual</text>
+<text x="8" y="200" class="p8g-s">product &mdash; a common failure mode with English-first moderation models.</text>
+</svg>
+</div>
+<div class="callout">
+<div class="callout-label">Deployment note</div>
+<p>The 0.6B is the one to reach for. A guard model runs on <em>every</em> request in both directions, so its cost is pure overhead on your entire traffic. Running an 8B guard in front of a 4B generator is a common and expensive mistake.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-08">
+<div class="slide-number">08</div>
+<h2>Qwen-Image and the speech stack</h2>
+<div class="diagram-grid cols-2">
+<div class="diagram-panel accent-border">
+<h4>Qwen-Image (Aug 2025)</h4>
+<p>A 20B MMDiT &mdash; multimodal diffusion transformer &mdash; for image generation. Its distinguishing capability is <strong>text rendering</strong>: it draws legible, correctly-spelled text in complex layouts, in Chinese as well as English, which most diffusion models still do badly. <strong>Qwen-Image-Edit</strong> extended that to editing, and <strong>Qwen-Image-3.0</strong> (July 2026) broadened text rendering to 12 languages.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Why text rendering is hard</h4>
+<p>Diffusion models operate on continuous latents where a letterform is a texture, not a symbol. Getting "SALE 20% OFF" to render with the right glyphs, spacing and kerning requires the model to hold discrete symbolic structure through a continuous denoising process. It is a genuinely different capability from image quality, and it is what makes a generator usable for posters, slides and UI mockups.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Qwen3-ASR</h4>
+<p>Open speech recognition with multilingual coverage, plus <strong>Qwen-Audio-3.0-ASR-Flash</strong> (July 2026) tuned for low-latency transcription. The natural front end for a voice pipeline that does not need Omni's end-to-end integration.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Qwen-Audio-3.0-TTS and Qwen-MT</h4>
+<p><strong>TTS</strong> (July 2026) covers expressive speech across 16 languages. <strong>Qwen-MT</strong> (July 2025) is a dedicated translation model over 92 languages and major dialects, reinforcement-tuned for translation quality specifically &mdash; considerably cheaper and better at the job than prompting a general model.</p>
+</div>
+</div>
+<div class="callout">
+<div class="callout-label">The generalist trap</div>
+<p>It is tempting to do everything with one large general model. For translation, transcription, embedding, reranking and moderation, a dedicated small Qwen specialist is almost always <strong>cheaper, faster and better</strong> than a prompt to a big generalist. The general model's job is the part that genuinely needs general intelligence; everything else should be a specialist call.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-09">
+<div class="slide-number">09</div>
+<h2>Composing the fleet into one system</h2>
+<p>A realistic production stack uses four or five Qwen models of very different sizes, each doing the job it is cheapest at. Here is a document-QA system with voice input, written out end to end.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 320" width="720" height="320" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="p8c-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<style>
+.p8c-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p8c-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
+.p8c-bg{fill:rgba(31,158,142,0.10);stroke:#1F9E8E;stroke-width:1.2;}
+.p8c-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9px;text-anchor:middle;}
+.p8c-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8px;text-anchor:middle;}
+.p8c-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p8c-ar{stroke:#7B61FF;stroke-width:1.3;fill:none;marker-end:url(#p8c-a);}
+</style>
+<text x="8" y="16" class="p8c-h">Ingestion &mdash; offline, run once per document</text>
+<rect x="12" y="26" width="130" height="46" rx="5" class="p8c-b"/><text x="77" y="46" class="p8c-l">PDF / scan</text><text x="77" y="62" class="p8c-s">arrives</text>
+<line x1="146" y1="49" x2="168" y2="49" class="p8c-ar"/>
+<rect x="172" y="26" width="164" height="46" rx="5" class="p8c-ba"/><text x="254" y="46" class="p8c-l">Qwen3-VL-2B</text><text x="254" y="62" class="p8c-s">OCR + layout &rarr; markdown</text>
+<line x1="340" y1="49" x2="362" y2="49" class="p8c-ar"/>
+<rect x="366" y="26" width="164" height="46" rx="5" class="p8c-ba"/><text x="448" y="46" class="p8c-l">Qwen3-Embedding-0.6B</text><text x="448" y="62" class="p8c-s">chunk &rarr; vectors</text>
+<line x1="534" y1="49" x2="556" y2="49" class="p8c-ar"/>
+<rect x="560" y="26" width="148" height="46" rx="5" class="p8c-b"/><text x="634" y="46" class="p8c-l">vector index</text><text x="634" y="62" class="p8c-s">ANN over millions</text>
+
+<text x="8" y="104" class="p8c-h">Request path &mdash; online, per query</text>
+<rect x="12" y="114" width="130" height="46" rx="5" class="p8c-b"/><text x="77" y="134" class="p8c-l">voice question</text>
+<line x1="146" y1="137" x2="168" y2="137" class="p8c-ar"/>
+<rect x="172" y="114" width="130" height="46" rx="5" class="p8c-ba"/><text x="237" y="134" class="p8c-l">Qwen3-ASR</text><text x="237" y="150" class="p8c-s">speech &rarr; text</text>
+<line x1="306" y1="137" x2="328" y2="137" class="p8c-ar"/>
+<rect x="332" y="114" width="130" height="46" rx="5" class="p8c-bg"/><text x="397" y="134" class="p8c-l">Qwen3Guard-0.6B</text><text x="397" y="150" class="p8c-s">screen the prompt</text>
+<line x1="466" y1="137" x2="488" y2="137" class="p8c-ar"/>
+<rect x="492" y="114" width="216" height="46" rx="5" class="p8c-ba"/><text x="600" y="134" class="p8c-l">Qwen3-Embedding &rarr; ANN &rarr; top 100</text><text x="600" y="150" class="p8c-s">retrieve candidates</text>
+
+<line x1="600" y1="164" x2="600" y2="180" class="p8c-ar"/>
+<rect x="492" y="184" width="216" height="46" rx="5" class="p8c-ba"/><text x="600" y="204" class="p8c-l">Qwen3-Reranker-4B</text><text x="600" y="220" class="p8c-s">100 &rarr; top 5, accurately</text>
+<line x1="488" y1="207" x2="466" y2="207" class="p8c-ar"/>
+<rect x="252" y="184" width="212" height="46" rx="5" class="p8c-ba"/><text x="358" y="204" class="p8c-l">Qwen3.6-27B</text><text x="358" y="220" class="p8c-s">answer from the 5 passages</text>
+<line x1="248" y1="207" x2="226" y2="207" class="p8c-ar"/>
+<rect x="90" y="184" width="132" height="46" rx="5" class="p8c-bg"/><text x="156" y="204" class="p8c-l">Qwen3Guard-Stream</text><text x="156" y="220" class="p8c-s">screen as it generates</text>
+<line x1="156" y1="234" x2="156" y2="250" class="p8c-ar"/>
+<rect x="90" y="254" width="132" height="42" rx="5" class="p8c-b"/><text x="156" y="272" class="p8c-l">Qwen-Audio-3.0-TTS</text><text x="156" y="288" class="p8c-s">speak the answer</text>
+
+<text x="252" y="272" class="p8c-s" style="text-anchor:start">Six models, four of them under 5B. The only large one runs once per query, over five</text>
+<text x="252" y="286" class="p8c-s" style="text-anchor:start">short passages &mdash; so the expensive component sees the smallest prompt. That</text>
+<text x="252" y="300" class="p8c-s" style="text-anchor:start">inversion is the whole art of cost-effective LLM system design.</text>
+</svg>
+</div>
+<div class="callout">
+<div class="callout-label">Next</div>
+<p>Part 09 is where all of this converges. <strong>Qwen3.5</strong> (February 2026) put hybrid attention into every size from 0.8B to 397B-A17B, made the base model natively multimodal &mdash; folding the VL line into the mainline &mdash; extended language coverage to 201, and finally solved the reasoning/non-reasoning split that Qwen3 could not.</p>
+</div>
+</section>
+
+<nav class="deck-nav"><a href="part7.html">&larr; Part 07 &middot; Qwen3-Next</a><a class="next" href="part9.html">Part 09 &middot; Qwen3.5 &rarr;</a></nav>
+<footer class="footer"><p>Part of the <a href="index.html">Qwen</a> presentation series &mdash; a deep exploration of Alibaba's open-weight model family.</p><p style="margin-top:0.5rem;font-size:0.8rem;"><a href="index.html">Back to Series Index</a></p></footer>
+
+<script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.slide').forEach(slide => {
+        slide.style.opacity = '0';
+        slide.style.transform = 'translateY(30px)';
+        slide.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(slide);
+    });
+</script>
+</body>
+</html>

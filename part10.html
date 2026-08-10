@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qwen 10 __TITLE__mdash; Qwen3.6 to Qwen3.8</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-card: #0d1117;
+            --bg-code: #161b22;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --accent: #7B61FF;
+            --accent-dim: #7B61FF40;
+            --accent-glow: #7B61FF30;
+            --border: #21262d;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            --font-body: 'Inter', sans-serif;
+            --max-width: 900px;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 17px;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .hero > * { position: relative; z-index: 1; }
+        .series-label {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        .hero h1 .accent { color: var(--accent); }
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 640px;
+            margin-bottom: 2rem;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+        }
+        .tag {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            background: var(--accent-dim);
+            white-space: nowrap;
+        }
+        .pipeline {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+            max-width: var(--max-width);
+        }
+        .pipeline-step {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            padding: 0.3rem 0.7rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        .pipeline-arrow { color: var(--accent); font-size: 0.9rem; font-weight: 700; }
+        .slide {
+            min-height: 100vh;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .slide-number {
+            font-family: var(--font-display);
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--accent-dim);
+            position: absolute;
+            top: 2rem;
+            right: 1.5rem;
+            line-height: 1;
+            user-select: none;
+        }
+        .slide h2 {
+            font-family: var(--font-display);
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            line-height: 1.25;
+        }
+        .slide h3 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .slide p { margin-bottom: 1rem; color: var(--text-secondary); }
+        .slide p strong { color: var(--text-primary); }
+        .slide ul, .slide ol { margin-bottom: 1rem; padding-left: 1.5rem; color: var(--text-secondary); }
+        .slide li { margin-bottom: 0.4rem; }
+        .slide li strong { color: var(--text-primary); }
+        .slide code {
+            font-family: var(--font-mono);
+            font-size: 0.88em;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            padding: 0.05rem 0.35rem;
+            border-radius: 3px;
+            color: #c9d1d9;
+        }
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin: 1.25rem 0;
+            overflow: hidden;
+        }
+        .code-header {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            background: rgba(123, 97, 255, 0.08);
+            padding: 0.4rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .code-block pre { margin: 0; padding: 1rem; overflow-x: auto; }
+        .code-block code {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #c9d1d9;
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+        .kw { color: #ff7b72; }
+        .fn { color: #d2a8ff; }
+        .str { color: #a5d6ff; }
+        .cm { color: #8b949e; font-style: italic; }
+        .num { color: #79c0ff; }
+        .type { color: #ffa657; }
+        .dir { color: #ff7b72; }
+        .mac { color: #ffa657; }
+        .table-wrap {
+            overflow-x: auto;
+            margin: 1.25rem 0;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th {
+            background: var(--bg-code);
+            color: var(--accent);
+            font-weight: 600;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            font-family: var(--font-display);
+            white-space: nowrap;
+        }
+        td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:nth-child(even) td { background: rgba(13, 17, 23, 0.5); }
+        .diagram-flow {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .diagram-box {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            text-align: center;
+            white-space: nowrap;
+        }
+        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-box.dim { color: var(--text-secondary); border-color: var(--border); }
+        .diagram-arrow { color: var(--accent); font-size: 1.3rem; font-weight: 700; }
+        .diagram-vertical {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .diagram-vertical .diagram-arrow { font-size: 1.1rem; }
+        .hierarchy {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .hierarchy-level { display: flex; align-items: center; gap: 0.75rem; }
+        .hierarchy-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+            text-align: right;
+        }
+        .hierarchy-items { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+        .hierarchy-item {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-grid {
+            display: grid;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .diagram-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+        .diagram-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+        .diagram-panel {
+            padding: 1rem;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+        .diagram-panel.accent-border { border-left: 3px solid var(--accent); }
+        .diagram-panel h4 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        .diagram-panel p, .diagram-panel ul { font-size: 0.85rem; }
+        .callout {
+            background: var(--bg-card);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+            padding: 1rem 1.25rem;
+            margin: 1.25rem 0;
+        }
+        .callout p { margin-bottom: 0; }
+        .callout p + p { margin-top: 0.5rem; }
+        .callout .callout-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.3rem;
+        }
+        .contents-list { list-style: none; padding-left: 0; counter-reset: contents; }
+        .contents-list li {
+            counter-increment: contents;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .contents-list li:last-child { border-bottom: none; }
+        .contents-list li::before {
+            content: counter(contents, decimal-leading-zero);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            min-width: 2rem;
+        }
+        .contents-list a { color: var(--text-primary); text-decoration: none; transition: color 0.2s; }
+        .contents-list a:hover { color: var(--accent); }
+        .footer {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+        .footer a { color: var(--accent); text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+        .deck-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        .deck-nav a {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: border-color 0.15s, color 0.15s;
+        }
+        .deck-nav a:hover { border-color: var(--accent); color: var(--accent); }
+        .deck-nav a.next { margin-left: auto; }
+        .canvas-wrap {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.25rem 0;
+            overflow-x: auto;
+        }
+        .canvas-wrap canvas, .canvas-wrap svg { display: block; margin: 0 auto; max-width: 100%; }
+        .badge {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            padding: 0.1rem 0.45rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            vertical-align: middle;
+            margin-left: 0.3rem;
+        }
+        .badge.ok    { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+        .badge.warn  { border-color: #ffa657; color: #ffa657; background: rgba(255,166,87,0.08); }
+        .badge.bad   { border-color: #ff7b72; color: #ff7b72; background: rgba(255,123,114,0.08); }
+        @media (max-width: 640px) {
+            .slide { padding: 3rem 1rem; min-height: auto; }
+            .slide-number { font-size: 3rem; top: 1.5rem; right: 1rem; }
+            .slide h2 { font-size: 1.5rem; }
+            .diagram-grid.cols-2, .diagram-grid.cols-3 { grid-template-columns: 1fr; }
+            .pipeline { gap: 0.15rem; }
+            .pipeline-step { font-size: 0.6rem; padding: 0.2rem 0.4rem; }
+            .hero h1 { font-size: 1.8rem; }
+            table { font-size: 0.78rem; }
+        }
+    </style>
+</head>
+<body>
+<header class="hero">
+<div class="series-label">Qwen &middot; Part 10</div>
+<h1>Dense Returns, and <span class="accent">Max Goes Frontier</span></h1>
+<p class="subtitle">April to August 2026. A 27-billion-parameter dense model beats a 397-billion mixture-of-experts on agentic coding. Reasoning stops being thrown away between turns. And the Max tier reaches 2.4 trillion parameters &mdash; with an open-weights release announced but, as this deck is written, not yet shipped.</p>
+<div class="tags">
+<span class="tag">Qwen3.6-27B</span>
+<span class="tag">Qwen3.6-35B-A3B</span>
+<span class="tag">Thinking preservation</span>
+<span class="tag">Qwen3.7-Max</span>
+<span class="tag">Qwen3.8-Max &mdash; 2.4T</span>
+</div>
+<div class="pipeline">
+<span class="pipeline-step">Qwen3.5</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">3.6-Plus</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">3.6-35B-A3B</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">3.6-27B</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">3.7-Max</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">3.8-Max</span>
+</div>
+</header>
+
+<section class="slide" id="slide-00">
+<div class="slide-number">00</div>
+<h2>Contents</h2>
+<ul class="contents-list">
+<li><a href="#slide-01">Qwen3.6 &mdash; two months later, two models</a></li>
+<li><a href="#slide-02">Qwen3.6-35B-A3B, specified</a></li>
+<li><a href="#slide-03">Dense beats sparse &mdash; the Qwen3.6-27B result</a></li>
+<li><a href="#slide-04">Thinking preservation</a></li>
+<li><a href="#slide-05">The Max tier &mdash; a timeline of closed flagships</a></li>
+<li><a href="#slide-06">Qwen3.8-Max &mdash; 2.4 trillion parameters</a></li>
+<li><a href="#slide-07">The open-weights question</a></li>
+<li><a href="#slide-08">Serving Qwen3.6</a></li>
+<li><a href="#slide-09">Reading the trajectory</a></li>
+</ul>
+<div class="callout">
+<div class="callout-label">Caveat</div>
+<p>This deck describes releases from the last four months, the most recent of them a week old. Primary documentation for the Max tier is thin because those models are closed. Where a figure comes from a vendor announcement rather than a model card, it is described as such.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-01">
+<div class="slide-number">01</div>
+<h2>Qwen3.6 &mdash; two months later, two models</h2>
+<p>Qwen3.6 is not a new architecture. It is Qwen3.5's architecture with better post-training, a new inference feature and a sharply different size strategy &mdash; shipped nine weeks after its predecessor.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Release</th><th>Date</th><th>Shape</th><th>Licence</th><th>Headline</th></tr></thead>
+<tbody>
+<tr><td>Qwen3.6-Plus</td><td>2 Apr 2026</td><td>proprietary, hosted</td><td>API only</td><td>1M context, repository-scale focus</td></tr>
+<tr><td>Qwen3.6-Max-Preview</td><td>18 Apr 2026</td><td>~1T sparse MoE</td><td>API only</td><td>262K context, agentic coding and tool use</td></tr>
+<tr><td><strong>Qwen3.6-35B-A3B</strong></td><td>16 Apr 2026</td><td>35B / 3B MoE</td><td>Apache 2.0</td><td>73.4 SWE-bench Verified on 3B of active compute</td></tr>
+<tr><td><strong>Qwen3.6-27B</strong></td><td>22 Apr 2026</td><td>27B dense</td><td>Apache 2.0</td><td>77.2 SWE-bench Verified &mdash; beats the 397B</td></tr>
+</tbody>
+</table>
+</div>
+<h3>What is new relative to Qwen3.5</h3>
+<ul>
+<li><strong>Stability and real-world utility</strong> as the explicit framing, rather than new capability &mdash; better behaviour in long agentic sessions rather than higher peak scores.</li>
+<li><strong>Thinking preservation</strong>, a genuinely new inference-time feature covered on slide 04.</li>
+<li><strong>A dense flagship.</strong> After two generations of "sparsity wins", Qwen3.6's strongest open model is a plain 27B dense transformer with hybrid attention. That is worth taking seriously.</li>
+<li><strong>Sharper agentic-coding post-training</strong>, which is where nearly all of the measured improvement lands.</li>
+</ul>
+</section>
+
+<section class="slide" id="slide-02">
+<div class="slide-number">02</div>
+<h2>Qwen3.6-35B-A3B, specified</h2>
+<p>The successor to the most-deployed shape in the family. Forty layers of the now-familiar hybrid block, 256 experts with 8 active, vision built in, and a native quarter-million-token context.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 250" width="720" height="250" xmlns="http://www.w3.org/2000/svg">
+<style>
+.p10a-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p10a-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
+.p10a-dn{fill:rgba(31,158,142,0.14);stroke:#1F9E8E;stroke-width:1;}
+.p10a-at{fill:rgba(123,97,255,0.22);stroke:#7B61FF;stroke-width:1.2;}
+.p10a-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p10a-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p10a-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p10a-v{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;text-anchor:middle;}
+</style>
+<text x="8" y="16" class="p10a-h">10 &times; (3 &times; (Gated DeltaNet &rarr; MoE) &rarr; 1 &times; (Gated Attention &rarr; MoE))  =  40 layers</text>
+
+<rect x="12" y="28" width="300" height="106" rx="6" class="p10a-b"/>
+<text x="162" y="46" class="p10a-l">the repeating block, ten times</text>
+<rect x="28" y="54" width="268" height="17" rx="3" class="p10a-dn"/><text x="162" y="66" class="p10a-l">Gated DeltaNet &rarr; MoE</text>
+<rect x="28" y="75" width="268" height="17" rx="3" class="p10a-dn"/><text x="162" y="87" class="p10a-l">Gated DeltaNet &rarr; MoE</text>
+<rect x="28" y="96" width="268" height="17" rx="3" class="p10a-dn"/><text x="162" y="108" class="p10a-l">Gated DeltaNet &rarr; MoE</text>
+<rect x="28" y="117" width="268" height="17" rx="3" class="p10a-at"/><text x="162" y="129" class="p10a-l">Gated Attention &rarr; MoE</text>
+
+<rect x="324" y="28" width="182" height="106" rx="6" class="p10a-ba"/>
+<text x="415" y="52" class="p10a-v">256 / 8</text><text x="415" y="70" class="p10a-s">experts total / activated</text>
+<text x="415" y="96" class="p10a-v">35B / 3B</text><text x="415" y="114" class="p10a-s">total / active parameters</text>
+
+<rect x="518" y="28" width="190" height="106" rx="6" class="p10a-ba"/>
+<text x="613" y="52" class="p10a-v">262,144</text><text x="613" y="70" class="p10a-s">native context</text>
+<text x="613" y="96" class="p10a-v">1,010,000</text><text x="613" y="114" class="p10a-s">extended via YaRN</text>
+
+<rect x="12" y="146" width="222" height="52" rx="6" class="p10a-b"/>
+<text x="123" y="168" class="p10a-l">text, images and video in</text><text x="123" y="186" class="p10a-s">vision is native, not a separate checkpoint</text>
+
+<rect x="246" y="146" width="222" height="52" rx="6" class="p10a-b"/>
+<text x="357" y="168" class="p10a-l">thinking mode by default</text><text x="357" y="186" class="p10a-s">plus preserve_thinking across turns</text>
+
+<rect x="480" y="146" width="228" height="52" rx="6" class="p10a-b"/>
+<text x="594" y="168" class="p10a-l">Apache 2.0</text><text x="594" y="186" class="p10a-s">vLLM &middot; SGLang &middot; KTransformers</text>
+
+<text x="12" y="228" class="p10a-s" style="text-anchor:start">Sampling differs by task, which is unusual and worth honouring: temperature 1.0 for general thinking-mode work, 0.6 for precise coding.</text>
+<text x="12" y="244" class="p10a-s" style="text-anchor:start">The lower temperature buys determinism where an edit must be exactly right; the higher one buys exploration where the model must search.</text>
+</svg>
+</div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Benchmark</th><th>Qwen3.6-35B-A3B</th><th>Reads as</th></tr></thead>
+<tbody>
+<tr><td>SWE-bench Verified</td><td>73.4</td><td>Above Qwen3-Coder-480B-A35B (69.6), on 3B of active compute</td></tr>
+<tr><td>SWE-bench Pro</td><td>49.5</td><td>The harder variant &mdash; still substantial headroom industry-wide</td></tr>
+<tr><td>Terminal-Bench 2.0</td><td>51.5</td><td>Shell and tool-sequencing competence</td></tr>
+<tr><td>MMLU-Pro</td><td>85.2</td><td>Broad knowledge, within a couple of points of the 397B flagship</td></tr>
+<tr><td>GPQA</td><td>86.0</td><td>Graduate-level science reasoning</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section class="slide" id="slide-03">
+<div class="slide-number">03</div>
+<h2>Dense beats sparse &mdash; the Qwen3.6-27B result</h2>
+<p>Six days after the 35B-A3B, Qwen shipped a <strong>27B dense</strong> model that beat it on every agentic-coding measure &mdash; and beat the 397B-A17B flagship too. All twenty-seven billion parameters fire on every token.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 300" width="720" height="300" xmlns="http://www.w3.org/2000/svg">
+<style>
+.p10c-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p10c-ax{stroke:#30363d;stroke-width:1;}
+.p10c-gr{stroke:#21262d;stroke-width:1;}
+.p10c-a{fill:#7B61FF;}
+.p10c-b{fill:#1F9E8E;}
+.p10c-cat{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;}
+.p10c-val{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;}
+.p10c-tick{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p10c-leg{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9px;}
+.p10c-note{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+</style>
+<rect x="8" y="8" width="12" height="12" rx="2" class="p10c-a"/><text x="26" y="18" class="p10c-leg">Qwen3.6-27B (dense, 27B active)</text>
+<rect x="270" y="8" width="12" height="12" rx="2" class="p10c-b"/><text x="288" y="18" class="p10c-leg">Qwen3.6-35B-A3B (MoE, 3B active)</text>
+
+<line x1="150" y1="34" x2="150" y2="246" class="p10c-ax"/>
+<line x1="275" y1="34" x2="275" y2="246" class="p10c-gr"/>
+<line x1="400" y1="34" x2="400" y2="246" class="p10c-gr"/>
+<line x1="525" y1="34" x2="525" y2="246" class="p10c-gr"/>
+<line x1="650" y1="34" x2="650" y2="246" class="p10c-gr"/>
+<line x1="150" y1="246" x2="650" y2="246" class="p10c-ax"/>
+<text x="150" y="260" class="p10c-tick">0</text>
+<text x="275" y="260" class="p10c-tick">20</text>
+<text x="400" y="260" class="p10c-tick">40</text>
+<text x="525" y="260" class="p10c-tick">60</text>
+<text x="650" y="260" class="p10c-tick">80</text>
+<text x="400" y="278" class="p10c-tick">score</text>
+
+<text x="8" y="60" class="p10c-cat">SWE-bench Verified</text>
+<rect x="150" y="46" width="483" height="20" rx="4" class="p10c-a"/><text x="641" y="61" class="p10c-val">77.2</text>
+<rect x="150" y="68" width="459" height="20" rx="4" class="p10c-b"/><text x="617" y="83" class="p10c-val">73.4</text>
+
+<text x="8" y="126" class="p10c-cat">SWE-bench Pro</text>
+<rect x="150" y="112" width="334" height="20" rx="4" class="p10c-a"/><text x="492" y="127" class="p10c-val">53.5</text>
+<rect x="150" y="134" width="309" height="20" rx="4" class="p10c-b"/><text x="467" y="149" class="p10c-val">49.5</text>
+
+<text x="8" y="192" class="p10c-cat">Terminal-Bench 2.0</text>
+<rect x="150" y="178" width="371" height="20" rx="4" class="p10c-a"/><text x="529" y="193" class="p10c-val">59.3</text>
+<rect x="150" y="200" width="322" height="20" rx="4" class="p10c-b"/><text x="480" y="215" class="p10c-val">51.5</text>
+
+<line x1="8" y1="286" x2="712" y2="286" class="p10c-gr"/>
+<text x="8" y="300" class="p10c-note">Terminal-Bench 2.0 measured under a 3-hour timeout with 32 CPUs and 48GB RAM. Qwen3.6-27B's 59.3 was reported as matching Claude 4.5 Opus.</text>
+</svg>
+</div>
+<h3>Why dense won here</h3>
+<ul>
+<li><strong>Agentic coding is decode-heavy and sequential.</strong> Hundreds of short turns, each latency-sensitive. Dense models have uniform, predictable per-token latency; MoE routing adds variance and all-to-all communication that hurts precisely in this regime.</li>
+<li><strong>Sparsity is a memory-capacity trick, not a reasoning trick.</strong> It buys knowledge breadth per FLOP. Long-horizon coding is bounded more by consistent reasoning than by breadth of knowledge.</li>
+<li><strong>Every parameter contributes to every token.</strong> With 27B dense you get 27B of computation per token; the 35B-A3B gives you 3B. On this workload that gap outweighs the eight-billion-parameter difference in stored knowledge.</li>
+</ul>
+<div class="callout">
+<div class="callout-label">The correct conclusion</div>
+<p>Not "dense is back" &mdash; it is that <strong>sparsity and density trade differently by workload</strong>. Sparse MoE wins where knowledge breadth and throughput-per-dollar dominate: RAG, classification, high-volume chat. Dense wins where per-token reasoning quality and latency consistency dominate: agentic coding, long-horizon tool use. Qwen3.6 ships both because both are right, for different jobs. Part 12 turns this into a selection rule.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-04">
+<div class="slide-number">04</div>
+<h2>Thinking preservation</h2>
+<p>The new inference feature in Qwen3.6, exposed as <code>preserve_thinking</code>. It addresses a specific, wasteful behaviour that every multi-turn reasoning deployment has been living with.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 294" width="720" height="294" xmlns="http://www.w3.org/2000/svg">
+<style>
+.p10t-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p10t-th{fill:rgba(123,97,255,0.16);stroke:#7B61FF;stroke-width:1;}
+.p10t-gone{fill:#0d1117;stroke:#30363d;stroke-width:1;stroke-dasharray:3,3;}
+.p10t-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9px;text-anchor:middle;}
+.p10t-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p10t-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+</style>
+<text x="8" y="16" class="p10t-h">Default behaviour &mdash; the trace is discarded once the turn ends</text>
+<rect x="12" y="26" width="80" height="24" rx="3" class="p10t-b"/><text x="52" y="42" class="p10t-l">turn 1 ask</text>
+<rect x="96" y="26" width="150" height="24" rx="3" class="p10t-th"/><text x="171" y="42" class="p10t-l">&lt;think&gt; 6,000 tokens</text>
+<rect x="250" y="26" width="90" height="24" rx="3" class="p10t-b"/><text x="295" y="42" class="p10t-l">answer + tool</text>
+<rect x="344" y="26" width="80" height="24" rx="3" class="p10t-b"/><text x="384" y="42" class="p10t-l">turn 2 ask</text>
+<rect x="428" y="26" width="150" height="24" rx="3" class="p10t-th"/><text x="503" y="42" class="p10t-l">&lt;think&gt; 6,000 again</text>
+<rect x="582" y="26" width="90" height="24" rx="3" class="p10t-b"/><text x="627" y="42" class="p10t-l">answer</text>
+
+<rect x="96" y="56" width="150" height="20" rx="3" class="p10t-gone"/><text x="171" y="70" class="p10t-l" fill="#8b949e">dropped from history</text>
+<text x="256" y="70" class="p10t-s">so turn 2 re-derives the plan, the constraints and the dead ends from scratch</text>
+
+<line x1="8" y1="96" x2="712" y2="96" stroke="#21262d" stroke-width="1"/>
+
+<text x="8" y="118" class="p10t-h">With preserve_thinking &mdash; earlier reasoning stays in context</text>
+<rect x="12" y="128" width="80" height="24" rx="3" class="p10t-b"/><text x="52" y="144" class="p10t-l">turn 1 ask</text>
+<rect x="96" y="128" width="150" height="24" rx="3" class="p10t-th"/><text x="171" y="144" class="p10t-l">&lt;think&gt; 6,000 tokens</text>
+<rect x="250" y="128" width="90" height="24" rx="3" class="p10t-b"/><text x="295" y="144" class="p10t-l">answer + tool</text>
+<rect x="344" y="128" width="80" height="24" rx="3" class="p10t-b"/><text x="384" y="144" class="p10t-l">turn 2 ask</text>
+<rect x="428" y="128" width="110" height="24" rx="3" class="p10t-th"/><text x="483" y="144" class="p10t-l">&lt;think&gt; ~1,500</text>
+<rect x="542" y="128" width="130" height="24" rx="3" class="p10t-b"/><text x="607" y="144" class="p10t-l">answer</text>
+<text x="96" y="170" class="p10t-s">retained &mdash; and prefix-cacheable, so it costs almost nothing to re-send</text>
+
+<line x1="8" y1="190" x2="712" y2="190" stroke="#21262d" stroke-width="1"/>
+<text x="8" y="210" class="p10t-h">Why this matters most for agents</text>
+<text x="8" y="228" class="p10t-s">An agent's turns are not independent questions &mdash; they are steps in one task. Discarding the reasoning between them forces the model to</text>
+<text x="8" y="242" class="p10t-s">reconstruct its own plan every time a tool returns, which is both expensive and a common source of drift: the reconstructed plan is not</text>
+<text x="8" y="256" class="p10t-s">always the original plan. Preserving the trace keeps the agent on one line of thought across a long episode.</text>
+<text x="8" y="272" class="p10t-s">Trade-off: retained traces consume the context window. On very long sessions you still need a</text>
+<text x="8" y="286" class="p10t-s">compaction strategy &mdash; this defers the problem, it does not remove it.</text>
+</svg>
+</div>
+</section>
+
+<section class="slide" id="slide-05">
+<div class="slide-number">05</div>
+<h2>The Max tier &mdash; a timeline of closed flagships</h2>
+<p>Since September 2025 the strongest Qwen has been an API product. The tier has moved roughly quarterly, and each step has been substantial.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Model</th><th>Date</th><th>Scale</th><th>Context</th><th>Indicative pricing (per 1M in / out)</th></tr></thead>
+<tbody>
+<tr><td>Qwen3-Max</td><td>Sept 2025</td><td>1T+ total</td><td>&mdash;</td><td>&mdash; the first Qwen past a trillion parameters</td></tr>
+<tr><td>Qwen3.6-Max-Preview</td><td>Apr 2026</td><td>~1T sparse MoE</td><td>262K</td><td>~$1.03 / $6.16</td></tr>
+<tr><td>Qwen3.7-Max</td><td>May 2026</td><td>~1T total / ~24B active</td><td>1M</td><td>~$1.48 / $4.43</td></tr>
+<tr><td>Qwen3.7-Plus</td><td>Jun 2026</td><td>undisclosed</td><td>&mdash;</td><td>$0.40 / $1.60</td></tr>
+<tr><td><strong>Qwen3.8-Max</strong></td><td>3 Aug 2026</td><td>2.4T total / 95B active</td><td>1M</td><td>$2.00 / $6.00, cached reads $0.25</td></tr>
+</tbody>
+</table>
+</div>
+<div class="diagram-grid cols-2">
+<div class="diagram-panel accent-border">
+<h4>What the tier structure means for you</h4>
+<p><strong>-Plus</strong> is the volume workhorse: near-flagship quality, tool-integrated, priced for production traffic. <strong>-Max</strong> is the frontier: the model you route to when a task genuinely needs it. Neither has open weights, and Alibaba has not published architecture details for either &mdash; the 3.8-Max announcement notably did not disclose its activated-parameter count at first, which makes independent cost modelling impossible.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>How to think about the split</h4>
+<p>The open line and the Max line are converging in capability but diverging in <em>availability</em>. Qwen3.6-27B beats the previous open flagship at a twentieth of the size; meanwhile the closed tier has grown from 1T to 2.4T. Read together: <strong>the open models are getting radically more efficient, and the closed models are getting radically bigger.</strong></p>
+</div>
+</div>
+</section>
+
+<section class="slide" id="slide-06">
+<div class="slide-number">06</div>
+<h2>Qwen3.8-Max &mdash; 2.4 trillion parameters</h2>
+<p>Announced <strong>3 August 2026</strong>, a week before this deck was written. It is the largest model Alibaba has published anything about, and it is multimodal from the start.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 254" width="720" height="254" xmlns="http://www.w3.org/2000/svg">
+<style>
+.p10x-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p10x-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
+.p10x-v{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px;text-anchor:middle;}
+.p10x-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p10x-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p10x-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+</style>
+<text x="8" y="16" class="p10x-h">Qwen3.8-Max &mdash; as announced</text>
+
+<rect x="12" y="26" width="168" height="86" rx="6" class="p10x-ba"/>
+<text x="96" y="60" class="p10x-v">2.4T</text><text x="96" y="82" class="p10x-l">total parameters</text><text x="96" y="98" class="p10x-s">mixture of experts</text>
+
+<rect x="190" y="26" width="168" height="86" rx="6" class="p10x-ba"/>
+<text x="274" y="60" class="p10x-v">95B</text><text x="274" y="82" class="p10x-l">activated per token</text><text x="274" y="98" class="p10x-s">~4% activation ratio</text>
+
+<rect x="368" y="26" width="168" height="86" rx="6" class="p10x-ba"/>
+<text x="452" y="60" class="p10x-v">1M</text><text x="452" y="82" class="p10x-l">context window</text><text x="452" y="98" class="p10x-s">991K in / 131K out</text>
+
+<rect x="546" y="26" width="162" height="86" rx="6" class="p10x-ba"/>
+<text x="627" y="60" class="p10x-v">262K</text><text x="627" y="82" class="p10x-l">reasoning budget</text><text x="627" y="98" class="p10x-s">a quarter-million thinking tokens</text>
+
+<rect x="12" y="124" width="346" height="72" rx="6" class="p10x-b"/>
+<text x="185" y="146" class="p10x-l">inputs and features</text>
+<text x="185" y="166" class="p10x-s">text, image and video in &middot; function calling &middot;</text>
+<text x="185" y="182" class="p10x-s">structured outputs &middot; fine-tuning &middot; OpenAI- and DashScope-compatible</text>
+
+<rect x="368" y="124" width="340" height="72" rx="6" class="p10x-b"/>
+<text x="538" y="146" class="p10x-l">pricing</text>
+<text x="538" y="166" class="p10x-s">$2.00 per 1M input &middot; $6.00 per 1M output</text>
+<text x="538" y="182" class="p10x-s">$0.25 per 1M cached input reads</text>
+
+<text x="12" y="220" class="p10x-s" style="text-anchor:start">Note the reasoning budget: 262,144 thinking tokens is larger than most models' entire context</text>
+<text x="12" y="234" class="p10x-s" style="text-anchor:start">window. This is a model designed for tasks measured in hours, not seconds.</text>
+</svg>
+</div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Benchmark</th><th>Qwen3.8-Max</th><th>Context</th></tr></thead>
+<tbody>
+<tr><td>Terminal-Bench 2.1</td><td>86.6</td><td>Reported ahead of Claude Opus 4.8 and Claude Fable 5 (84.6), behind GPT-5.6 Sol max (88.8)</td></tr>
+<tr><td>OSWorld-Verified</td><td>86.1</td><td>Computer use &mdash; reported ahead of GPT-5.6 Sol Max and Fable 5</td></tr>
+<tr><td>PaperBench</td><td>93.0</td><td>Reported ahead of GPT-5.6 Sol (90.5) and Claude Fable 5 (88.8)</td></tr>
+<tr><td>OmniDocBench</td><td>92.1</td><td>Document understanding &mdash; the vision side is unusually strong</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout">
+<div class="callout-label">Read with the usual caution</div>
+<p>These are <strong>vendor-reported</strong> numbers from a launch announcement, not independent evaluation, and agentic benchmarks are especially harness-sensitive. The pattern that survives scepticism is the shape: Qwen3.8-Max is comparatively stronger on <em>agentic and visual</em> tasks than on pure reasoning benchmarks &mdash; consistent with a model post-trained hard for long-horizon computer use.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-07">
+<div class="slide-number">07</div>
+<h2>The open-weights question</h2>
+<p>At the Qwen3.8-Max launch, Alibaba stated that weights for <strong>both Qwen3.8-Max and a Qwen3.8-27B sibling</strong> would be published on Hugging Face and ModelScope during the week of 10 August 2026 &mdash; the week this deck is being written. That would be the first open-weight release at Max scale in the family's history.</p>
+<div class="diagram-grid cols-2">
+<div class="diagram-panel accent-border">
+<h4>Status as of 10 August 2026</h4>
+<ul>
+<li>Announced, with a stated timeframe</li>
+<li><strong>No matching repository yet published</strong> under the Qwen organisation</li>
+<li><strong>No licence named.</strong> Qwen3.5 and Qwen3.6 were Apache 2.0, but Alibaba has not confirmed that Qwen3.8 will be</li>
+<li>The activated-parameter count was initially undisclosed, later reported as 95B</li>
+</ul>
+<p><strong>Treat it as announced, not shipped.</strong> Do not plan a deployment around weights that do not yet exist.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>What would change if it lands</h4>
+<ul>
+<li>A 2.4T open model is a <strong>research artefact more than a deployment option</strong> &mdash; the memory bill is datacentre-scale even at FP8</li>
+<li>Its real value would be as a <strong>teacher</strong>: distillation targets, synthetic data generation, and evaluation of what the frontier actually contains</li>
+<li><strong>Qwen3.8-27B is the one that matters practically</strong> &mdash; a dense on-premise model in the shape that Qwen3.6-27B proved out</li>
+<li>Symbolically it would be significant: the first time the commercial flagship tier itself was opened</li>
+</ul>
+</div>
+</div>
+<div class="callout">
+<div class="callout-label">How to verify</div>
+<p>Check <code>huggingface.co/Qwen</code> and ModelScope directly, and read the <code>LICENSE</code> file in the repository rather than trusting a summary. Announcements slip, licences differ from expectations, and the gap between "will be released" and "is released" has been weeks rather than days more than once in this family's history.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-08">
+<div class="slide-number">08</div>
+<h2>Serving Qwen3.6</h2>
+<p>Both open Qwen3.6 models are supported by vLLM, SGLang and KTransformers. The flags are essentially Qwen3.5's, since the architecture is unchanged.</p>
+<div class="code-block">
+<div class="code-header">vLLM and SGLang</div>
+<pre><code><span class="cm"># The MoE, across four GPUs</span>
+vllm serve Qwen/Qwen3.6-35B-A3B \
+  --port 8000 --tensor-parallel-size 4 \
+  --max-model-len 262144 \
+  --reasoning-parser qwen3
+
+<span class="cm"># The dense 27B &mdash; the agentic-coding recommendation</span>
+vllm serve Qwen/Qwen3.6-27B \
+  --port 8000 --tensor-parallel-size 2 \
+  --max-model-len 262144 \
+  --enable-auto-tool-choice --tool-call-parser qwen3_xml \
+  --reasoning-parser qwen3
+
+<span class="cm"># SGLang, same model</span>
+python -m sglang.launch_server --model-path Qwen/Qwen3.6-35B-A3B \
+  --port 8000 --tp-size 4 --context-length 262144 --reasoning-parser qwen3</code></pre>
+</div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Setting</th><th>Value</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td>Sampling, general thinking</td><td><code>temperature 1.0</code></td><td>The model card's recommendation &mdash; exploration helps reasoning</td></tr>
+<tr><td>Sampling, precise coding</td><td><code>temperature 0.6</code></td><td>Edits must be exactly right; less exploration, more determinism</td></tr>
+<tr><td>Reasoning parser</td><td><code>qwen3</code></td><td>Thinking is on by default, so traces will otherwise land inline in <code>content</code></td></tr>
+<tr><td>Tool-call parser</td><td><code>qwen3_xml</code></td><td>The current recommendation for Qwen3-generation XML tool calls</td></tr>
+<tr><td>Multi-turn agents</td><td><code>preserve_thinking</code></td><td>Keeps the reasoning chain across turns; pair with prefix caching for the cost benefit</td></tr>
+<tr><td>Text-only workload</td><td><code>--language-model-only</code></td><td>These are multimodal models; skip the vision tower if you never send images</td></tr>
+<tr><td>Long context beyond 262K</td><td>YaRN via <code>--rope-scaling</code></td><td>Reaches ~1,010,000, at a small cost to short-context quality</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout">
+<div class="callout-label">Cost note from the field</div>
+<p>Qwen3.6-27B was benchmarked publicly on roughly $800 of consumer GPUs on release day, with llama.cpp and vLLM compared head to head. A 27B dense model with hybrid attention at 4-bit is genuinely within reach of a well-specified workstation &mdash; which is a large part of why the dense result on slide 03 mattered to so many people.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-09">
+<div class="slide-number">09</div>
+<h2>Reading the trajectory</h2>
+<p>Three years, eight generations. Four patterns hold across all of them and are the safest basis for predicting what comes next.</p>
+<div class="diagram-grid cols-2">
+<div class="diagram-panel accent-border">
+<h4>1. Efficiency is the product</h4>
+<p>Every generation delivers more capability per unit of inference cost, and the gains increasingly come from architecture rather than scale. A 27B in 2026 outperforms a 397B from two months earlier on the workload both were built for.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>2. Specialists converge into the mainline</h4>
+<p>QwQ became thinking mode. Qwen3-VL became native multimodality. Qwen3-Coder's agentic training became general post-training. The pattern is consistent: fork to explore, merge once it works.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>3. Open weights stay genuinely open</h4>
+<p>Apache 2.0 with no usage riders, right up to a 397B flagship. The restriction lives in <em>what is published</em>, not in the terms. That contract has held for four generations.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>4. The frontier is moving behind the API</h4>
+<p>The strongest Qwen has been closed since September 2025, and the gap between the open flagship and the Max tier is now roughly six times in total parameters. The announced Qwen3.8 open release would be the first real test of whether that gap narrows.</p>
+</div>
+</div>
+<div class="callout">
+<div class="callout-label">What this means for a decision you make today</div>
+<p>Build against the <strong>open line</strong> and expect it to improve underneath you roughly quarterly, with a re-tokenisation-scale break every second or third generation. Keep the Max tier as a routed escalation path for the small fraction of requests that genuinely need it, behind the same OpenAI-compatible interface, so switching is a configuration change rather than a rewrite.</p>
+</div>
+<div class="callout">
+<div class="callout-label">Next</div>
+<p>Part 11 is the serving deep dive that the whole series has been pointing at: <strong>Qwen on vLLM</strong> &mdash; every architecture class, every parser, every parallelism strategy, quantisation, long context, multimodal limits, speculative decoding, and a diagnostic table for what to do when it breaks.</p>
+</div>
+</section>
+
+<nav class="deck-nav"><a href="part9.html">&larr; Part 09 &middot; Qwen3.5</a><a class="next" href="part11.html">Part 11 &middot; Serving Qwen with vLLM &rarr;</a></nav>
+<footer class="footer"><p>Part of the <a href="index.html">Qwen</a> presentation series &mdash; a deep exploration of Alibaba's open-weight model family.</p><p style="margin-top:0.5rem;font-size:0.8rem;"><a href="index.html">Back to Series Index</a></p></footer>
+
+<script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.slide').forEach(slide => {
+        slide.style.opacity = '0';
+        slide.style.transform = 'translateY(30px)';
+        slide.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(slide);
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qwen 05 __TITLE__mdash; Qwen3</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-card: #0d1117;
+            --bg-code: #161b22;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --accent: #7B61FF;
+            --accent-dim: #7B61FF40;
+            --accent-glow: #7B61FF30;
+            --border: #21262d;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            --font-body: 'Inter', sans-serif;
+            --max-width: 900px;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 17px;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .hero > * { position: relative; z-index: 1; }
+        .series-label {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        .hero h1 .accent { color: var(--accent); }
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 640px;
+            margin-bottom: 2rem;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+        }
+        .tag {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            background: var(--accent-dim);
+            white-space: nowrap;
+        }
+        .pipeline {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+            max-width: var(--max-width);
+        }
+        .pipeline-step {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            padding: 0.3rem 0.7rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        .pipeline-arrow { color: var(--accent); font-size: 0.9rem; font-weight: 700; }
+        .slide {
+            min-height: 100vh;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .slide-number {
+            font-family: var(--font-display);
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--accent-dim);
+            position: absolute;
+            top: 2rem;
+            right: 1.5rem;
+            line-height: 1;
+            user-select: none;
+        }
+        .slide h2 {
+            font-family: var(--font-display);
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            line-height: 1.25;
+        }
+        .slide h3 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .slide p { margin-bottom: 1rem; color: var(--text-secondary); }
+        .slide p strong { color: var(--text-primary); }
+        .slide ul, .slide ol { margin-bottom: 1rem; padding-left: 1.5rem; color: var(--text-secondary); }
+        .slide li { margin-bottom: 0.4rem; }
+        .slide li strong { color: var(--text-primary); }
+        .slide code {
+            font-family: var(--font-mono);
+            font-size: 0.88em;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            padding: 0.05rem 0.35rem;
+            border-radius: 3px;
+            color: #c9d1d9;
+        }
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin: 1.25rem 0;
+            overflow: hidden;
+        }
+        .code-header {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            background: rgba(123, 97, 255, 0.08);
+            padding: 0.4rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .code-block pre { margin: 0; padding: 1rem; overflow-x: auto; }
+        .code-block code {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #c9d1d9;
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+        .kw { color: #ff7b72; }
+        .fn { color: #d2a8ff; }
+        .str { color: #a5d6ff; }
+        .cm { color: #8b949e; font-style: italic; }
+        .num { color: #79c0ff; }
+        .type { color: #ffa657; }
+        .dir { color: #ff7b72; }
+        .mac { color: #ffa657; }
+        .table-wrap {
+            overflow-x: auto;
+            margin: 1.25rem 0;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th {
+            background: var(--bg-code);
+            color: var(--accent);
+            font-weight: 600;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            font-family: var(--font-display);
+            white-space: nowrap;
+        }
+        td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:nth-child(even) td { background: rgba(13, 17, 23, 0.5); }
+        .diagram-flow {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .diagram-box {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            text-align: center;
+            white-space: nowrap;
+        }
+        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-box.dim { color: var(--text-secondary); border-color: var(--border); }
+        .diagram-arrow { color: var(--accent); font-size: 1.3rem; font-weight: 700; }
+        .diagram-vertical {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .diagram-vertical .diagram-arrow { font-size: 1.1rem; }
+        .hierarchy {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .hierarchy-level { display: flex; align-items: center; gap: 0.75rem; }
+        .hierarchy-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+            text-align: right;
+        }
+        .hierarchy-items { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+        .hierarchy-item {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-grid {
+            display: grid;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .diagram-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+        .diagram-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+        .diagram-panel {
+            padding: 1rem;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+        .diagram-panel.accent-border { border-left: 3px solid var(--accent); }
+        .diagram-panel h4 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        .diagram-panel p, .diagram-panel ul { font-size: 0.85rem; }
+        .callout {
+            background: var(--bg-card);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+            padding: 1rem 1.25rem;
+            margin: 1.25rem 0;
+        }
+        .callout p { margin-bottom: 0; }
+        .callout p + p { margin-top: 0.5rem; }
+        .callout .callout-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.3rem;
+        }
+        .contents-list { list-style: none; padding-left: 0; counter-reset: contents; }
+        .contents-list li {
+            counter-increment: contents;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .contents-list li:last-child { border-bottom: none; }
+        .contents-list li::before {
+            content: counter(contents, decimal-leading-zero);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            min-width: 2rem;
+        }
+        .contents-list a { color: var(--text-primary); text-decoration: none; transition: color 0.2s; }
+        .contents-list a:hover { color: var(--accent); }
+        .footer {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+        .footer a { color: var(--accent); text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+        .deck-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        .deck-nav a {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: border-color 0.15s, color 0.15s;
+        }
+        .deck-nav a:hover { border-color: var(--accent); color: var(--accent); }
+        .deck-nav a.next { margin-left: auto; }
+        .canvas-wrap {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.25rem 0;
+            overflow-x: auto;
+        }
+        .canvas-wrap canvas, .canvas-wrap svg { display: block; margin: 0 auto; max-width: 100%; }
+        .badge {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            padding: 0.1rem 0.45rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            vertical-align: middle;
+            margin-left: 0.3rem;
+        }
+        .badge.ok    { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+        .badge.warn  { border-color: #ffa657; color: #ffa657; background: rgba(255,166,87,0.08); }
+        .badge.bad   { border-color: #ff7b72; color: #ff7b72; background: rgba(255,123,114,0.08); }
+        @media (max-width: 640px) {
+            .slide { padding: 3rem 1rem; min-height: auto; }
+            .slide-number { font-size: 3rem; top: 1.5rem; right: 1rem; }
+            .slide h2 { font-size: 1.5rem; }
+            .diagram-grid.cols-2, .diagram-grid.cols-3 { grid-template-columns: 1fr; }
+            .pipeline { gap: 0.15rem; }
+            .pipeline-step { font-size: 0.6rem; padding: 0.2rem 0.4rem; }
+            .hero h1 { font-size: 1.8rem; }
+            table { font-size: 0.78rem; }
+        }
+    </style>
+</head>
+<body>
+<header class="hero">
+<div class="series-label">Qwen &middot; Part 05</div>
+<h1>Qwen3 &mdash; and the <span class="accent">Hybrid Thinking</span> Experiment</h1>
+<p class="subtitle">28 April 2025. Eight open models from 0.6B to 235B-A22B, 36 trillion pre-training tokens, 119 languages, all Apache 2.0. One checkpoint that could reason on demand or answer instantly &mdash; the most ambitious post-training idea in the family's history, and the one it had to walk back three months later.</p>
+<div class="tags">
+<span class="tag">36T tokens</span>
+<span class="tag">119 languages</span>
+<span class="tag">QK-Norm</span>
+<span class="tag">128 experts / 8 active</span>
+<span class="tag">Hybrid thinking</span>
+<span class="tag">Strong-to-weak distillation</span>
+</div>
+<div class="pipeline">
+<span class="pipeline-step">S1 general 30T</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">S2 reasoning 5T</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">S3 long context</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">4-stage post-train</span><span class="pipeline-arrow">&rarr;</span>
+<span class="pipeline-step">distil to small</span>
+</div>
+</header>
+
+<section class="slide" id="slide-00">
+<div class="slide-number">00</div>
+<h2>Contents</h2>
+<ul class="contents-list">
+<li><a href="#slide-01">The lineup &mdash; eight models, one release</a></li>
+<li><a href="#slide-02">The architecture, precisely</a></li>
+<li><a href="#slide-03">Inside the MoE block</a></li>
+<li><a href="#slide-04">Three pre-training stages, 36 trillion tokens</a></li>
+<li><a href="#slide-05">Hybrid thinking &mdash; the idea and the controls</a></li>
+<li><a href="#slide-06">Four post-training stages, and distillation for the small models</a></li>
+<li><a href="#slide-07">Agentic capability and MCP</a></li>
+<li><a href="#slide-08">The 2507 split &mdash; admitting the experiment failed</a></li>
+<li><a href="#slide-09">Serving Qwen3: the flags that matter</a></li>
+</ul>
+</section>
+
+<section class="slide" id="slide-01">
+<div class="slide-number">01</div>
+<h2>The lineup &mdash; eight models, one release</h2>
+<p>Qwen3 shipped six dense models and two mixture-of-experts models simultaneously, all under Apache 2.0, all sharing one pre-training corpus and one tokenizer. This is the release that made Qwen the default open family outright.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Model</th><th>Layers</th><th>Heads Q/KV</th><th>Experts</th><th>Tied emb.</th><th>Context</th><th>Where it fits</th></tr></thead>
+<tbody>
+<tr><td>Qwen3-0.6B</td><td>28</td><td>16 / 8</td><td>&mdash;</td><td>yes</td><td>32K</td><td>Mobile, on-device, draft model for speculation</td></tr>
+<tr><td>Qwen3-1.7B</td><td>28</td><td>16 / 8</td><td>&mdash;</td><td>yes</td><td>32K</td><td>Edge, classification, routing</td></tr>
+<tr><td>Qwen3-4B</td><td>36</td><td>32 / 8</td><td>&mdash;</td><td>yes</td><td>128K</td><td>Laptop-class assistant; surprisingly capable at reasoning</td></tr>
+<tr><td>Qwen3-8B</td><td>36</td><td>32 / 8</td><td>&mdash;</td><td>no</td><td>128K</td><td>The fine-tuning workhorse</td></tr>
+<tr><td>Qwen3-14B</td><td>40</td><td>40 / 8</td><td>&mdash;</td><td>no</td><td>128K</td><td>Single 24GB card at 8-bit</td></tr>
+<tr><td>Qwen3-32B</td><td>64</td><td>64 / 8</td><td>&mdash;</td><td>no</td><td>128K</td><td>The strongest dense self-host</td></tr>
+<tr><td>Qwen3-30B-A3B</td><td>48</td><td>32 / 4</td><td>128 / 8</td><td>no</td><td>128K</td><td>The value model &mdash; 30B knowledge at 3B speed</td></tr>
+<tr><td>Qwen3-235B-A22B</td><td>94</td><td>64 / 4</td><td>128 / 8</td><td>no</td><td>128K</td><td>Flagship; multi-GPU or multi-node</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout">
+<div class="callout-label">The one to notice</div>
+<p><strong>Qwen3-30B-A3B</strong> was the release's quiet triumph. Roughly 60GB of BF16 weights &mdash; or about 18GB at 4-bit, so a single 24GB card &mdash; while doing the arithmetic of a 3B model per token. It made "large model quality at small model speed" a thing an individual could actually run, and its successors (30B-A3B-2507, Qwen3.5-35B-A3B, Qwen3.6-35B-A3B) have been the family's most-deployed models ever since.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-02">
+<div class="slide-number">02</div>
+<h2>The architecture, precisely</h2>
+<p>Qwen3's backbone is a conventional pre-norm decoder &mdash; GQA, SwiGLU, RoPE, RMSNorm &mdash; with two deliberate changes from Qwen2 that are both about training stability at scale.</p>
+<div class="diagram-grid cols-2">
+<div class="diagram-panel accent-border">
+<h4>Removed: QKV bias</h4>
+<p>Qwen 1.0 kept bias terms on the QKV projection because they helped context extrapolation. By Qwen3 the long-context capability was trained rather than extrapolated, so the bias no longer earned its place &mdash; and biases are a known source of activation outliers, which hurt both training stability and post-training quantisation.</p>
+</div>
+<div class="diagram-panel accent-border">
+<h4>Added: QK-Norm</h4>
+<p>RMSNorm applied to the query and key vectors before the attention dot product. Attention logits are the product of two learned vectors and their magnitude can grow without bound during training, causing loss spikes at scale. Normalising Q and K bounds the logit magnitude directly, which is why deep MoE models like the 94-layer 235B can be trained without babysitting.</p>
+</div>
+</div>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 250" width="720" height="250" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="p5b-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<style>
+.p5b-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p5b-ba{fill:rgba(123,97,255,0.12);stroke:#7B61FF;stroke-width:1.2;}
+.p5b-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p5b-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p5b-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p5b-ar{stroke:#7B61FF;stroke-width:1.3;fill:none;marker-end:url(#p5b-a);}
+.p5b-res{stroke:#8b949e;stroke-width:1.1;fill:none;stroke-dasharray:3,3;marker-end:url(#p5b-a);}
+</style>
+<text x="8" y="16" class="p5b-h">One Qwen3 decoder layer &mdash; MoE variant</text>
+
+<rect x="270" y="30" width="180" height="22" rx="4" class="p5b-b"/><text x="360" y="45" class="p5b-l">hidden states in</text>
+<line x1="360" y1="52" x2="360" y2="62" class="p5b-ar"/>
+<rect x="270" y="64" width="180" height="22" rx="4" class="p5b-b"/><text x="360" y="79" class="p5b-l">RMSNorm (pre-norm)</text>
+<line x1="360" y1="86" x2="360" y2="96" class="p5b-ar"/>
+
+<rect x="196" y="98" width="328" height="62" rx="6" class="p5b-ba"/>
+<text x="360" y="114" class="p5b-l">grouped-query attention</text>
+<rect x="208" y="122" width="96" height="20" rx="3" class="p5b-b"/><text x="256" y="136" class="p5b-s">Q proj &rarr; QK-Norm</text>
+<rect x="312" y="122" width="96" height="20" rx="3" class="p5b-b"/><text x="360" y="136" class="p5b-s">K proj &rarr; QK-Norm</text>
+<rect x="416" y="122" width="96" height="20" rx="3" class="p5b-b"/><text x="464" y="136" class="p5b-s">V proj</text>
+<text x="360" y="154" class="p5b-s">RoPE on Q,K &middot; no bias terms &middot; 64 Q heads share 4 KV heads (235B)</text>
+
+<line x1="360" y1="160" x2="360" y2="170" class="p5b-ar"/>
+<rect x="270" y="172" width="180" height="22" rx="4" class="p5b-b"/><text x="360" y="187" class="p5b-l">RMSNorm</text>
+<line x1="360" y1="194" x2="360" y2="204" class="p5b-ar"/>
+
+<rect x="196" y="206" width="328" height="36" rx="6" class="p5b-ba"/>
+<text x="360" y="222" class="p5b-l">MoE feed-forward &mdash; router selects 8 of 128 experts</text>
+<text x="360" y="236" class="p5b-s">no shared experts &middot; global-batch load-balancing loss</text>
+
+<path d="M262,41 L180,41 L180,200 L192,200" class="p5b-res"/>
+<path d="M262,183 L120,183 L120,224 L192,224" class="p5b-res"/>
+<text x="126" y="120" class="p5b-s" transform="rotate(-90 126 120)">residual connections</text>
+
+<rect x="540" y="98" width="172" height="144" rx="6" class="p5b-b"/>
+<text x="626" y="118" class="p5b-l">Qwen3-235B-A22B</text>
+<text x="626" y="138" class="p5b-s">94 layers</text>
+<text x="626" y="154" class="p5b-s">64 Q heads / 4 KV heads</text>
+<text x="626" y="170" class="p5b-s">128 experts, 8 active</text>
+<text x="626" y="186" class="p5b-s">235B total / 22B active</text>
+<text x="626" y="202" class="p5b-s">128K context (YaRN)</text>
+<text x="626" y="222" class="p5b-s">&asymp; 9.4% of params fire</text>
+<text x="626" y="236" class="p5b-s">per token</text>
+</svg>
+</div>
+</section>
+
+<section class="slide" id="slide-03">
+<div class="slide-number">03</div>
+<h2>Inside the MoE block</h2>
+<p>Qwen3's mixture-of-experts made one notable break from Qwen2's: it <strong>dropped shared experts entirely</strong>. Qwen1.5-MoE and Qwen2-57B-A14B both used always-on shared experts to hold common knowledge; Qwen3 uses 128 routed experts, 8 activated, and nothing always-on.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 260" width="720" height="260" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="p5m-a" markerWidth="7" markerHeight="7" refX="5.5" refY="2.8" orient="auto"><path d="M0,0 L5.5,2.8 L0,5.6 Z" fill="#7B61FF"/></marker></defs>
+<style>
+.p5m-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p5m-on{fill:rgba(123,97,255,0.30);stroke:#7B61FF;stroke-width:1.2;}
+.p5m-off{fill:#0d1117;stroke:#21262d;stroke-width:1;}
+.p5m-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p5m-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p5m-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p5m-ar{stroke:#7B61FF;stroke-width:1.2;fill:none;marker-end:url(#p5m-a);}
+</style>
+<text x="8" y="16" class="p5m-h">128 experts resident, 8 selected per token &mdash; the router is a single linear layer</text>
+
+<rect x="16" y="40" width="96" height="26" rx="4" class="p5m-b"/><text x="64" y="57" class="p5m-l">token h</text>
+<line x1="116" y1="53" x2="146" y2="53" class="p5m-ar"/>
+<rect x="150" y="40" width="110" height="26" rx="4" class="p5m-b"/><text x="205" y="57" class="p5m-l">router (linear)</text>
+<text x="205" y="80" class="p5m-s" style="text-anchor:middle">softmax over 128 &rarr; top-8</text>
+
+<g>
+<rect x="300" y="34" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="324" y="34" width="20" height="16" rx="2" class="p5m-on"/>
+<rect x="348" y="34" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="372" y="34" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="396" y="34" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="420" y="34" width="20" height="16" rx="2" class="p5m-on"/>
+<rect x="444" y="34" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="468" y="34" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="492" y="34" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="516" y="34" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="540" y="34" width="20" height="16" rx="2" class="p5m-on"/>
+<rect x="564" y="34" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="588" y="34" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="612" y="34" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="636" y="34" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="660" y="34" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="300" y="54" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="324" y="54" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="348" y="54" width="20" height="16" rx="2" class="p5m-on"/>
+<rect x="372" y="54" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="396" y="54" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="420" y="54" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="444" y="54" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="468" y="54" width="20" height="16" rx="2" class="p5m-on"/>
+<rect x="492" y="54" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="516" y="54" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="540" y="54" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="564" y="54" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="588" y="54" width="20" height="16" rx="2" class="p5m-on"/>
+<rect x="612" y="54" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="636" y="54" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="660" y="54" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="300" y="74" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="324" y="74" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="348" y="74" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="372" y="74" width="20" height="16" rx="2" class="p5m-on"/>
+<rect x="396" y="74" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="420" y="74" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="444" y="74" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="468" y="74" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="492" y="74" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="516" y="74" width="20" height="16" rx="2" class="p5m-on"/>
+<rect x="540" y="74" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="564" y="74" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="588" y="74" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="612" y="74" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="636" y="74" width="20" height="16" rx="2" class="p5m-off"/>
+<rect x="660" y="74" width="20" height="16" rx="2" class="p5m-off"/>
+</g>
+<text x="490" y="106" class="p5m-s" style="text-anchor:middle">128 experts &mdash; 8 lit for this token, 120 idle but resident in VRAM</text>
+
+<line x1="8" y1="126" x2="712" y2="126" stroke="#21262d" stroke-width="1"/>
+<text x="8" y="148" class="p5m-h">Three consequences you will feel in production</text>
+<text x="8" y="170" class="p5m-s">1. <tspan fill="#e6edf3">Memory is total, compute is active.</tspan> All 128 experts must be resident. 235B of BF16 weights is ~470GB &mdash; multi-node,</text>
+<text x="8" y="184" class="p5m-s">   or FP8 at ~235GB across 4&times;80GB. But each token only touches 22B, so decode is fast for the memory footprint.</text>
+<text x="8" y="206" class="p5m-s">2. <tspan fill="#e6edf3">Batching changes the maths.</tspan> One token lights 8 experts; a batch of 64 tokens may light nearly all 128. Large batches</text>
+<text x="8" y="220" class="p5m-s">   erode the sparsity advantage in compute terms while keeping it in memory-bandwidth terms.</text>
+<text x="8" y="242" class="p5m-s">3. <tspan fill="#e6edf3">Expert parallelism is a distinct sharding axis.</tspan> vLLM's --enable-expert-parallel splits experts across GPUs rather than</text>
+<text x="8" y="256" class="p5m-s">   splitting every matrix &mdash; usually the better topology for high-sparsity MoE. Part 11 covers when to use it.</text>
+</svg>
+</div>
+<p>A <strong>global-batch load-balancing loss</strong> keeps the router from collapsing onto a few favourite experts. Without it, MoE training reliably degenerates: a handful of experts get all the traffic, the rest never learn, and you have paid for 128 experts to get the capability of six.</p>
+</section>
+
+<section class="slide" id="slide-04">
+<div class="slide-number">04</div>
+<h2>Three pre-training stages, 36 trillion tokens</h2>
+<p>Qwen3 was trained on roughly <strong>36 trillion tokens across 119 languages and dialects</strong> &mdash; double Qwen2.5's corpus, and roughly five times Qwen2's. The curriculum is staged, and each stage has a distinct job.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 224" width="720" height="224" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="p5p-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<style>
+.p5p-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p5p-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
+.p5p-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:10px;text-anchor:middle;}
+.p5p-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p5p-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p5p-ar{stroke:#7B61FF;stroke-width:1.5;fill:none;marker-end:url(#p5p-a);}
+.p5p-bar{fill:#7B61FF;}
+.p5p-bar2{fill:#1F9E8E;}
+.p5p-bar3{fill:#B87C22;}
+</style>
+<text x="8" y="16" class="p5p-h">The pre-training curriculum &mdash; volume first, then quality, then length</text>
+
+<rect x="16" y="32" width="204" height="96" rx="6" class="p5p-ba"/>
+<text x="118" y="52" class="p5p-l">S1 &middot; General</text>
+<text x="118" y="70" class="p5p-s">&gt; 30 trillion tokens</text>
+<text x="118" y="86" class="p5p-s">sequence length 4,096</text>
+<text x="118" y="104" class="p5p-s">119 languages &amp; dialects</text>
+<text x="118" y="120" class="p5p-s">broad world knowledge</text>
+
+<line x1="224" y1="80" x2="248" y2="80" class="p5p-ar"/>
+
+<rect x="252" y="32" width="204" height="96" rx="6" class="p5p-ba"/>
+<text x="354" y="52" class="p5p-l">S2 &middot; Reasoning</text>
+<text x="354" y="70" class="p5p-s">~5 trillion tokens</text>
+<text x="354" y="86" class="p5p-s">sequence length 4,096</text>
+<text x="354" y="104" class="p5p-s">STEM, code, synthetic</text>
+<text x="354" y="120" class="p5p-s">reasoning data; up-weighted</text>
+
+<line x1="460" y1="80" x2="484" y2="80" class="p5p-ar"/>
+
+<rect x="488" y="32" width="216" height="96" rx="6" class="p5p-ba"/>
+<text x="596" y="52" class="p5p-l">S3 &middot; Long context</text>
+<text x="596" y="70" class="p5p-s">hundreds of billions of tokens</text>
+<text x="596" y="86" class="p5p-s">sequence length 32,768</text>
+<text x="596" y="104" class="p5p-s">long documents, repositories</text>
+<text x="596" y="120" class="p5p-s">128K reached via YaRN</text>
+
+<text x="8" y="152" class="p5p-h">Relative token volume</text>
+<rect x="16" y="160" width="574" height="16" rx="3" class="p5p-bar"/>
+<rect x="594" y="160" width="96" height="16" rx="3" class="p5p-bar2"/>
+<rect x="694" y="160" width="10" height="16" rx="3" class="p5p-bar3"/>
+<text x="20" y="172" class="p5p-s" style="text-anchor:start" fill="#0a0a0a" font-weight="700">S1 &mdash; 30T+</text>
+<text x="598" y="172" class="p5p-s" style="text-anchor:start" fill="#0a0a0a" font-weight="700">S2 &mdash; 5T</text>
+<text x="700" y="192" class="p5p-s" style="text-anchor:end">S3 &mdash; ~0.3T</text>
+<text x="16" y="202" class="p5p-s" style="text-anchor:start">Long-context training is a rounding error in tokens and decisive in capability &mdash; it is where</text>
+<text x="16" y="216" class="p5p-s" style="text-anchor:start">the model learns to use a window, rather than merely tolerate one.</text>
+</svg>
+</div>
+<h3>The data flywheel</h3>
+<p>Two details in the corpus construction are worth borrowing. First, <strong>Qwen2.5-VL was used to extract text from documents and PDFs</strong>, opening a corpus that pure text crawling cannot reach. Second, <strong>Qwen2.5-Math and Qwen2.5-Coder generated synthetic textbooks, problems and code</strong> for the reasoning stage. Each generation is used to build the next generation's data &mdash; a compounding advantage that is difficult for a new entrant to replicate, and arguably a larger moat than any architectural choice in the model.</p>
+</section>
+
+<section class="slide" id="slide-05">
+<div class="slide-number">05</div>
+<h2>Hybrid thinking &mdash; the idea and the controls</h2>
+<p>Qwen3's headline feature: <strong>one checkpoint, two modes</strong>. Thinking mode emits a <code>&lt;think&gt;</code> trace before answering; non-thinking mode answers immediately. Both live in the same weights, and the mode is selected per request.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 230" width="720" height="230" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="p5h-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<style>
+.p5h-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p5h-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
+.p5h-bt{fill:rgba(31,158,142,0.10);stroke:#1F9E8E;stroke-width:1.2;}
+.p5h-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p5h-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p5h-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p5h-ar{stroke:#7B61FF;stroke-width:1.3;fill:none;marker-end:url(#p5h-a);}
+</style>
+<text x="8" y="16" class="p5h-h">One set of weights, two behaviours, three ways to choose between them</text>
+
+<rect x="270" y="32" width="180" height="30" rx="5" class="p5h-b"/>
+<text x="360" y="52" class="p5h-l">Qwen3 &mdash; one checkpoint</text>
+
+<line x1="330" y1="62" x2="230" y2="88" class="p5h-ar"/>
+<line x1="390" y1="62" x2="490" y2="88" class="p5h-ar"/>
+
+<rect x="60" y="92" width="270" height="86" rx="6" class="p5h-ba"/>
+<text x="195" y="112" class="p5h-l">thinking mode</text>
+<text x="195" y="130" class="p5h-s">&lt;think&gt; long reasoning &lt;/think&gt; answer</text>
+<text x="195" y="148" class="p5h-s">high accuracy on maths, code, logic</text>
+<text x="195" y="164" class="p5h-s">high latency, high token cost</text>
+
+<rect x="390" y="92" width="270" height="86" rx="6" class="p5h-bt"/>
+<text x="525" y="112" class="p5h-l">non-thinking mode</text>
+<text x="525" y="130" class="p5h-s">answer immediately, no trace</text>
+<text x="525" y="148" class="p5h-s">near-instant, cheap</text>
+<text x="525" y="164" class="p5h-s">for chat, extraction, routing, drafting</text>
+
+<text x="8" y="204" class="p5h-s" style="text-anchor:start">Selection: (1) API parameter enable_thinking &mdash; (2) in-conversation soft switches /think and /no_think &mdash; (3) a thinking budget</text>
+<text x="8" y="220" class="p5h-s" style="text-anchor:start">that caps trace length, degrading gracefully from full reasoning to a short one rather than switching off abruptly.</text>
+</svg>
+</div>
+<div class="code-block">
+<div class="code-header">The three controls, in practice</div>
+<pre><code><span class="cm"># 1. Per-request, via the chat template kwargs (vLLM / SGLang OpenAI API)</span>
+{
+  <span class="str">"model"</span>: <span class="str">"Qwen/Qwen3-32B"</span>,
+  <span class="str">"messages"</span>: [...],
+  <span class="str">"chat_template_kwargs"</span>: { <span class="str">"enable_thinking"</span>: <span class="kw">false</span> }
+}
+
+<span class="cm"># 2. Soft switch inside the conversation &mdash; the user (or your scaffold) can flip mid-dialogue</span>
+<span class="str">"Refactor this function. /no_think"</span>
+<span class="str">"Now prove the loop terminates. /think"</span>
+
+<span class="cm"># 3. Server-wide default: ship a chat template with thinking off</span>
+vllm serve Qwen/Qwen3-32B --chat-template ./qwen3_nonthinking.jinja
+<span class="cm">#    or, on current vLLM:</span>
+vllm serve Qwen/Qwen3-32B --default-chat-template-kwargs <span class="str">'{"enable_thinking": false}'</span></code></pre>
+</div>
+<div class="callout">
+<div class="callout-label">Why this was ambitious</div>
+<p>Thinking and non-thinking are not just different output lengths &mdash; they are different <em>policies</em>. One is trained to explore, backtrack and doubt; the other to commit immediately. Asking one parameter set to hold both, and to switch cleanly on a token in the prompt, is a genuinely hard post-training problem. Stage 3 of the pipeline exists solely to solve it.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-06">
+<div class="slide-number">06</div>
+<h2>Four post-training stages, and distillation for the small models</h2>
+<p>The flagship models went through a four-stage pipeline. The six smaller models did not &mdash; they were distilled from the flagships, which is both cheaper and, per the technical report, <em>better</em> than running the full pipeline at small scale.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 312" width="720" height="312" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="p5s-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<style>
+.p5s-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p5s-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
+.p5s-bt{fill:rgba(31,158,142,0.10);stroke:#1F9E8E;stroke-width:1.2;}
+.p5s-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p5s-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8px;text-anchor:middle;}
+.p5s-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p5s-ar{stroke:#7B61FF;stroke-width:1.4;fill:none;marker-end:url(#p5s-a);}
+.p5s-ar2{stroke:#1F9E8E;stroke-width:1.4;fill:none;marker-end:url(#p5s-a);}
+</style>
+<text x="8" y="16" class="p5s-h">Flagship path &mdash; four stages</text>
+
+<rect x="12" y="30" width="160" height="76" rx="6" class="p5s-ba"/>
+<text x="92" y="50" class="p5s-l">1 &middot; Long-CoT cold start</text>
+<text x="92" y="68" class="p5s-s">SFT on curated long chain-</text>
+<text x="92" y="82" class="p5s-s">of-thought across maths,</text>
+<text x="92" y="96" class="p5s-s">code, logic, STEM</text>
+<line x1="176" y1="68" x2="196" y2="68" class="p5s-ar"/>
+
+<rect x="200" y="30" width="160" height="76" rx="6" class="p5s-ba"/>
+<text x="280" y="50" class="p5s-l">2 &middot; Reasoning RL</text>
+<text x="280" y="68" class="p5s-s">large-scale RL with rule-</text>
+<text x="280" y="82" class="p5s-s">based verifiable rewards &mdash;</text>
+<text x="280" y="96" class="p5s-s">the QwQ recipe, scaled</text>
+<line x1="364" y1="68" x2="384" y2="68" class="p5s-ar"/>
+
+<rect x="388" y="30" width="160" height="76" rx="6" class="p5s-ba"/>
+<text x="468" y="50" class="p5s-l">3 &middot; Thinking fusion</text>
+<text x="468" y="68" class="p5s-s">SFT on a blend of long-CoT</text>
+<text x="468" y="82" class="p5s-s">and instruct data, teaching</text>
+<text x="468" y="96" class="p5s-s">the mode switch itself</text>
+<line x1="552" y1="68" x2="572" y2="68" class="p5s-ar"/>
+
+<rect x="576" y="30" width="132" height="76" rx="6" class="p5s-ba"/>
+<text x="642" y="50" class="p5s-l">4 &middot; General RL</text>
+<text x="642" y="68" class="p5s-s">20+ task domains &mdash;</text>
+<text x="642" y="82" class="p5s-s">instruction following,</text>
+<text x="642" y="96" class="p5s-s">format, agents, safety</text>
+
+<line x1="360" y1="110" x2="360" y2="140" class="p5s-ar2"/>
+<text x="392" y="130" class="p5s-s">the finished flagship becomes the teacher</text>
+
+<text x="8" y="162" class="p5s-h">Small-model path &mdash; strong-to-weak distillation</text>
+
+<rect x="12" y="176" width="216" height="86" rx="6" class="p5s-bt"/>
+<text x="120" y="196" class="p5s-l">off-policy distillation</text>
+<text x="120" y="216" class="p5s-s">student trained on teacher outputs</text>
+<text x="120" y="232" class="p5s-s">in BOTH modes, so it inherits the</text>
+<text x="120" y="248" class="p5s-s">thinking / non-thinking switch too</text>
+<line x1="232" y1="219" x2="256" y2="219" class="p5s-ar2"/>
+
+<rect x="260" y="176" width="216" height="86" rx="6" class="p5s-bt"/>
+<text x="368" y="196" class="p5s-l">on-policy distillation</text>
+<text x="368" y="216" class="p5s-s">student generates, teacher scores,</text>
+<text x="368" y="232" class="p5s-s">student is corrected toward the</text>
+<text x="368" y="248" class="p5s-s">teacher's distribution on its own errors</text>
+
+<rect x="500" y="176" width="208" height="86" rx="6" class="p5s-b"/>
+<text x="604" y="196" class="p5s-l">the payoff</text>
+<text x="604" y="216" class="p5s-s">roughly 1/10 the GPU hours of</text>
+<text x="604" y="232" class="p5s-s">running the full four-stage pipeline,</text>
+<text x="604" y="248" class="p5s-s">and better results at small scale</text>
+
+<text x="8" y="290" class="p5s-s" style="text-anchor:start">Why distillation wins at small scale: RL needs the model to occasionally succeed at a hard task to get any signal at all.</text>
+<text x="8" y="304" class="p5s-s" style="text-anchor:start">A 0.6B rarely does, so RL barely moves it. A teacher's traces supply the signal directly instead.</text>
+</svg>
+</div>
+</section>
+
+<section class="slide" id="slide-07">
+<div class="slide-number">07</div>
+<h2>Agentic capability and MCP</h2>
+<p>Qwen3 was the first generation post-trained for tool use as a first-class objective rather than a formatting exercise, and the first with explicit <strong>Model Context Protocol</strong> support in the reference agent framework.</p>
+<div class="code-block">
+<div class="code-header">Qwen-Agent &mdash; the reference tool-calling loop, with MCP servers</div>
+<pre><code><span class="kw">from</span> qwen_agent.agents <span class="kw">import</span> Assistant
+
+llm_cfg = {
+    <span class="str">'model'</span>: <span class="str">'Qwen3-32B'</span>,
+    <span class="str">'model_server'</span>: <span class="str">'http://localhost:8000/v1'</span>,   <span class="cm"># any OpenAI-compatible endpoint</span>
+    <span class="str">'api_key'</span>: <span class="str">'EMPTY'</span>,
+}
+
+tools = [
+    {<span class="str">'mcpServers'</span>: {
+        <span class="str">'time'</span>:  {<span class="str">'command'</span>: <span class="str">'uvx'</span>, <span class="str">'args'</span>: [<span class="str">'mcp-server-time'</span>]},
+        <span class="str">'fetch'</span>: {<span class="str">'command'</span>: <span class="str">'uvx'</span>, <span class="str">'args'</span>: [<span class="str">'mcp-server-fetch'</span>]},
+    }},
+    <span class="str">'code_interpreter'</span>,                          <span class="cm"># a built-in tool</span>
+]
+
+bot = Assistant(llm=llm_cfg, function_list=tools)
+<span class="kw">for</span> chunk <span class="kw">in</span> bot.run(messages=[{<span class="str">'role'</span>: <span class="str">'user'</span>, <span class="str">'content'</span>: <span class="str">'Summarise https://qwenlm.github.io/blog/qwen3/'</span>}]):
+    <span class="fn">print</span>(chunk)</code></pre>
+</div>
+<h3>What "trained for agents" actually means</h3>
+<ul>
+<li><strong>Schema adherence under pressure.</strong> Emitting valid JSON arguments for a tool is easy in isolation and hard after 8,000 tokens of reasoning. Stage 4 RL rewards it directly.</li>
+<li><strong>Recovery from tool errors.</strong> A tool returns a stack trace; the model must diagnose and retry with different arguments rather than repeating the same call or giving up.</li>
+<li><strong>Knowing when not to call.</strong> Over-eager tool use is as damaging as under-use &mdash; a model that searches the web to answer "what is 2+2" is unusable at scale.</li>
+<li><strong>Multi-turn state.</strong> Holding a plan across a dozen tool round-trips without losing the thread, which is where the interaction with thinking mode gets subtle: the trace helps planning but consumes the context the plan needs.</li>
+</ul>
+<div class="callout">
+<div class="callout-label">Serving note</div>
+<p>Qwen3's tool-call format is Hermes-style. In vLLM that means <code>--enable-auto-tool-choice --tool-call-parser hermes</code>. The Coder line uses a different, XML-flavoured format with its own parser &mdash; getting this pairing wrong produces tool calls that appear in the text content and are never dispatched. Part 11 has the full matrix.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-08">
+<div class="slide-number">08</div>
+<h2>The 2507 split &mdash; admitting the experiment failed</h2>
+<p>In July 2025, three months after launch, the team published <code>Qwen3-235B-A22B-Instruct-2507</code> and <code>Qwen3-235B-A22B-Thinking-2507</code> as <em>separate models</em>, with matching 30B-A3B variants. The Instruct model's card states it plainly: it supports only non-thinking mode, and <code>enable_thinking=False</code> is no longer needed because there is no longer anything to disable.</p>
+<div class="canvas-wrap">
+<svg viewBox="0 0 720 210" width="720" height="210" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="p5x-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<style>
+.p5x-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p5x-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
+.p5x-bt{fill:rgba(31,158,142,0.10);stroke:#1F9E8E;stroke-width:1.2;}
+.p5x-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p5x-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p5x-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p5x-ar{stroke:#7B61FF;stroke-width:1.4;fill:none;marker-end:url(#p5x-a);}
+</style>
+<text x="8" y="16" class="p5x-h">April 2025 &rarr; July 2025</text>
+
+<rect x="30" y="60" width="200" height="76" rx="6" class="p5x-b"/>
+<text x="130" y="84" class="p5x-l">Qwen3-235B-A22B</text>
+<text x="130" y="104" class="p5x-s">one checkpoint</text>
+<text x="130" y="120" class="p5x-s">both modes &middot; 128K context</text>
+
+<line x1="236" y1="82" x2="290" y2="66" class="p5x-ar"/>
+<line x1="236" y1="114" x2="290" y2="130" class="p5x-ar"/>
+
+<rect x="294" y="36" width="240" height="62" rx="6" class="p5x-bt"/>
+<text x="414" y="58" class="p5x-l">&hellip;-Instruct-2507</text>
+<text x="414" y="76" class="p5x-s">non-thinking only, no &lt;think&gt; blocks</text>
+<text x="414" y="90" class="p5x-s">262,144 native context</text>
+
+<rect x="294" y="108" width="240" height="62" rx="6" class="p5x-ba"/>
+<text x="414" y="130" class="p5x-l">&hellip;-Thinking-2507</text>
+<text x="414" y="148" class="p5x-s">always thinks, no switch</text>
+<text x="414" y="162" class="p5x-s">262,144 native context</text>
+
+<rect x="554" y="60" width="152" height="76" rx="6" class="p5x-b"/>
+<text x="630" y="82" class="p5x-l">result</text>
+<text x="630" y="102" class="p5x-s">each better in its lane</text>
+<text x="630" y="118" class="p5x-s">than the hybrid was</text>
+<text x="630" y="132" class="p5x-s">in either</text>
+</svg>
+</div>
+<h3>Why it did not hold together</h3>
+<ul>
+<li><strong>The modes compete for capacity.</strong> Post-training a single parameter set toward two contradictory policies means each is a compromise. The 2507 models are visibly stronger in their respective lanes.</li>
+<li><strong>Mode leakage.</strong> In practice the hybrid would sometimes produce short, thinking-flavoured hedging in non-thinking mode, or skip real deliberation in thinking mode &mdash; a blurred boundary rather than a clean switch.</li>
+<li><strong>Evaluation ambiguity.</strong> Every benchmark result needed a mode annotation, and comparisons across labs became muddled.</li>
+<li><strong>Serving reality.</strong> Most deployments picked one mode at the gateway and never changed it, so the flexibility was paying a quality cost for a feature nobody used.</li>
+</ul>
+<p>The 2507 refresh also doubled native context to <strong>262,144 tokens</strong> and improved instruction following, tool use, and long-context comprehension across the board. If you run any Qwen3 flagship today, run a 2507 checkpoint &mdash; the original April weights are strictly superseded.</p>
+<div class="callout">
+<div class="callout-label">The idea was not wrong, the implementation was early</div>
+<p>Qwen3.5 revisits exactly this problem and, per Alibaba, gets it right: reasoning and non-reasoning modes in a single model without the quality tax, alongside native multimodality. Part 09 examines what changed &mdash; and the honest answer involves a much larger model, a different architecture, and a year of post-training research.</p>
+</div>
+</section>
+
+<section class="slide" id="slide-09">
+<div class="slide-number">09</div>
+<h2>Serving Qwen3: the flags that matter</h2>
+<div class="code-block">
+<div class="code-header">vLLM &mdash; the four configurations you will actually use</div>
+<pre><code><span class="cm"># 1. Dense, single GPU, thinking enabled, traces split into reasoning_content</span>
+vllm serve Qwen/Qwen3-8B \
+  --reasoning-parser qwen3 \
+  --max-model-len 32768
+
+<span class="cm"># 2. Same model as a tool-calling agent backend</span>
+vllm serve Qwen/Qwen3-8B \
+  --enable-auto-tool-choice --tool-call-parser hermes \
+  --reasoning-parser qwen3
+
+<span class="cm"># 3. MoE across 4 GPUs with expert parallelism &mdash; usually better than pure TP for sparse MoE</span>
+vllm serve Qwen/Qwen3-30B-A3B-Instruct-2507 \
+  --tensor-parallel-size 4 --enable-expert-parallel \
+  --max-model-len 262144
+
+<span class="cm"># 4. 128K context on a model whose native window is 32K &mdash; YaRN, applied explicitly</span>
+vllm serve Qwen/Qwen3-8B \
+  --rope-scaling <span class="str">'{"rope_type":"yarn","factor":4.0,"original_max_position_embeddings":32768}'</span> \
+  --max-model-len 131072</code></pre>
+</div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Situation</th><th>Flag</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td>Any thinking-capable Qwen3</td><td><code>--reasoning-parser qwen3</code></td><td>On vLLM before 0.9, use <code>deepseek_r1</code> &mdash; same <code>&lt;think&gt;</code> convention</td></tr>
+<tr><td>Tool / function calling</td><td><code>--enable-auto-tool-choice --tool-call-parser hermes</code></td><td>Both flags, or tool calls arrive as plain text</td></tr>
+<tr><td>Thinking off by default</td><td><code>--default-chat-template-kwargs '{"enable_thinking": false}'</code></td><td>Older builds: ship <code>qwen3_nonthinking.jinja</code> via <code>--chat-template</code></td></tr>
+<tr><td>MoE on multiple GPUs</td><td><code>--enable-expert-parallel</code></td><td>Shards experts rather than every matrix; usually higher throughput</td></tr>
+<tr><td>Out of memory</td><td><code>--max-model-len</code>, <code>--gpu-memory-utilization</code>, <code>--enforce-eager</code></td><td>Reduce context first &mdash; it is almost always the KV cache, not the weights</td></tr>
+<tr><td>Long context beyond native</td><td><code>--rope-scaling '{"rope_type":"yarn",...}'</code></td><td>Applies YaRN statically to all requests, so short prompts pay a small quality cost</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout">
+<div class="callout-label">Sampling</div>
+<p>Thinking mode: <code>temperature 0.6</code>, <code>top_p 0.95</code>, <code>top_k 20</code>. Non-thinking mode: <code>temperature 0.7</code>, <code>top_p 0.8</code>, <code>top_k 20</code>, <code>presence_penalty 1.5</code> if you see repetition. <strong>Never greedy decoding in thinking mode</strong> &mdash; see Part 04.</p>
+</div>
+<div class="callout">
+<div class="callout-label">Next</div>
+<p>Part 06 is the deep dive the Qwen3 generation deserves most: <strong>Qwen3-Coder</strong> &mdash; a 480B-A35B agentic coding model, its 30B-A3B sibling, the 20,000-environment RL system that trained it, its full flag surface, its benchmark record and its honest weaknesses.</p>
+</div>
+</section>
+
+<nav class="deck-nav"><a href="part4.html">&larr; Part 04 &middot; QwQ &amp; QVQ</a><a class="next" href="part6.html">Part 06 &middot; Qwen3-Coder &rarr;</a></nav>
+<footer class="footer"><p>Part of the <a href="index.html">Qwen</a> presentation series &mdash; a deep exploration of Alibaba's open-weight model family.</p><p style="margin-top:0.5rem;font-size:0.8rem;"><a href="index.html">Back to Series Index</a></p></footer>
+
+<script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.slide').forEach(slide => {
+        slide.style.opacity = '0';
+        slide.style.transform = 'translateY(30px)';
+        slide.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(slide);
+    });
+</script>
+</body>
+</html>
