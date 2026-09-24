@@ -9,15 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0a0a;
-            --bg-card: #0d1117;
-            --bg-code: #161b22;
-            --text-primary: #e6edf3;
-            --text-secondary: #8b949e;
-            --accent: #7B61FF;
-            --accent-dim: #7B61FF40;
-            --accent-glow: #7B61FF30;
-            --border: #21262d;
+            --bg-primary: #0f2027;
+            --bg-card: #13272f;
+            --bg-code: #182f38;
+            --text-primary: #ede7dd;
+            --text-secondary: #8ca5a9;
+            --accent: #907bc3;
+            --accent-dim: #907bc340;
+            --accent-glow: #907bc330;
+            --border: #23404a;
             --font-display: 'Space Grotesk', sans-serif;
             --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
             --font-body: 'Inter', sans-serif;
@@ -165,7 +165,7 @@
             border: 1px solid var(--border);
             padding: 0.05rem 0.35rem;
             border-radius: 3px;
-            color: #c9d1d9;
+            color: #cfd7d1;
         }
         .code-block {
             background: var(--bg-code);
@@ -178,7 +178,7 @@
             font-family: var(--font-mono);
             font-size: 0.75rem;
             color: var(--accent);
-            background: rgba(123, 97, 255, 0.08);
+            background: rgba(144,123,195,0.08);
             padding: 0.4rem 1rem;
             border-bottom: 1px solid var(--border);
         }
@@ -187,19 +187,19 @@
             font-family: var(--font-mono);
             font-size: 0.85rem;
             line-height: 1.6;
-            color: #c9d1d9;
+            color: #cfd7d1;
             background: transparent;
             border: none;
             padding: 0;
         }
-        .kw { color: #ff7b72; }
-        .fn { color: #d2a8ff; }
-        .str { color: #a5d6ff; }
-        .cm { color: #8b949e; font-style: italic; }
-        .num { color: #79c0ff; }
-        .type { color: #ffa657; }
-        .dir { color: #ff7b72; }
-        .mac { color: #ffa657; }
+        .kw { color: #f48f70; }
+        .fn { color: #d4c0ea; }
+        .str { color: #c3dbea; }
+        .cm { color: #8ca5a9; font-style: italic; }
+        .num { color: #a8cee8; }
+        .type { color: #eac48b; }
+        .dir { color: #f48f70; }
+        .mac { color: #eac48b; }
         .table-wrap {
             overflow-x: auto;
             margin: 1.25rem 0;
@@ -223,7 +223,7 @@
             color: var(--text-secondary);
         }
         tr:last-child td { border-bottom: none; }
-        tr:nth-child(even) td { background: rgba(13, 17, 23, 0.5); }
+        tr:nth-child(even) td { background: rgba(19,39,47,0.5); }
         .diagram-flow {
             display: flex;
             flex-wrap: wrap;
@@ -247,7 +247,7 @@
             text-align: center;
             white-space: nowrap;
         }
-        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(144,123,195,0.08); }
         .diagram-box.dim { color: var(--text-secondary); border-color: var(--border); }
         .diagram-arrow { color: var(--accent); font-size: 1.3rem; font-weight: 700; }
         .diagram-vertical {
@@ -290,7 +290,7 @@
             border: 1px solid var(--border);
             color: var(--text-secondary);
         }
-        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(144,123,195,0.08); }
         .diagram-grid {
             display: grid;
             gap: 0.75rem;
@@ -405,8 +405,8 @@
             margin-left: 0.3rem;
         }
         .badge.ok    { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
-        .badge.warn  { border-color: #ffa657; color: #ffa657; background: rgba(255,166,87,0.08); }
-        .badge.bad   { border-color: #ff7b72; color: #ff7b72; background: rgba(255,123,114,0.08); }
+        .badge.warn  { border-color: #eac48b; color: #eac48b; background: rgba(234,196,139,0.08); }
+        .badge.bad   { border-color: #f48f70; color: #f48f70; background: rgba(244,143,112,0.08); }
         @media (max-width: 640px) {
             .slide { padding: 3rem 1rem; min-height: auto; }
             .slide-number { font-size: 3rem; top: 1.5rem; right: 1rem; }
@@ -505,15 +505,15 @@
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 430" width="720" height="430" xmlns="http://www.w3.org/2000/svg">
 <style>
-.p1t-lane{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p1t-lanelabel{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:10px;}
-.p1t-dot{fill:#7B61FF;}
-.p1t-dot2{fill:#8b949e;}
-.p1t-ev{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p1t-yr{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:10px;text-anchor:middle;}
-.p1t-grid{stroke:#21262d;stroke-width:1;stroke-dasharray:3,3;}
-.p1t-axis{stroke:#30363d;stroke-width:1;}
-.p1t-title{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12px;}
+.p1t-lane{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p1t-lanelabel{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:10px;}
+.p1t-dot{fill:#907bc3;}
+.p1t-dot2{fill:#8ca5a9;}
+.p1t-ev{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p1t-yr{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:10px;text-anchor:middle;}
+.p1t-grid{stroke:#23404a;stroke-width:1;stroke-dasharray:3,3;}
+.p1t-axis{stroke:#2f4d57;stroke-width:1;}
+.p1t-title{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12px;}
 </style>
 
 <text x="8" y="16" class="p1t-title">Qwen release swimlanes &mdash; Aug 2023 to Aug 2026</text>
@@ -529,7 +529,7 @@
 
 <rect x="88" y="56" width="624" height="62" rx="4" class="p1t-lane"/>
 <text x="8" y="80" class="p1t-lanelabel">Core LLM</text>
-<text x="8" y="93" class="p1t-lanelabel" fill="#8b949e" font-weight="400">open weights</text>
+<text x="8" y="93" class="p1t-lanelabel" fill="#8ca5a9" font-weight="400">open weights</text>
 <circle cx="90" cy="76" r="4" class="p1t-dot"/><text x="98" y="94" class="p1t-ev">Qwen</text>
 <circle cx="190" cy="76" r="4" class="p1t-dot"/><text x="190" y="94" class="p1t-ev">1.5</text>
 <circle cx="257" cy="76" r="4" class="p1t-dot"/><text x="257" y="94" class="p1t-ev">Qwen2</text>
@@ -563,7 +563,7 @@
 
 <rect x="88" y="306" width="624" height="52" rx="4" class="p1t-lane"/>
 <text x="8" y="330" class="p1t-lanelabel">Max tier</text>
-<text x="8" y="343" class="p1t-lanelabel" fill="#8b949e" font-weight="400">proprietary</text>
+<text x="8" y="343" class="p1t-lanelabel" fill="#8ca5a9" font-weight="400">proprietary</text>
 <circle cx="507" cy="326" r="4" class="p1t-dot"/><text x="512" y="344" class="p1t-ev">Qwen3-Max</text>
 <circle cx="623" cy="326" r="4" class="p1t-dot"/><text x="623" y="344" class="p1t-ev">3.6-Max</text>
 <circle cx="640" cy="326" r="4" class="p1t-dot"/><text x="655" y="356" class="p1t-ev">3.7-Max</text>
@@ -585,15 +585,15 @@
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 268" width="720" height="268" xmlns="http://www.w3.org/2000/svg">
 <style>
-.p1n-name{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:19px;}
-.p1n-hl{fill:#7B61FF;font-family:'JetBrains Mono',monospace;font-size:19px;}
-.p1n-seg{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1;}
-.p1n-mk{fill:#7B61FF;font-family:'JetBrains Mono',monospace;font-size:9px;text-anchor:middle;}
-.p1n-mkc{fill:none;stroke:#7B61FF;stroke-width:1;}
-.p1n-lab{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:10.5px;}
-.p1n-sub{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:9px;}
-.p1n-tok{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:10px;}
-.p1n-rule{stroke:#21262d;stroke-width:1;}
+.p1n-name{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:19px;}
+.p1n-hl{fill:#907bc3;font-family:'JetBrains Mono',monospace;font-size:19px;}
+.p1n-seg{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1;}
+.p1n-mk{fill:#907bc3;font-family:'JetBrains Mono',monospace;font-size:9px;text-anchor:middle;}
+.p1n-mkc{fill:none;stroke:#907bc3;stroke-width:1;}
+.p1n-lab{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:10.5px;}
+.p1n-sub{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:9px;}
+.p1n-tok{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:10px;}
+.p1n-rule{stroke:#23404a;stroke-width:1;}
 </style>
 
 <rect x="146" y="26" width="60" height="30" rx="4" class="p1n-seg"/>
@@ -719,16 +719,16 @@
 <p>Strip away the model names and the family tells one clear story in three acts: a conventional dense transformer, a pivot to sparsity, and then a pivot to sub-quadratic attention. Each act was driven by a specific cost that had become the binding constraint.</p>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 300" width="720" height="300" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="p1a-a" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#7B61FF"/></marker></defs>
+<defs><marker id="p1a-a" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#907bc3"/></marker></defs>
 <style>
-.p1a-box{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p1a-boxa{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
-.p1a-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12px;text-anchor:middle;}
-.p1a-t{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
-.p1a-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p1a-ar{stroke:#7B61FF;stroke-width:1.5;fill:none;marker-end:url(#p1a-a);}
-.p1a-cap{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
-.p1a-ttl{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p1a-box{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p1a-boxa{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
+.p1a-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12px;text-anchor:middle;}
+.p1a-t{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p1a-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p1a-ar{stroke:#907bc3;stroke-width:1.5;fill:none;marker-end:url(#p1a-a);}
+.p1a-cap{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p1a-ttl{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
 </style>
 <text x="8" y="16" class="p1a-ttl">Three acts, three binding constraints</text>
 

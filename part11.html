@@ -9,15 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0a0a;
-            --bg-card: #0d1117;
-            --bg-code: #161b22;
-            --text-primary: #e6edf3;
-            --text-secondary: #8b949e;
-            --accent: #7B61FF;
-            --accent-dim: #7B61FF40;
-            --accent-glow: #7B61FF30;
-            --border: #21262d;
+            --bg-primary: #0f2027;
+            --bg-card: #13272f;
+            --bg-code: #182f38;
+            --text-primary: #ede7dd;
+            --text-secondary: #8ca5a9;
+            --accent: #907bc3;
+            --accent-dim: #907bc340;
+            --accent-glow: #907bc330;
+            --border: #23404a;
             --font-display: 'Space Grotesk', sans-serif;
             --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
             --font-body: 'Inter', sans-serif;
@@ -165,7 +165,7 @@
             border: 1px solid var(--border);
             padding: 0.05rem 0.35rem;
             border-radius: 3px;
-            color: #c9d1d9;
+            color: #cfd7d1;
         }
         .code-block {
             background: var(--bg-code);
@@ -178,7 +178,7 @@
             font-family: var(--font-mono);
             font-size: 0.75rem;
             color: var(--accent);
-            background: rgba(123, 97, 255, 0.08);
+            background: rgba(144,123,195,0.08);
             padding: 0.4rem 1rem;
             border-bottom: 1px solid var(--border);
         }
@@ -187,19 +187,19 @@
             font-family: var(--font-mono);
             font-size: 0.85rem;
             line-height: 1.6;
-            color: #c9d1d9;
+            color: #cfd7d1;
             background: transparent;
             border: none;
             padding: 0;
         }
-        .kw { color: #ff7b72; }
-        .fn { color: #d2a8ff; }
-        .str { color: #a5d6ff; }
-        .cm { color: #8b949e; font-style: italic; }
-        .num { color: #79c0ff; }
-        .type { color: #ffa657; }
-        .dir { color: #ff7b72; }
-        .mac { color: #ffa657; }
+        .kw { color: #f48f70; }
+        .fn { color: #d4c0ea; }
+        .str { color: #c3dbea; }
+        .cm { color: #8ca5a9; font-style: italic; }
+        .num { color: #a8cee8; }
+        .type { color: #eac48b; }
+        .dir { color: #f48f70; }
+        .mac { color: #eac48b; }
         .table-wrap {
             overflow-x: auto;
             margin: 1.25rem 0;
@@ -223,7 +223,7 @@
             color: var(--text-secondary);
         }
         tr:last-child td { border-bottom: none; }
-        tr:nth-child(even) td { background: rgba(13, 17, 23, 0.5); }
+        tr:nth-child(even) td { background: rgba(19,39,47,0.5); }
         .diagram-flow {
             display: flex;
             flex-wrap: wrap;
@@ -247,7 +247,7 @@
             text-align: center;
             white-space: nowrap;
         }
-        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(144,123,195,0.08); }
         .diagram-box.dim { color: var(--text-secondary); border-color: var(--border); }
         .diagram-arrow { color: var(--accent); font-size: 1.3rem; font-weight: 700; }
         .diagram-vertical {
@@ -290,7 +290,7 @@
             border: 1px solid var(--border);
             color: var(--text-secondary);
         }
-        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(144,123,195,0.08); }
         .diagram-grid {
             display: grid;
             gap: 0.75rem;
@@ -405,8 +405,8 @@
             margin-left: 0.3rem;
         }
         .badge.ok    { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
-        .badge.warn  { border-color: #ffa657; color: #ffa657; background: rgba(255,166,87,0.08); }
-        .badge.bad   { border-color: #ff7b72; color: #ff7b72; background: rgba(255,123,114,0.08); }
+        .badge.warn  { border-color: #eac48b; color: #eac48b; background: rgba(234,196,139,0.08); }
+        .badge.bad   { border-color: #f48f70; color: #f48f70; background: rgba(244,143,112,0.08); }
         @media (max-width: 640px) {
             .slide { padding: 3rem 1rem; min-height: auto; }
             .slide-number { font-size: 3rem; top: 1.5rem; right: 1rem; }
@@ -524,15 +524,15 @@ Qwen3.5 / 3.6  &rarr; &ge; 0.17.0</code></pre>
 <p>Two independent parsers sit between the model's raw token stream and your API response. Choosing them wrongly produces failures that look like model failures, and they are the single most common Qwen deployment mistake.</p>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 220" width="720" height="220" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="p11p-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<defs><marker id="p11p-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#907bc3"/></marker></defs>
 <style>
-.p11p-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p11p-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
-.p11p-bt{fill:rgba(31,158,142,0.10);stroke:#1F9E8E;stroke-width:1.2;}
-.p11p-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
-.p11p-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p11p-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p11p-ar{stroke:#7B61FF;stroke-width:1.3;fill:none;marker-end:url(#p11p-a);}
+.p11p-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p11p-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
+.p11p-bt{fill:rgba(116,160,150,0.10);stroke:#74a096;stroke-width:1.2;}
+.p11p-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p11p-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p11p-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p11p-ar{stroke:#907bc3;stroke-width:1.3;fill:none;marker-end:url(#p11p-a);}
 </style>
 <text x="8" y="16" class="p11p-h">Raw tokens &rarr; two parsers &rarr; three response fields</text>
 
@@ -555,7 +555,7 @@ Qwen3.5 / 3.6  &rarr; &ge; 0.17.0</code></pre>
 <rect x="410" y="62" width="298" height="30" rx="4" class="p11p-b"/><text x="559" y="81" class="p11p-l">tool_calls[] &mdash; structured, ready to dispatch</text>
 <rect x="410" y="98" width="298" height="30" rx="4" class="p11p-b"/><text x="559" y="117" class="p11p-l">content &mdash; what you show the user</text>
 
-<line x1="8" y1="146" x2="712" y2="146" stroke="#21262d" stroke-width="1"/>
+<line x1="8" y1="146" x2="712" y2="146" stroke="#23404a" stroke-width="1"/>
 <text x="8" y="166" class="p11p-h">Set neither and both failures are silent</text>
 <text x="8" y="186" class="p11p-s" style="text-anchor:start">&bull; No reasoning parser &rArr; the whole &lt;think&gt; trace arrives inside content. Your JSON parser fails, your UI shows the model's inner monologue.</text>
 <text x="8" y="202" class="p11p-s" style="text-anchor:start">&bull; No tool-call parser &rArr; tool_calls is empty and the call sits in content as text. The agent silently does nothing, and no error is raised.</text>
@@ -633,12 +633,12 @@ vllm serve Qwen/Qwen3-Coder-480B-A35B-Instruct \
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 294" width="720" height="294" xmlns="http://www.w3.org/2000/svg">
 <style>
-.p11m-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p11m-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
-.p11m-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;}
-.p11m-eq{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:11px;}
-.p11m-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p11m-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
+.p11m-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p11m-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p11m-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;}
+.p11m-eq{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:11px;}
+.p11m-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p11m-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
 </style>
 <text x="8" y="16" class="p11m-h">The KV cache formula &mdash; memorise this one</text>
 <rect x="8" y="26" width="704" height="34" rx="5" class="p11m-ba"/>
@@ -695,11 +695,11 @@ vllm serve Qwen/Qwen3-Coder-480B-A35B-Instruct \
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 200" width="720" height="200" xmlns="http://www.w3.org/2000/svg">
 <style>
-.p11l-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p11l-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
-.p11l-hit{fill:rgba(31,158,142,0.30);stroke:#1F9E8E;stroke-width:1;}
-.p11l-new{fill:rgba(123,97,255,0.25);stroke:#7B61FF;stroke-width:1;}
-.p11l-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p11l-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p11l-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p11l-hit{fill:rgba(116,160,150,0.30);stroke:#74a096;stroke-width:1;}
+.p11l-new{fill:rgba(144,123,195,0.25);stroke:#907bc3;stroke-width:1;}
+.p11l-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
 </style>
 <text x="8" y="16" class="p11l-h">Why prefix caching is the highest-value flag for agentic Qwen workloads</text>
 
@@ -721,7 +721,7 @@ vllm serve Qwen/Qwen3-Coder-480B-A35B-Instruct \
 <rect x="514" y="90" width="70" height="16" rx="3" class="p11l-hit"/><text x="549" y="102" class="p11l-l">cache hit</text>
 <rect x="586" y="90" width="70" height="16" rx="3" class="p11l-new"/><text x="621" y="102" class="p11l-l">new</text>
 
-<line x1="8" y1="124" x2="712" y2="124" stroke="#21262d" stroke-width="1"/>
+<line x1="8" y1="124" x2="712" y2="124" stroke="#23404a" stroke-width="1"/>
 <text x="8" y="144" class="p11l-s">A 30-turn session over a 150K-token repository would re-prefill 4.5M tokens without caching.</text>
 <text x="8" y="160" class="p11l-s">With it, roughly 150K once plus the deltas. Design prompts to exploit this: everything stable</text>
 <text x="8" y="176" class="p11l-s">FIRST, everything variable LAST. A single changed byte near the start invalidates the whole</text>

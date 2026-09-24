@@ -9,15 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0a0a;
-            --bg-card: #0d1117;
-            --bg-code: #161b22;
-            --text-primary: #e6edf3;
-            --text-secondary: #8b949e;
-            --accent: #7B61FF;
-            --accent-dim: #7B61FF40;
-            --accent-glow: #7B61FF30;
-            --border: #21262d;
+            --bg-primary: #0f2027;
+            --bg-card: #13272f;
+            --bg-code: #182f38;
+            --text-primary: #ede7dd;
+            --text-secondary: #8ca5a9;
+            --accent: #907bc3;
+            --accent-dim: #907bc340;
+            --accent-glow: #907bc330;
+            --border: #23404a;
             --font-display: 'Space Grotesk', sans-serif;
             --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
             --font-body: 'Inter', sans-serif;
@@ -165,7 +165,7 @@
             border: 1px solid var(--border);
             padding: 0.05rem 0.35rem;
             border-radius: 3px;
-            color: #c9d1d9;
+            color: #cfd7d1;
         }
         .code-block {
             background: var(--bg-code);
@@ -178,7 +178,7 @@
             font-family: var(--font-mono);
             font-size: 0.75rem;
             color: var(--accent);
-            background: rgba(123, 97, 255, 0.08);
+            background: rgba(144,123,195,0.08);
             padding: 0.4rem 1rem;
             border-bottom: 1px solid var(--border);
         }
@@ -187,19 +187,19 @@
             font-family: var(--font-mono);
             font-size: 0.85rem;
             line-height: 1.6;
-            color: #c9d1d9;
+            color: #cfd7d1;
             background: transparent;
             border: none;
             padding: 0;
         }
-        .kw { color: #ff7b72; }
-        .fn { color: #d2a8ff; }
-        .str { color: #a5d6ff; }
-        .cm { color: #8b949e; font-style: italic; }
-        .num { color: #79c0ff; }
-        .type { color: #ffa657; }
-        .dir { color: #ff7b72; }
-        .mac { color: #ffa657; }
+        .kw { color: #f48f70; }
+        .fn { color: #d4c0ea; }
+        .str { color: #c3dbea; }
+        .cm { color: #8ca5a9; font-style: italic; }
+        .num { color: #a8cee8; }
+        .type { color: #eac48b; }
+        .dir { color: #f48f70; }
+        .mac { color: #eac48b; }
         .table-wrap {
             overflow-x: auto;
             margin: 1.25rem 0;
@@ -223,7 +223,7 @@
             color: var(--text-secondary);
         }
         tr:last-child td { border-bottom: none; }
-        tr:nth-child(even) td { background: rgba(13, 17, 23, 0.5); }
+        tr:nth-child(even) td { background: rgba(19,39,47,0.5); }
         .diagram-flow {
             display: flex;
             flex-wrap: wrap;
@@ -247,7 +247,7 @@
             text-align: center;
             white-space: nowrap;
         }
-        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(144,123,195,0.08); }
         .diagram-box.dim { color: var(--text-secondary); border-color: var(--border); }
         .diagram-arrow { color: var(--accent); font-size: 1.3rem; font-weight: 700; }
         .diagram-vertical {
@@ -290,7 +290,7 @@
             border: 1px solid var(--border);
             color: var(--text-secondary);
         }
-        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(144,123,195,0.08); }
         .diagram-grid {
             display: grid;
             gap: 0.75rem;
@@ -405,8 +405,8 @@
             margin-left: 0.3rem;
         }
         .badge.ok    { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
-        .badge.warn  { border-color: #ffa657; color: #ffa657; background: rgba(255,166,87,0.08); }
-        .badge.bad   { border-color: #ff7b72; color: #ff7b72; background: rgba(255,123,114,0.08); }
+        .badge.warn  { border-color: #eac48b; color: #eac48b; background: rgba(234,196,139,0.08); }
+        .badge.bad   { border-color: #f48f70; color: #f48f70; background: rgba(244,143,112,0.08); }
         @media (max-width: 640px) {
             .slide { padding: 3rem 1rem; min-height: auto; }
             .slide-number { font-size: 3rem; top: 1.5rem; right: 1rem; }
@@ -498,15 +498,15 @@
 </div>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 250" width="720" height="250" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="p5b-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<defs><marker id="p5b-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#907bc3"/></marker></defs>
 <style>
-.p5b-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p5b-ba{fill:rgba(123,97,255,0.12);stroke:#7B61FF;stroke-width:1.2;}
-.p5b-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
-.p5b-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p5b-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p5b-ar{stroke:#7B61FF;stroke-width:1.3;fill:none;marker-end:url(#p5b-a);}
-.p5b-res{stroke:#8b949e;stroke-width:1.1;fill:none;stroke-dasharray:3,3;marker-end:url(#p5b-a);}
+.p5b-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p5b-ba{fill:rgba(144,123,195,0.12);stroke:#907bc3;stroke-width:1.2;}
+.p5b-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p5b-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p5b-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p5b-ar{stroke:#907bc3;stroke-width:1.3;fill:none;marker-end:url(#p5b-a);}
+.p5b-res{stroke:#8ca5a9;stroke-width:1.1;fill:none;stroke-dasharray:3,3;marker-end:url(#p5b-a);}
 </style>
 <text x="8" y="16" class="p5b-h">One Qwen3 decoder layer &mdash; MoE variant</text>
 
@@ -553,15 +553,15 @@
 <p>Qwen3's mixture-of-experts made one notable break from Qwen2's: it <strong>dropped shared experts entirely</strong>. Qwen1.5-MoE and Qwen2-57B-A14B both used always-on shared experts to hold common knowledge; Qwen3 uses 128 routed experts, 8 activated, and nothing always-on.</p>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 260" width="720" height="260" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="p5m-a" markerWidth="7" markerHeight="7" refX="5.5" refY="2.8" orient="auto"><path d="M0,0 L5.5,2.8 L0,5.6 Z" fill="#7B61FF"/></marker></defs>
+<defs><marker id="p5m-a" markerWidth="7" markerHeight="7" refX="5.5" refY="2.8" orient="auto"><path d="M0,0 L5.5,2.8 L0,5.6 Z" fill="#907bc3"/></marker></defs>
 <style>
-.p5m-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p5m-on{fill:rgba(123,97,255,0.30);stroke:#7B61FF;stroke-width:1.2;}
-.p5m-off{fill:#0d1117;stroke:#21262d;stroke-width:1;}
-.p5m-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
-.p5m-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
-.p5m-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p5m-ar{stroke:#7B61FF;stroke-width:1.2;fill:none;marker-end:url(#p5m-a);}
+.p5m-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p5m-on{fill:rgba(144,123,195,0.30);stroke:#907bc3;stroke-width:1.2;}
+.p5m-off{fill:#13272f;stroke:#23404a;stroke-width:1;}
+.p5m-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p5m-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p5m-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p5m-ar{stroke:#907bc3;stroke-width:1.2;fill:none;marker-end:url(#p5m-a);}
 </style>
 <text x="8" y="16" class="p5m-h">128 experts resident, 8 selected per token &mdash; the router is a single linear layer</text>
 
@@ -622,13 +622,13 @@
 </g>
 <text x="490" y="106" class="p5m-s" style="text-anchor:middle">128 experts &mdash; 8 lit for this token, 120 idle but resident in VRAM</text>
 
-<line x1="8" y1="126" x2="712" y2="126" stroke="#21262d" stroke-width="1"/>
+<line x1="8" y1="126" x2="712" y2="126" stroke="#23404a" stroke-width="1"/>
 <text x="8" y="148" class="p5m-h">Three consequences you will feel in production</text>
-<text x="8" y="170" class="p5m-s">1. <tspan fill="#e6edf3">Memory is total, compute is active.</tspan> All 128 experts must be resident. 235B of BF16 weights is ~470GB &mdash; multi-node,</text>
+<text x="8" y="170" class="p5m-s">1. <tspan fill="#ede7dd">Memory is total, compute is active.</tspan> All 128 experts must be resident. 235B of BF16 weights is ~470GB &mdash; multi-node,</text>
 <text x="8" y="184" class="p5m-s">   or FP8 at ~235GB across 4&times;80GB. But each token only touches 22B, so decode is fast for the memory footprint.</text>
-<text x="8" y="206" class="p5m-s">2. <tspan fill="#e6edf3">Batching changes the maths.</tspan> One token lights 8 experts; a batch of 64 tokens may light nearly all 128. Large batches</text>
+<text x="8" y="206" class="p5m-s">2. <tspan fill="#ede7dd">Batching changes the maths.</tspan> One token lights 8 experts; a batch of 64 tokens may light nearly all 128. Large batches</text>
 <text x="8" y="220" class="p5m-s">   erode the sparsity advantage in compute terms while keeping it in memory-bandwidth terms.</text>
-<text x="8" y="242" class="p5m-s">3. <tspan fill="#e6edf3">Expert parallelism is a distinct sharding axis.</tspan> vLLM's --enable-expert-parallel splits experts across GPUs rather than</text>
+<text x="8" y="242" class="p5m-s">3. <tspan fill="#ede7dd">Expert parallelism is a distinct sharding axis.</tspan> vLLM's --enable-expert-parallel splits experts across GPUs rather than</text>
 <text x="8" y="256" class="p5m-s">   splitting every matrix &mdash; usually the better topology for high-sparsity MoE. Part 11 covers when to use it.</text>
 </svg>
 </div>
@@ -641,17 +641,17 @@
 <p>Qwen3 was trained on roughly <strong>36 trillion tokens across 119 languages and dialects</strong> &mdash; double Qwen2.5's corpus, and roughly five times Qwen2's. The curriculum is staged, and each stage has a distinct job.</p>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 224" width="720" height="224" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="p5p-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<defs><marker id="p5p-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#907bc3"/></marker></defs>
 <style>
-.p5p-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p5p-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
-.p5p-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:10px;text-anchor:middle;}
-.p5p-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p5p-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p5p-ar{stroke:#7B61FF;stroke-width:1.5;fill:none;marker-end:url(#p5p-a);}
-.p5p-bar{fill:#7B61FF;}
-.p5p-bar2{fill:#1F9E8E;}
-.p5p-bar3{fill:#B87C22;}
+.p5p-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p5p-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
+.p5p-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:10px;text-anchor:middle;}
+.p5p-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p5p-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p5p-ar{stroke:#907bc3;stroke-width:1.5;fill:none;marker-end:url(#p5p-a);}
+.p5p-bar{fill:#907bc3;}
+.p5p-bar2{fill:#74a096;}
+.p5p-bar3{fill:#ae9361;}
 </style>
 <text x="8" y="16" class="p5p-h">The pre-training curriculum &mdash; volume first, then quality, then length</text>
 
@@ -684,8 +684,8 @@
 <rect x="16" y="160" width="574" height="16" rx="3" class="p5p-bar"/>
 <rect x="594" y="160" width="96" height="16" rx="3" class="p5p-bar2"/>
 <rect x="694" y="160" width="10" height="16" rx="3" class="p5p-bar3"/>
-<text x="20" y="172" class="p5p-s" style="text-anchor:start" fill="#0a0a0a" font-weight="700">S1 &mdash; 30T+</text>
-<text x="598" y="172" class="p5p-s" style="text-anchor:start" fill="#0a0a0a" font-weight="700">S2 &mdash; 5T</text>
+<text x="20" y="172" class="p5p-s" style="text-anchor:start" fill="#0f2027" font-weight="700">S1 &mdash; 30T+</text>
+<text x="598" y="172" class="p5p-s" style="text-anchor:start" fill="#0f2027" font-weight="700">S2 &mdash; 5T</text>
 <text x="700" y="192" class="p5p-s" style="text-anchor:end">S3 &mdash; ~0.3T</text>
 <text x="16" y="202" class="p5p-s" style="text-anchor:start">Long-context training is a rounding error in tokens and decisive in capability &mdash; it is where</text>
 <text x="16" y="216" class="p5p-s" style="text-anchor:start">the model learns to use a window, rather than merely tolerate one.</text>
@@ -701,15 +701,15 @@
 <p>Qwen3's headline feature: <strong>one checkpoint, two modes</strong>. Thinking mode emits a <code>&lt;think&gt;</code> trace before answering; non-thinking mode answers immediately. Both live in the same weights, and the mode is selected per request.</p>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 230" width="720" height="230" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="p5h-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<defs><marker id="p5h-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#907bc3"/></marker></defs>
 <style>
-.p5h-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p5h-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
-.p5h-bt{fill:rgba(31,158,142,0.10);stroke:#1F9E8E;stroke-width:1.2;}
-.p5h-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
-.p5h-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p5h-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p5h-ar{stroke:#7B61FF;stroke-width:1.3;fill:none;marker-end:url(#p5h-a);}
+.p5h-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p5h-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
+.p5h-bt{fill:rgba(116,160,150,0.10);stroke:#74a096;stroke-width:1.2;}
+.p5h-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p5h-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p5h-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p5h-ar{stroke:#907bc3;stroke-width:1.3;fill:none;marker-end:url(#p5h-a);}
 </style>
 <text x="8" y="16" class="p5h-h">One set of weights, two behaviours, three ways to choose between them</text>
 
@@ -765,16 +765,16 @@ vllm serve Qwen/Qwen3-32B --default-chat-template-kwargs <span class="str">'{"en
 <p>The flagship models went through a four-stage pipeline. The six smaller models did not &mdash; they were distilled from the flagships, which is both cheaper and, per the technical report, <em>better</em> than running the full pipeline at small scale.</p>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 312" width="720" height="312" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="p5s-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<defs><marker id="p5s-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#907bc3"/></marker></defs>
 <style>
-.p5s-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p5s-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
-.p5s-bt{fill:rgba(31,158,142,0.10);stroke:#1F9E8E;stroke-width:1.2;}
-.p5s-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
-.p5s-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8px;text-anchor:middle;}
-.p5s-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p5s-ar{stroke:#7B61FF;stroke-width:1.4;fill:none;marker-end:url(#p5s-a);}
-.p5s-ar2{stroke:#1F9E8E;stroke-width:1.4;fill:none;marker-end:url(#p5s-a);}
+.p5s-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p5s-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
+.p5s-bt{fill:rgba(116,160,150,0.10);stroke:#74a096;stroke-width:1.2;}
+.p5s-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p5s-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8px;text-anchor:middle;}
+.p5s-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p5s-ar{stroke:#907bc3;stroke-width:1.4;fill:none;marker-end:url(#p5s-a);}
+.p5s-ar2{stroke:#74a096;stroke-width:1.4;fill:none;marker-end:url(#p5s-a);}
 </style>
 <text x="8" y="16" class="p5s-h">Flagship path &mdash; four stages</text>
 
@@ -880,15 +880,15 @@ bot = Assistant(llm=llm_cfg, function_list=tools)
 <p>In July 2025, three months after launch, the team published <code>Qwen3-235B-A22B-Instruct-2507</code> and <code>Qwen3-235B-A22B-Thinking-2507</code> as <em>separate models</em>, with matching 30B-A3B variants. The Instruct model's card states it plainly: it supports only non-thinking mode, and <code>enable_thinking=False</code> is no longer needed because there is no longer anything to disable.</p>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 210" width="720" height="210" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="p5x-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<defs><marker id="p5x-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#907bc3"/></marker></defs>
 <style>
-.p5x-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p5x-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
-.p5x-bt{fill:rgba(31,158,142,0.10);stroke:#1F9E8E;stroke-width:1.2;}
-.p5x-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
-.p5x-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p5x-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p5x-ar{stroke:#7B61FF;stroke-width:1.4;fill:none;marker-end:url(#p5x-a);}
+.p5x-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p5x-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
+.p5x-bt{fill:rgba(116,160,150,0.10);stroke:#74a096;stroke-width:1.2;}
+.p5x-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p5x-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p5x-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p5x-ar{stroke:#907bc3;stroke-width:1.4;fill:none;marker-end:url(#p5x-a);}
 </style>
 <text x="8" y="16" class="p5x-h">April 2025 &rarr; July 2025</text>
 

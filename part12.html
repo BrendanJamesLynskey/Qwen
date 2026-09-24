@@ -9,15 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0a0a;
-            --bg-card: #0d1117;
-            --bg-code: #161b22;
-            --text-primary: #e6edf3;
-            --text-secondary: #8b949e;
-            --accent: #7B61FF;
-            --accent-dim: #7B61FF40;
-            --accent-glow: #7B61FF30;
-            --border: #21262d;
+            --bg-primary: #0f2027;
+            --bg-card: #13272f;
+            --bg-code: #182f38;
+            --text-primary: #ede7dd;
+            --text-secondary: #8ca5a9;
+            --accent: #907bc3;
+            --accent-dim: #907bc340;
+            --accent-glow: #907bc330;
+            --border: #23404a;
             --font-display: 'Space Grotesk', sans-serif;
             --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
             --font-body: 'Inter', sans-serif;
@@ -165,7 +165,7 @@
             border: 1px solid var(--border);
             padding: 0.05rem 0.35rem;
             border-radius: 3px;
-            color: #c9d1d9;
+            color: #cfd7d1;
         }
         .code-block {
             background: var(--bg-code);
@@ -178,7 +178,7 @@
             font-family: var(--font-mono);
             font-size: 0.75rem;
             color: var(--accent);
-            background: rgba(123, 97, 255, 0.08);
+            background: rgba(144,123,195,0.08);
             padding: 0.4rem 1rem;
             border-bottom: 1px solid var(--border);
         }
@@ -187,19 +187,19 @@
             font-family: var(--font-mono);
             font-size: 0.85rem;
             line-height: 1.6;
-            color: #c9d1d9;
+            color: #cfd7d1;
             background: transparent;
             border: none;
             padding: 0;
         }
-        .kw { color: #ff7b72; }
-        .fn { color: #d2a8ff; }
-        .str { color: #a5d6ff; }
-        .cm { color: #8b949e; font-style: italic; }
-        .num { color: #79c0ff; }
-        .type { color: #ffa657; }
-        .dir { color: #ff7b72; }
-        .mac { color: #ffa657; }
+        .kw { color: #f48f70; }
+        .fn { color: #d4c0ea; }
+        .str { color: #c3dbea; }
+        .cm { color: #8ca5a9; font-style: italic; }
+        .num { color: #a8cee8; }
+        .type { color: #eac48b; }
+        .dir { color: #f48f70; }
+        .mac { color: #eac48b; }
         .table-wrap {
             overflow-x: auto;
             margin: 1.25rem 0;
@@ -223,7 +223,7 @@
             color: var(--text-secondary);
         }
         tr:last-child td { border-bottom: none; }
-        tr:nth-child(even) td { background: rgba(13, 17, 23, 0.5); }
+        tr:nth-child(even) td { background: rgba(19,39,47,0.5); }
         .diagram-flow {
             display: flex;
             flex-wrap: wrap;
@@ -247,7 +247,7 @@
             text-align: center;
             white-space: nowrap;
         }
-        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(144,123,195,0.08); }
         .diagram-box.dim { color: var(--text-secondary); border-color: var(--border); }
         .diagram-arrow { color: var(--accent); font-size: 1.3rem; font-weight: 700; }
         .diagram-vertical {
@@ -290,7 +290,7 @@
             border: 1px solid var(--border);
             color: var(--text-secondary);
         }
-        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(144,123,195,0.08); }
         .diagram-grid {
             display: grid;
             gap: 0.75rem;
@@ -405,8 +405,8 @@
             margin-left: 0.3rem;
         }
         .badge.ok    { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
-        .badge.warn  { border-color: #ffa657; color: #ffa657; background: rgba(255,166,87,0.08); }
-        .badge.bad   { border-color: #ff7b72; color: #ff7b72; background: rgba(255,123,114,0.08); }
+        .badge.warn  { border-color: #eac48b; color: #eac48b; background: rgba(234,196,139,0.08); }
+        .badge.bad   { border-color: #f48f70; color: #f48f70; background: rgba(244,143,112,0.08); }
         @media (max-width: 640px) {
             .slide { padding: 3rem 1rem; min-height: auto; }
             .slide-number { font-size: 3rem; top: 1.5rem; right: 1rem; }
@@ -462,15 +462,15 @@
 <h2>The decision tree</h2>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 400" width="720" height="400" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="p12d-a" markerWidth="7" markerHeight="7" refX="5.5" refY="2.8" orient="auto"><path d="M0,0 L5.5,2.8 L0,5.6 Z" fill="#7B61FF"/></marker></defs>
+<defs><marker id="p12d-a" markerWidth="7" markerHeight="7" refX="5.5" refY="2.8" orient="auto"><path d="M0,0 L5.5,2.8 L0,5.6 Z" fill="#907bc3"/></marker></defs>
 <style>
-.p12d-q{fill:#161b22;stroke:#7B61FF;stroke-width:1.2;}
-.p12d-a{fill:rgba(123,97,255,0.12);stroke:#7B61FF;stroke-width:1;}
-.p12d-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9px;text-anchor:middle;}
-.p12d-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8px;text-anchor:middle;}
-.p12d-e{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8px;}
-.p12d-ar{stroke:#7B61FF;stroke-width:1.1;fill:none;marker-end:url(#p12d-a);}
-.p12d-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p12d-q{fill:#182f38;stroke:#907bc3;stroke-width:1.2;}
+.p12d-a{fill:rgba(144,123,195,0.12);stroke:#907bc3;stroke-width:1;}
+.p12d-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9px;text-anchor:middle;}
+.p12d-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8px;text-anchor:middle;}
+.p12d-e{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8px;}
+.p12d-ar{stroke:#907bc3;stroke-width:1.1;fill:none;marker-end:url(#p12d-a);}
+.p12d-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
 </style>
 <text x="8" y="16" class="p12d-h">Start here &mdash; open-weight Qwen, as of August 2026</text>
 
@@ -514,7 +514,7 @@
 <text x="625" y="179" class="p12d-s">Embedding / Reranker / Guard</text>
 <text x="625" y="190" class="p12d-s">ASR / MT / Image</text>
 
-<line x1="8" y1="216" x2="712" y2="216" stroke="#21262d" stroke-width="1"/>
+<line x1="8" y1="216" x2="712" y2="216" stroke="#23404a" stroke-width="1"/>
 
 <text x="8" y="238" class="p12d-h">Then apply the constraints, in this order</text>
 
@@ -539,8 +539,8 @@
 <text x="628" y="298" class="p12d-s">and edge-runtime support</text>
 
 <text x="8" y="336" class="p12d-h">Two defaults, if you want to stop reading now</text>
-<text x="8" y="358" class="p12d-s" style="text-anchor:start">&bull; <tspan fill="#e6edf3">Qwen3.5-9B</tspan> &mdash; one 24GB card, 262K context, multimodal, thinking on demand. The best single answer for a general workload.</text>
-<text x="8" y="376" class="p12d-s" style="text-anchor:start">&bull; <tspan fill="#e6edf3">Qwen3.6-27B</tspan> &mdash; two cards or one big one. The best open model for agentic coding and long-horizon tool use.</text>
+<text x="8" y="358" class="p12d-s" style="text-anchor:start">&bull; <tspan fill="#ede7dd">Qwen3.5-9B</tspan> &mdash; one 24GB card, 262K context, multimodal, thinking on demand. The best single answer for a general workload.</text>
+<text x="8" y="376" class="p12d-s" style="text-anchor:start">&bull; <tspan fill="#ede7dd">Qwen3.6-27B</tspan> &mdash; two cards or one big one. The best open model for agentic coding and long-horizon tool use.</text>
 <text x="8" y="394" class="p12d-s" style="text-anchor:start">Both are Apache 2.0. Neither requires anything exotic beyond a current vLLM.</text>
 </svg>
 </div>

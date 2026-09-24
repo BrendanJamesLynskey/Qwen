@@ -9,15 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0a0a;
-            --bg-card: #0d1117;
-            --bg-code: #161b22;
-            --text-primary: #e6edf3;
-            --text-secondary: #8b949e;
-            --accent: #7B61FF;
-            --accent-dim: #7B61FF40;
-            --accent-glow: #7B61FF30;
-            --border: #21262d;
+            --bg-primary: #0f2027;
+            --bg-card: #13272f;
+            --bg-code: #182f38;
+            --text-primary: #ede7dd;
+            --text-secondary: #8ca5a9;
+            --accent: #907bc3;
+            --accent-dim: #907bc340;
+            --accent-glow: #907bc330;
+            --border: #23404a;
             --font-display: 'Space Grotesk', sans-serif;
             --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
             --font-body: 'Inter', sans-serif;
@@ -165,7 +165,7 @@
             border: 1px solid var(--border);
             padding: 0.05rem 0.35rem;
             border-radius: 3px;
-            color: #c9d1d9;
+            color: #cfd7d1;
         }
         .code-block {
             background: var(--bg-code);
@@ -178,7 +178,7 @@
             font-family: var(--font-mono);
             font-size: 0.75rem;
             color: var(--accent);
-            background: rgba(123, 97, 255, 0.08);
+            background: rgba(144,123,195,0.08);
             padding: 0.4rem 1rem;
             border-bottom: 1px solid var(--border);
         }
@@ -187,19 +187,19 @@
             font-family: var(--font-mono);
             font-size: 0.85rem;
             line-height: 1.6;
-            color: #c9d1d9;
+            color: #cfd7d1;
             background: transparent;
             border: none;
             padding: 0;
         }
-        .kw { color: #ff7b72; }
-        .fn { color: #d2a8ff; }
-        .str { color: #a5d6ff; }
-        .cm { color: #8b949e; font-style: italic; }
-        .num { color: #79c0ff; }
-        .type { color: #ffa657; }
-        .dir { color: #ff7b72; }
-        .mac { color: #ffa657; }
+        .kw { color: #f48f70; }
+        .fn { color: #d4c0ea; }
+        .str { color: #c3dbea; }
+        .cm { color: #8ca5a9; font-style: italic; }
+        .num { color: #a8cee8; }
+        .type { color: #eac48b; }
+        .dir { color: #f48f70; }
+        .mac { color: #eac48b; }
         .table-wrap {
             overflow-x: auto;
             margin: 1.25rem 0;
@@ -223,7 +223,7 @@
             color: var(--text-secondary);
         }
         tr:last-child td { border-bottom: none; }
-        tr:nth-child(even) td { background: rgba(13, 17, 23, 0.5); }
+        tr:nth-child(even) td { background: rgba(19,39,47,0.5); }
         .diagram-flow {
             display: flex;
             flex-wrap: wrap;
@@ -247,7 +247,7 @@
             text-align: center;
             white-space: nowrap;
         }
-        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(144,123,195,0.08); }
         .diagram-box.dim { color: var(--text-secondary); border-color: var(--border); }
         .diagram-arrow { color: var(--accent); font-size: 1.3rem; font-weight: 700; }
         .diagram-vertical {
@@ -290,7 +290,7 @@
             border: 1px solid var(--border);
             color: var(--text-secondary);
         }
-        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(144,123,195,0.08); }
         .diagram-grid {
             display: grid;
             gap: 0.75rem;
@@ -405,8 +405,8 @@
             margin-left: 0.3rem;
         }
         .badge.ok    { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
-        .badge.warn  { border-color: #ffa657; color: #ffa657; background: rgba(255,166,87,0.08); }
-        .badge.bad   { border-color: #ff7b72; color: #ff7b72; background: rgba(255,123,114,0.08); }
+        .badge.warn  { border-color: #eac48b; color: #eac48b; background: rgba(234,196,139,0.08); }
+        .badge.bad   { border-color: #f48f70; color: #f48f70; background: rgba(244,143,112,0.08); }
         @media (max-width: 640px) {
             .slide { padding: 3rem 1rem; min-height: auto; }
             .slide-number { font-size: 3rem; top: 1.5rem; right: 1rem; }
@@ -500,13 +500,13 @@
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 250" width="720" height="250" xmlns="http://www.w3.org/2000/svg">
 <style>
-.p2k-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p2k-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:9px;}
-.p2k-tok{fill:#161b22;stroke:#30363d;stroke-width:1;}
-.p2k-toka{fill:rgba(123,97,255,0.12);stroke:#7B61FF;stroke-width:1;}
-.p2k-tl{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:11px;text-anchor:middle;}
-.p2k-tla{fill:#7B61FF;font-family:'JetBrains Mono',monospace;font-size:11px;text-anchor:middle;}
-.p2k-cap{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p2k-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p2k-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:9px;}
+.p2k-tok{fill:#182f38;stroke:#2f4d57;stroke-width:1;}
+.p2k-toka{fill:rgba(144,123,195,0.12);stroke:#907bc3;stroke-width:1;}
+.p2k-tl{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:11px;text-anchor:middle;}
+.p2k-tla{fill:#907bc3;font-family:'JetBrains Mono',monospace;font-size:11px;text-anchor:middle;}
+.p2k-cap{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
 </style>
 <text x="8" y="16" class="p2k-h">Illustrative: how a Latin-centric 32K BPE vs. Qwen's 152K BPE segment the same string</text>
 
@@ -530,7 +530,7 @@
 <rect x="72" y="128" width="60" height="26" rx="3" class="p2k-toka"/><text x="102" y="146" class="p2k-tla">&#x667A;&#x80FD;</text>
 <text x="150" y="146" class="p2k-cap">&rarr; 2 tokens for the same 4 characters &mdash; a 6&times; reduction</text>
 
-<line x1="8" y1="176" x2="712" y2="176" stroke="#21262d" stroke-width="1"/>
+<line x1="8" y1="176" x2="712" y2="176" stroke="#23404a" stroke-width="1"/>
 <text x="8" y="196" class="p2k-h">Consequences of the larger vocabulary</text>
 <text x="8" y="214" class="p2k-cap">&bull; More meaning per token &rArr; a nominal 32K context holds far more Chinese text, and per-token API cost falls proportionally.</text>
 <text x="8" y="228" class="p2k-cap">&bull; Attention is O(n&sup2;) in sequence length &mdash; halving the token count quarters the attention cost for the same document.</text>
@@ -637,17 +637,17 @@
 <p>In March 2024 the team published a model that mattered far more than its benchmark scores: a <strong>14.3B-parameter mixture-of-experts activating just 2.7B per token</strong>, matching Qwen1.5-7B's quality at roughly 1.74&times; the inference speed and about 25% of the training cost.</p>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 300" width="720" height="300" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="p2m-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<defs><marker id="p2m-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#907bc3"/></marker></defs>
 <style>
-.p2m-box{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p2m-boxa{fill:rgba(123,97,255,0.12);stroke:#7B61FF;stroke-width:1.2;}
-.p2m-boxd{fill:#0d1117;stroke:#30363d;stroke-width:1;}
-.p2m-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:10px;text-anchor:middle;}
-.p2m-la{fill:#7B61FF;font-family:'JetBrains Mono',monospace;font-size:10px;text-anchor:middle;}
-.p2m-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p2m-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p2m-ar{stroke:#7B61FF;stroke-width:1.4;fill:none;marker-end:url(#p2m-a);}
-.p2m-dim{stroke:#30363d;stroke-width:1;fill:none;stroke-dasharray:3,3;}
+.p2m-box{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p2m-boxa{fill:rgba(144,123,195,0.12);stroke:#907bc3;stroke-width:1.2;}
+.p2m-boxd{fill:#13272f;stroke:#2f4d57;stroke-width:1;}
+.p2m-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:10px;text-anchor:middle;}
+.p2m-la{fill:#907bc3;font-family:'JetBrains Mono',monospace;font-size:10px;text-anchor:middle;}
+.p2m-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p2m-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p2m-ar{stroke:#907bc3;stroke-width:1.4;fill:none;marker-end:url(#p2m-a);}
+.p2m-dim{stroke:#2f4d57;stroke-width:1;fill:none;stroke-dasharray:3,3;}
 </style>
 <text x="8" y="16" class="p2m-h">Upcycling: one dense FFN becomes 64 fine-grained experts</text>
 

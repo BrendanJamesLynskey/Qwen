@@ -9,15 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0a0a;
-            --bg-card: #0d1117;
-            --bg-code: #161b22;
-            --text-primary: #e6edf3;
-            --text-secondary: #8b949e;
-            --accent: #7B61FF;
-            --accent-dim: #7B61FF40;
-            --accent-glow: #7B61FF30;
-            --border: #21262d;
+            --bg-primary: #0f2027;
+            --bg-card: #13272f;
+            --bg-code: #182f38;
+            --text-primary: #ede7dd;
+            --text-secondary: #8ca5a9;
+            --accent: #907bc3;
+            --accent-dim: #907bc340;
+            --accent-glow: #907bc330;
+            --border: #23404a;
             --font-display: 'Space Grotesk', sans-serif;
             --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
             --font-body: 'Inter', sans-serif;
@@ -165,7 +165,7 @@
             border: 1px solid var(--border);
             padding: 0.05rem 0.35rem;
             border-radius: 3px;
-            color: #c9d1d9;
+            color: #cfd7d1;
         }
         .code-block {
             background: var(--bg-code);
@@ -178,7 +178,7 @@
             font-family: var(--font-mono);
             font-size: 0.75rem;
             color: var(--accent);
-            background: rgba(123, 97, 255, 0.08);
+            background: rgba(144,123,195,0.08);
             padding: 0.4rem 1rem;
             border-bottom: 1px solid var(--border);
         }
@@ -187,19 +187,19 @@
             font-family: var(--font-mono);
             font-size: 0.85rem;
             line-height: 1.6;
-            color: #c9d1d9;
+            color: #cfd7d1;
             background: transparent;
             border: none;
             padding: 0;
         }
-        .kw { color: #ff7b72; }
-        .fn { color: #d2a8ff; }
-        .str { color: #a5d6ff; }
-        .cm { color: #8b949e; font-style: italic; }
-        .num { color: #79c0ff; }
-        .type { color: #ffa657; }
-        .dir { color: #ff7b72; }
-        .mac { color: #ffa657; }
+        .kw { color: #f48f70; }
+        .fn { color: #d4c0ea; }
+        .str { color: #c3dbea; }
+        .cm { color: #8ca5a9; font-style: italic; }
+        .num { color: #a8cee8; }
+        .type { color: #eac48b; }
+        .dir { color: #f48f70; }
+        .mac { color: #eac48b; }
         .table-wrap {
             overflow-x: auto;
             margin: 1.25rem 0;
@@ -223,7 +223,7 @@
             color: var(--text-secondary);
         }
         tr:last-child td { border-bottom: none; }
-        tr:nth-child(even) td { background: rgba(13, 17, 23, 0.5); }
+        tr:nth-child(even) td { background: rgba(19,39,47,0.5); }
         .diagram-flow {
             display: flex;
             flex-wrap: wrap;
@@ -247,7 +247,7 @@
             text-align: center;
             white-space: nowrap;
         }
-        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(144,123,195,0.08); }
         .diagram-box.dim { color: var(--text-secondary); border-color: var(--border); }
         .diagram-arrow { color: var(--accent); font-size: 1.3rem; font-weight: 700; }
         .diagram-vertical {
@@ -290,7 +290,7 @@
             border: 1px solid var(--border);
             color: var(--text-secondary);
         }
-        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(144,123,195,0.08); }
         .diagram-grid {
             display: grid;
             gap: 0.75rem;
@@ -405,8 +405,8 @@
             margin-left: 0.3rem;
         }
         .badge.ok    { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
-        .badge.warn  { border-color: #ffa657; color: #ffa657; background: rgba(255,166,87,0.08); }
-        .badge.bad   { border-color: #ff7b72; color: #ff7b72; background: rgba(255,123,114,0.08); }
+        .badge.warn  { border-color: #eac48b; color: #eac48b; background: rgba(234,196,139,0.08); }
+        .badge.bad   { border-color: #f48f70; color: #f48f70; background: rgba(244,143,112,0.08); }
         @media (max-width: 640px) {
             .slide { padding: 3rem 1rem; min-height: auto; }
             .slide-number { font-size: 3rem; top: 1.5rem; right: 1rem; }
@@ -489,26 +489,26 @@
 <p>Gated DeltaNet comes from the 2024 paper <em>Gated Delta Networks: Improving Mamba2 with Delta Rule</em>. It is a linear-attention layer whose state is a fixed-size <strong>matrix memory</strong>, updated per token by two mechanisms that pull in opposite directions.</p>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 290" width="720" height="290" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="p7d-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<defs><marker id="p7d-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#907bc3"/></marker></defs>
 <style>
-.p7d-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p7d-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
-.p7d-bt{fill:rgba(31,158,142,0.10);stroke:#1F9E8E;stroke-width:1.2;}
-.p7d-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
-.p7d-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p7d-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p7d-ar{stroke:#7B61FF;stroke-width:1.3;fill:none;marker-end:url(#p7d-a);}
-.p7d-eq{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:12px;}
+.p7d-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p7d-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
+.p7d-bt{fill:rgba(116,160,150,0.10);stroke:#74a096;stroke-width:1.2;}
+.p7d-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p7d-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p7d-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p7d-ar{stroke:#907bc3;stroke-width:1.3;fill:none;marker-end:url(#p7d-a);}
+.p7d-eq{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:12px;}
 </style>
 <text x="8" y="16" class="p7d-h">The state update &mdash; decay what is stale, correct what is wrong</text>
 
 <rect x="150" y="30" width="420" height="40" rx="6" class="p7d-b"/>
-<text x="176" y="56" class="p7d-eq">S<tspan font-size="9" dy="3">t</tspan><tspan dy="-3"> = </tspan><tspan fill="#B87C22">&alpha;</tspan><tspan font-size="9" dy="3">t</tspan><tspan dy="-3"> S</tspan><tspan font-size="9" dy="3">t-1</tspan><tspan dy="-3"> + </tspan><tspan fill="#1F9E8E">&beta;</tspan><tspan font-size="9" dy="3">t</tspan><tspan dy="-3"> (v</tspan><tspan font-size="9" dy="3">t</tspan><tspan dy="-3"> &minus; S</tspan><tspan font-size="9" dy="3">t-1</tspan><tspan dy="-3">k</tspan><tspan font-size="9" dy="3">t</tspan><tspan dy="-3">) k</tspan><tspan font-size="9" dy="3">t</tspan><tspan dy="-3">&#7488;</tspan></text>
+<text x="176" y="56" class="p7d-eq">S<tspan font-size="9" dy="3">t</tspan><tspan dy="-3"> = </tspan><tspan fill="#ae9361">&alpha;</tspan><tspan font-size="9" dy="3">t</tspan><tspan dy="-3"> S</tspan><tspan font-size="9" dy="3">t-1</tspan><tspan dy="-3"> + </tspan><tspan fill="#74a096">&beta;</tspan><tspan font-size="9" dy="3">t</tspan><tspan dy="-3"> (v</tspan><tspan font-size="9" dy="3">t</tspan><tspan dy="-3"> &minus; S</tspan><tspan font-size="9" dy="3">t-1</tspan><tspan dy="-3">k</tspan><tspan font-size="9" dy="3">t</tspan><tspan dy="-3">) k</tspan><tspan font-size="9" dy="3">t</tspan><tspan dy="-3">&#7488;</tspan></text>
 
 <line x1="230" y1="74" x2="200" y2="100" class="p7d-ar"/>
 <line x1="400" y1="74" x2="430" y2="100" class="p7d-ar"/>
 
-<rect x="30" y="104" width="316" height="96" rx="6" class="p7d-b" stroke="#B87C22"/>
+<rect x="30" y="104" width="316" height="96" rx="6" class="p7d-b" stroke="#ae9361"/>
 <text x="188" y="126" class="p7d-l">gating &mdash; the Mamba2 half</text>
 <text x="188" y="146" class="p7d-s">&alpha; is a learned, input-dependent decay in (0,1)</text>
 <text x="188" y="162" class="p7d-s">old memory fades exponentially, so the fixed-size</text>
@@ -522,7 +522,7 @@
 <text x="532" y="178" class="p7d-s">the update writes only the correction &mdash; targeted,</text>
 <text x="532" y="194" class="p7d-s">associative, and it overwrites rather than accumulates</text>
 
-<line x1="8" y1="218" x2="712" y2="218" stroke="#21262d" stroke-width="1"/>
+<line x1="8" y1="218" x2="712" y2="218" stroke="#23404a" stroke-width="1"/>
 <text x="8" y="238" class="p7d-h">Two more pieces make it work in a transformer stack</text>
 <text x="8" y="258" class="p7d-s" style="text-anchor:start">&bull; A causal 1D convolution supplies short-range local context, doing the job RoPE does in an attention layer.</text>
 <text x="8" y="274" class="p7d-s" style="text-anchor:start">&bull; L2 normalisation on Q and K bounds the update magnitude, replacing the normalising role of softmax.</text>
@@ -542,13 +542,13 @@
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 300" width="720" height="300" xmlns="http://www.w3.org/2000/svg">
 <style>
-.p7h-dn{fill:rgba(31,158,142,0.14);stroke:#1F9E8E;stroke-width:1;}
-.p7h-at{fill:rgba(123,97,255,0.20);stroke:#7B61FF;stroke-width:1.2;}
-.p7h-moe{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p7h-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p7h-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
-.p7h-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p7h-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
+.p7h-dn{fill:rgba(116,160,150,0.14);stroke:#74a096;stroke-width:1;}
+.p7h-at{fill:rgba(144,123,195,0.20);stroke:#907bc3;stroke-width:1.2;}
+.p7h-moe{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p7h-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p7h-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p7h-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p7h-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
 </style>
 <text x="8" y="16" class="p7h-h">One repeating block, twelve times &mdash; 36 linear layers, 12 attention layers</text>
 
@@ -577,14 +577,14 @@
 <text x="624" y="138" class="p7h-s" style="text-anchor:middle">output gate suppresses</text>
 <text x="624" y="152" class="p7h-s" style="text-anchor:middle">attention-sink artefacts</text>
 
-<line x1="8" y1="188" x2="712" y2="188" stroke="#21262d" stroke-width="1"/>
+<line x1="8" y1="188" x2="712" y2="188" stroke="#23404a" stroke-width="1"/>
 <text x="8" y="208" class="p7h-h">What the ratio does to the KV cache</text>
 <text x="8" y="230" class="p7h-s">Full-attention 48-layer model:</text>
-<rect x="230" y="220" width="370" height="14" rx="3" fill="#7B61FF"/>
+<rect x="230" y="220" width="370" height="14" rx="3" fill="#907bc3"/>
 <text x="606" y="231" class="p7h-s">48 layers cached</text>
 <text x="8" y="256" class="p7h-s">Qwen3-Next:</text>
-<rect x="230" y="246" width="93" height="14" rx="3" fill="#7B61FF"/>
-<rect x="327" y="246" width="273" height="14" rx="3" fill="#1F9E8E" opacity="0.35"/>
+<rect x="230" y="246" width="93" height="14" rx="3" fill="#907bc3"/>
+<rect x="327" y="246" width="273" height="14" rx="3" fill="#74a096" opacity="0.35"/>
 <text x="333" y="257" class="p7h-s">36 layers: recurrent state, no cache</text>
 <text x="8" y="284" class="p7h-s">A 75% cut in cached layers, on top of an already aggressive 8:1 GQA ratio &mdash; which is why context past 32K stops dominating cost.</text>
 </svg>
@@ -655,15 +655,15 @@
 <p>Qwen3-Next was trained with an <strong>MTP</strong> objective: alongside the usual next-token head, additional heads predict tokens two and three positions ahead. This helps pre-training slightly, and helps inference a great deal.</p>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 250" width="720" height="250" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="p7m-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<defs><marker id="p7m-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#907bc3"/></marker></defs>
 <style>
-.p7m-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p7m-ok{fill:rgba(31,158,142,0.18);stroke:#1F9E8E;stroke-width:1;}
-.p7m-no{fill:rgba(209,77,72,0.15);stroke:#D14D48;stroke-width:1;}
-.p7m-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9px;text-anchor:middle;}
-.p7m-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
-.p7m-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p7m-ar{stroke:#7B61FF;stroke-width:1.3;fill:none;marker-end:url(#p7m-a);}
+.p7m-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p7m-ok{fill:rgba(116,160,150,0.18);stroke:#74a096;stroke-width:1;}
+.p7m-no{fill:rgba(193,95,64,0.15);stroke:#c15f40;stroke-width:1;}
+.p7m-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9px;text-anchor:middle;}
+.p7m-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p7m-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p7m-ar{stroke:#907bc3;stroke-width:1.3;fill:none;marker-end:url(#p7m-a);}
 </style>
 <text x="8" y="16" class="p7m-h">Self-speculation: the model drafts its own next few tokens, then verifies them in one pass</text>
 
@@ -681,7 +681,7 @@
 <rect x="388" y="104" width="90" height="24" rx="3" class="p7m-no"/><text x="433" y="120" class="p7m-l">reject &rarr; resample</text>
 <text x="494" y="120" class="p7m-s">3 tokens emitted for the cost of ~1 pass</text>
 
-<line x1="8" y1="148" x2="712" y2="148" stroke="#21262d" stroke-width="1"/>
+<line x1="8" y1="148" x2="712" y2="148" stroke="#23404a" stroke-width="1"/>
 <text x="8" y="168" class="p7m-h">Why this is worth more than it looks</text>
 <text x="8" y="188" class="p7m-s">Decoding is memory-bandwidth bound, not compute bound: each step reads the whole active parameter set to emit one token.</text>
 <text x="8" y="204" class="p7m-s">Verifying three candidate positions costs almost the same bandwidth as generating one &mdash; so accepted drafts are nearly free.</text>
@@ -748,12 +748,12 @@ vllm serve Qwen/Qwen3-Next-80B-A3B-Instruct \
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 264" width="720" height="264" xmlns="http://www.w3.org/2000/svg">
 <style>
-.p7n-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p7n-v{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;text-anchor:middle;}
-.p7n-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
-.p7n-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p7n-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p7n-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
+.p7n-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p7n-v{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;text-anchor:middle;}
+.p7n-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p7n-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p7n-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p7n-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
 </style>
 <text x="8" y="16" class="p7n-h">Qwen3-Next-80B-A3B versus Qwen3-32B-Base &mdash; as reported by the Qwen team</text>
 
@@ -806,14 +806,14 @@ vllm serve Qwen/Qwen3-Next-80B-A3B-Instruct \
 <p>Qwen3-Next was framed as an experiment in next-generation architecture. Five months later, the design is the entire product line.</p>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 216" width="720" height="216" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="p7f-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<defs><marker id="p7f-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#907bc3"/></marker></defs>
 <style>
-.p7f-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p7f-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
-.p7f-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
-.p7f-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p7f-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p7f-ar{stroke:#7B61FF;stroke-width:1.4;fill:none;marker-end:url(#p7f-a);}
+.p7f-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p7f-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
+.p7f-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p7f-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p7f-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p7f-ar{stroke:#907bc3;stroke-width:1.4;fill:none;marker-end:url(#p7f-a);}
 </style>
 <text x="8" y="16" class="p7f-h">The 3:1 Gated DeltaNet layout, from preview to standard</text>
 

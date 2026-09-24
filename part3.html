@@ -9,15 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0a0a;
-            --bg-card: #0d1117;
-            --bg-code: #161b22;
-            --text-primary: #e6edf3;
-            --text-secondary: #8b949e;
-            --accent: #7B61FF;
-            --accent-dim: #7B61FF40;
-            --accent-glow: #7B61FF30;
-            --border: #21262d;
+            --bg-primary: #0f2027;
+            --bg-card: #13272f;
+            --bg-code: #182f38;
+            --text-primary: #ede7dd;
+            --text-secondary: #8ca5a9;
+            --accent: #907bc3;
+            --accent-dim: #907bc340;
+            --accent-glow: #907bc330;
+            --border: #23404a;
             --font-display: 'Space Grotesk', sans-serif;
             --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
             --font-body: 'Inter', sans-serif;
@@ -165,7 +165,7 @@
             border: 1px solid var(--border);
             padding: 0.05rem 0.35rem;
             border-radius: 3px;
-            color: #c9d1d9;
+            color: #cfd7d1;
         }
         .code-block {
             background: var(--bg-code);
@@ -178,7 +178,7 @@
             font-family: var(--font-mono);
             font-size: 0.75rem;
             color: var(--accent);
-            background: rgba(123, 97, 255, 0.08);
+            background: rgba(144,123,195,0.08);
             padding: 0.4rem 1rem;
             border-bottom: 1px solid var(--border);
         }
@@ -187,19 +187,19 @@
             font-family: var(--font-mono);
             font-size: 0.85rem;
             line-height: 1.6;
-            color: #c9d1d9;
+            color: #cfd7d1;
             background: transparent;
             border: none;
             padding: 0;
         }
-        .kw { color: #ff7b72; }
-        .fn { color: #d2a8ff; }
-        .str { color: #a5d6ff; }
-        .cm { color: #8b949e; font-style: italic; }
-        .num { color: #79c0ff; }
-        .type { color: #ffa657; }
-        .dir { color: #ff7b72; }
-        .mac { color: #ffa657; }
+        .kw { color: #f48f70; }
+        .fn { color: #d4c0ea; }
+        .str { color: #c3dbea; }
+        .cm { color: #8ca5a9; font-style: italic; }
+        .num { color: #a8cee8; }
+        .type { color: #eac48b; }
+        .dir { color: #f48f70; }
+        .mac { color: #eac48b; }
         .table-wrap {
             overflow-x: auto;
             margin: 1.25rem 0;
@@ -223,7 +223,7 @@
             color: var(--text-secondary);
         }
         tr:last-child td { border-bottom: none; }
-        tr:nth-child(even) td { background: rgba(13, 17, 23, 0.5); }
+        tr:nth-child(even) td { background: rgba(19,39,47,0.5); }
         .diagram-flow {
             display: flex;
             flex-wrap: wrap;
@@ -247,7 +247,7 @@
             text-align: center;
             white-space: nowrap;
         }
-        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(144,123,195,0.08); }
         .diagram-box.dim { color: var(--text-secondary); border-color: var(--border); }
         .diagram-arrow { color: var(--accent); font-size: 1.3rem; font-weight: 700; }
         .diagram-vertical {
@@ -290,7 +290,7 @@
             border: 1px solid var(--border);
             color: var(--text-secondary);
         }
-        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(144,123,195,0.08); }
         .diagram-grid {
             display: grid;
             gap: 0.75rem;
@@ -405,8 +405,8 @@
             margin-left: 0.3rem;
         }
         .badge.ok    { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
-        .badge.warn  { border-color: #ffa657; color: #ffa657; background: rgba(255,166,87,0.08); }
-        .badge.bad   { border-color: #ff7b72; color: #ff7b72; background: rgba(255,123,114,0.08); }
+        .badge.warn  { border-color: #eac48b; color: #eac48b; background: rgba(234,196,139,0.08); }
+        .badge.bad   { border-color: #f48f70; color: #f48f70; background: rgba(244,143,112,0.08); }
         @media (max-width: 640px) {
             .slide { padding: 3rem 1rem; min-height: auto; }
             .slide-number { font-size: 3rem; top: 1.5rem; right: 1rem; }
@@ -494,13 +494,13 @@
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 260" width="720" height="260" xmlns="http://www.w3.org/2000/svg">
 <style>
-.p3g-q{fill:rgba(123,97,255,0.14);stroke:#7B61FF;stroke-width:1;}
-.p3g-kv{fill:#161b22;stroke:#1F9E8E;stroke-width:1.2;}
-.p3g-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p3g-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p3g-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:9px;}
-.p3g-t{fill:#1F9E8E;font-family:'JetBrains Mono',monospace;font-size:9px;}
-.p3g-link{stroke:#30363d;stroke-width:0.8;}
+.p3g-q{fill:rgba(144,123,195,0.14);stroke:#907bc3;stroke-width:1;}
+.p3g-kv{fill:#182f38;stroke:#74a096;stroke-width:1.2;}
+.p3g-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p3g-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p3g-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:9px;}
+.p3g-t{fill:#74a096;font-family:'JetBrains Mono',monospace;font-size:9px;}
+.p3g-link{stroke:#2f4d57;stroke-width:0.8;}
 </style>
 <text x="8" y="16" class="p3g-h">Qwen2.5-7B: 28 query heads share 4 key/value heads (a 7:1 group ratio)</text>
 
@@ -545,20 +545,20 @@
 <rect x="422" y="70" width="84" height="18" rx="3" class="p3g-kv"/><text x="464" y="83" class="p3g-l">K/V 2</text>
 <rect x="578" y="70" width="84" height="18" rx="3" class="p3g-kv"/><text x="620" y="83" class="p3g-l">K/V 3</text>
 
-<line x1="8" y1="106" x2="712" y2="106" stroke="#21262d" stroke-width="1"/>
+<line x1="8" y1="106" x2="712" y2="106" stroke="#23404a" stroke-width="1"/>
 <text x="8" y="128" class="p3g-h">The arithmetic, for Qwen2.5-7B (28 layers, head_dim 128, FP16 cache)</text>
 <text x="8" y="150" class="p3g-s">bytes per token  =  2 (K and V) &times; layers &times; kv_heads &times; head_dim &times; 2 bytes</text>
 
-<rect x="8" y="164" width="336" height="84" rx="6" fill="#161b22" stroke="#21262d"/>
+<rect x="8" y="164" width="336" height="84" rx="6" fill="#182f38" stroke="#23404a"/>
 <text x="20" y="184" class="p3g-t">Multi-head attention &mdash; 28 KV heads</text>
 <text x="20" y="204" class="p3g-s">2 &times; 28 &times; 28 &times; 128 &times; 2  =  392 KiB / token</text>
-<text x="20" y="224" class="p3g-s">at 128K context:  <tspan fill="#D14D48">49 GiB of KV cache</tspan></text>
+<text x="20" y="224" class="p3g-s">at 128K context:  <tspan fill="#c15f40">49 GiB of KV cache</tspan></text>
 <text x="20" y="240" class="p3g-s">&mdash; larger than the model, and it does not fit</text>
 
-<rect x="376" y="164" width="336" height="84" rx="6" fill="#161b22" stroke="#7B61FF"/>
+<rect x="376" y="164" width="336" height="84" rx="6" fill="#182f38" stroke="#907bc3"/>
 <text x="388" y="184" class="p3g-t">Grouped-query attention &mdash; 4 KV heads</text>
 <text x="388" y="204" class="p3g-s">2 &times; 28 &times; 4 &times; 128 &times; 2  =  56 KiB / token</text>
-<text x="388" y="224" class="p3g-s">at 128K context:  <tspan fill="#7B61FF">7.0 GiB of KV cache</tspan></text>
+<text x="388" y="224" class="p3g-s">at 128K context:  <tspan fill="#907bc3">7.0 GiB of KV cache</tspan></text>
 <text x="388" y="240" class="p3g-s">&mdash; fits alongside the weights on one 24GB card</text>
 </svg>
 </div>
@@ -621,19 +621,19 @@
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 180" width="720" height="180" xmlns="http://www.w3.org/2000/svg">
 <style>
-.p3d-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p3d-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
-.p3d-ch{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1;}
-.p3d-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9px;text-anchor:middle;}
-.p3d-bad{stroke:#D14D48;stroke-width:1.4;fill:none;}
-.p3d-good{stroke:#1F9E8E;stroke-width:1.4;fill:none;}
-.p3d-t{fill:#D14D48;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
-.p3d-t2{fill:#1F9E8E;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p3d-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p3d-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p3d-ch{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1;}
+.p3d-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9px;text-anchor:middle;}
+.p3d-bad{stroke:#c15f40;stroke-width:1.4;fill:none;}
+.p3d-good{stroke:#74a096;stroke-width:1.4;fill:none;}
+.p3d-t{fill:#c15f40;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p3d-t2{fill:#74a096;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
 </style>
 <text x="8" y="16" class="p3d-h">Why naive extrapolation fails, and what DCA does about it</text>
 
 <text x="8" y="40" class="p3d-s">naive: relative distance grows without bound</text>
-<rect x="8" y="48" width="560" height="22" rx="3" fill="#161b22" stroke="#21262d"/>
+<rect x="8" y="48" width="560" height="22" rx="3" fill="#182f38" stroke="#23404a"/>
 <text x="20" y="63" class="p3d-l" style="text-anchor:start">token 0</text>
 <text x="540" y="63" class="p3d-l" style="text-anchor:end">token 1,000,000</text>
 <path d="M60,48 C200,20 420,20 530,48" class="p3d-bad"/>
@@ -729,14 +729,14 @@
 <p>Released January 2025 in 3B, 7B, 32B and 72B, Qwen2.5-VL was the generation where the vision line stopped being a research curiosity and became the tool people actually use to parse documents.</p>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 230" width="720" height="230" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="p3v-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<defs><marker id="p3v-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#907bc3"/></marker></defs>
 <style>
-.p3v-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p3v-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
-.p3v-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
-.p3v-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p3v-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p3v-ar{stroke:#7B61FF;stroke-width:1.4;fill:none;marker-end:url(#p3v-a);}
+.p3v-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p3v-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
+.p3v-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p3v-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p3v-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p3v-ar{stroke:#907bc3;stroke-width:1.4;fill:none;marker-end:url(#p3v-a);}
 </style>
 <text x="8" y="16" class="p3v-h">Fixed budget (Qwen-VL, 2023) vs. naive dynamic resolution (Qwen2-VL onward)</text>
 
@@ -787,15 +787,15 @@
 <p>March 2025, in 3B and 7B. Omni takes text, images, audio and video in, and emits text <em>and streaming speech</em> out. The architecture that makes real-time speech output possible is worth understanding, because the same split reappears in Qwen3-Omni.</p>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 240" width="720" height="240" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="p3o-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<defs><marker id="p3o-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#907bc3"/></marker></defs>
 <style>
-.p3o-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p3o-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
-.p3o-bt{fill:rgba(31,158,142,0.10);stroke:#1F9E8E;stroke-width:1.2;}
-.p3o-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
-.p3o-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p3o-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p3o-ar{stroke:#7B61FF;stroke-width:1.4;fill:none;marker-end:url(#p3o-a);}
+.p3o-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p3o-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
+.p3o-bt{fill:rgba(116,160,150,0.10);stroke:#74a096;stroke-width:1.2;}
+.p3o-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p3o-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p3o-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p3o-ar{stroke:#907bc3;stroke-width:1.4;fill:none;marker-end:url(#p3o-a);}
 </style>
 <text x="8" y="16" class="p3o-h">Thinker&ndash;Talker: decouple what to say from how it sounds</text>
 

@@ -9,15 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0a0a;
-            --bg-card: #0d1117;
-            --bg-code: #161b22;
-            --text-primary: #e6edf3;
-            --text-secondary: #8b949e;
-            --accent: #7B61FF;
-            --accent-dim: #7B61FF40;
-            --accent-glow: #7B61FF30;
-            --border: #21262d;
+            --bg-primary: #0f2027;
+            --bg-card: #13272f;
+            --bg-code: #182f38;
+            --text-primary: #ede7dd;
+            --text-secondary: #8ca5a9;
+            --accent: #907bc3;
+            --accent-dim: #907bc340;
+            --accent-glow: #907bc330;
+            --border: #23404a;
             --font-display: 'Space Grotesk', sans-serif;
             --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
             --font-body: 'Inter', sans-serif;
@@ -165,7 +165,7 @@
             border: 1px solid var(--border);
             padding: 0.05rem 0.35rem;
             border-radius: 3px;
-            color: #c9d1d9;
+            color: #cfd7d1;
         }
         .code-block {
             background: var(--bg-code);
@@ -178,7 +178,7 @@
             font-family: var(--font-mono);
             font-size: 0.75rem;
             color: var(--accent);
-            background: rgba(123, 97, 255, 0.08);
+            background: rgba(144,123,195,0.08);
             padding: 0.4rem 1rem;
             border-bottom: 1px solid var(--border);
         }
@@ -187,19 +187,19 @@
             font-family: var(--font-mono);
             font-size: 0.85rem;
             line-height: 1.6;
-            color: #c9d1d9;
+            color: #cfd7d1;
             background: transparent;
             border: none;
             padding: 0;
         }
-        .kw { color: #ff7b72; }
-        .fn { color: #d2a8ff; }
-        .str { color: #a5d6ff; }
-        .cm { color: #8b949e; font-style: italic; }
-        .num { color: #79c0ff; }
-        .type { color: #ffa657; }
-        .dir { color: #ff7b72; }
-        .mac { color: #ffa657; }
+        .kw { color: #f48f70; }
+        .fn { color: #d4c0ea; }
+        .str { color: #c3dbea; }
+        .cm { color: #8ca5a9; font-style: italic; }
+        .num { color: #a8cee8; }
+        .type { color: #eac48b; }
+        .dir { color: #f48f70; }
+        .mac { color: #eac48b; }
         .table-wrap {
             overflow-x: auto;
             margin: 1.25rem 0;
@@ -223,7 +223,7 @@
             color: var(--text-secondary);
         }
         tr:last-child td { border-bottom: none; }
-        tr:nth-child(even) td { background: rgba(13, 17, 23, 0.5); }
+        tr:nth-child(even) td { background: rgba(19,39,47,0.5); }
         .diagram-flow {
             display: flex;
             flex-wrap: wrap;
@@ -247,7 +247,7 @@
             text-align: center;
             white-space: nowrap;
         }
-        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(144,123,195,0.08); }
         .diagram-box.dim { color: var(--text-secondary); border-color: var(--border); }
         .diagram-arrow { color: var(--accent); font-size: 1.3rem; font-weight: 700; }
         .diagram-vertical {
@@ -290,7 +290,7 @@
             border: 1px solid var(--border);
             color: var(--text-secondary);
         }
-        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(144,123,195,0.08); }
         .diagram-grid {
             display: grid;
             gap: 0.75rem;
@@ -405,8 +405,8 @@
             margin-left: 0.3rem;
         }
         .badge.ok    { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
-        .badge.warn  { border-color: #ffa657; color: #ffa657; background: rgba(255,166,87,0.08); }
-        .badge.bad   { border-color: #ff7b72; color: #ff7b72; background: rgba(255,123,114,0.08); }
+        .badge.warn  { border-color: #eac48b; color: #eac48b; background: rgba(234,196,139,0.08); }
+        .badge.bad   { border-color: #f48f70; color: #f48f70; background: rgba(244,143,112,0.08); }
         @media (max-width: 640px) {
             .slide { padding: 3rem 1rem; min-height: auto; }
             .slide-number { font-size: 3rem; top: 1.5rem; right: 1rem; }
@@ -499,12 +499,12 @@
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 250" width="720" height="250" xmlns="http://www.w3.org/2000/svg">
 <style>
-.p6a-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p6a-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
-.p6a-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:10px;text-anchor:middle;}
-.p6a-v{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;text-anchor:middle;}
-.p6a-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p6a-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p6a-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p6a-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
+.p6a-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:10px;text-anchor:middle;}
+.p6a-v{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;text-anchor:middle;}
+.p6a-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p6a-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
 </style>
 <text x="8" y="16" class="p6a-h">Qwen3-Coder-480B-A35B-Instruct &mdash; specification</text>
 
@@ -529,7 +529,7 @@
 <rect x="480" y="112" width="228" height="70" rx="6" class="p6a-b"/>
 <text x="594" y="140" class="p6a-v">358</text><text x="594" y="158" class="p6a-s">programming languages</text><text x="594" y="172" class="p6a-s">up from 92 in Qwen2.5-Coder</text>
 
-<line x1="12" y1="198" x2="708" y2="198" stroke="#21262d" stroke-width="1"/>
+<line x1="12" y1="198" x2="708" y2="198" stroke="#23404a" stroke-width="1"/>
 <text x="12" y="218" class="p6a-s" style="text-anchor:start">KV cache at 256K context: 2 &times; 62 layers &times; 8 KV heads &times; 128 head_dim &times; 2 bytes &times; 262,144 tokens &asymp; 33 GiB per sequence.</text>
 <text x="12" y="234" class="p6a-s" style="text-anchor:start">That is the number that actually sizes your deployment &mdash; long-context agentic coding is a KV-cache problem before it is a weights problem.</text>
 </svg>
@@ -543,16 +543,16 @@
 <p>The pre-training is unremarkable in kind, if large in degree. The post-training is where Qwen3-Coder separates itself from every previous coding model, and it has two distinct reinforcement-learning phases.</p>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 338" width="720" height="338" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="p6r-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<defs><marker id="p6r-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#907bc3"/></marker></defs>
 <style>
-.p6r-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p6r-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
-.p6r-bt{fill:rgba(31,158,142,0.10);stroke:#1F9E8E;stroke-width:1.2;}
-.p6r-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
-.p6r-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p6r-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p6r-ar{stroke:#7B61FF;stroke-width:1.3;fill:none;marker-end:url(#p6r-a);}
-.p6r-env{fill:#0d1117;stroke:#30363d;stroke-width:0.8;}
+.p6r-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p6r-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
+.p6r-bt{fill:rgba(116,160,150,0.10);stroke:#74a096;stroke-width:1.2;}
+.p6r-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p6r-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p6r-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p6r-ar{stroke:#907bc3;stroke-width:1.3;fill:none;marker-end:url(#p6r-a);}
+.p6r-env{fill:#13272f;stroke:#2f4d57;stroke-width:0.8;}
 </style>
 <text x="8" y="16" class="p6r-h">Phase 1 &mdash; Code RL: execution-driven, single-shot</text>
 <rect x="12" y="26" width="696" height="72" rx="6" class="p6r-ba"/>
@@ -619,14 +619,14 @@
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 312" width="720" height="312" xmlns="http://www.w3.org/2000/svg">
 <style>
-.p6c-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p6c-ax{stroke:#30363d;stroke-width:1;}
-.p6c-gr{stroke:#21262d;stroke-width:1;}
-.p6c-bar{fill:#7B61FF;}
-.p6c-cat{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;}
-.p6c-sub{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8px;}
-.p6c-val{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;}
-.p6c-tick{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p6c-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p6c-ax{stroke:#2f4d57;stroke-width:1;}
+.p6c-gr{stroke:#23404a;stroke-width:1;}
+.p6c-bar{fill:#907bc3;}
+.p6c-cat{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;}
+.p6c-sub{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8px;}
+.p6c-val{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;}
+.p6c-tick{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
 </style>
 <text x="8" y="16" class="p6c-h">SWE-bench Verified &mdash; the Qwen coding line, and what it costs per token</text>
 

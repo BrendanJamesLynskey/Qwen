@@ -9,15 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0a0a;
-            --bg-card: #0d1117;
-            --bg-code: #161b22;
-            --text-primary: #e6edf3;
-            --text-secondary: #8b949e;
-            --accent: #7B61FF;
-            --accent-dim: #7B61FF40;
-            --accent-glow: #7B61FF30;
-            --border: #21262d;
+            --bg-primary: #0f2027;
+            --bg-card: #13272f;
+            --bg-code: #182f38;
+            --text-primary: #ede7dd;
+            --text-secondary: #8ca5a9;
+            --accent: #907bc3;
+            --accent-dim: #907bc340;
+            --accent-glow: #907bc330;
+            --border: #23404a;
             --font-display: 'Space Grotesk', sans-serif;
             --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
             --font-body: 'Inter', sans-serif;
@@ -165,7 +165,7 @@
             border: 1px solid var(--border);
             padding: 0.05rem 0.35rem;
             border-radius: 3px;
-            color: #c9d1d9;
+            color: #cfd7d1;
         }
         .code-block {
             background: var(--bg-code);
@@ -178,7 +178,7 @@
             font-family: var(--font-mono);
             font-size: 0.75rem;
             color: var(--accent);
-            background: rgba(123, 97, 255, 0.08);
+            background: rgba(144,123,195,0.08);
             padding: 0.4rem 1rem;
             border-bottom: 1px solid var(--border);
         }
@@ -187,19 +187,19 @@
             font-family: var(--font-mono);
             font-size: 0.85rem;
             line-height: 1.6;
-            color: #c9d1d9;
+            color: #cfd7d1;
             background: transparent;
             border: none;
             padding: 0;
         }
-        .kw { color: #ff7b72; }
-        .fn { color: #d2a8ff; }
-        .str { color: #a5d6ff; }
-        .cm { color: #8b949e; font-style: italic; }
-        .num { color: #79c0ff; }
-        .type { color: #ffa657; }
-        .dir { color: #ff7b72; }
-        .mac { color: #ffa657; }
+        .kw { color: #f48f70; }
+        .fn { color: #d4c0ea; }
+        .str { color: #c3dbea; }
+        .cm { color: #8ca5a9; font-style: italic; }
+        .num { color: #a8cee8; }
+        .type { color: #eac48b; }
+        .dir { color: #f48f70; }
+        .mac { color: #eac48b; }
         .table-wrap {
             overflow-x: auto;
             margin: 1.25rem 0;
@@ -223,7 +223,7 @@
             color: var(--text-secondary);
         }
         tr:last-child td { border-bottom: none; }
-        tr:nth-child(even) td { background: rgba(13, 17, 23, 0.5); }
+        tr:nth-child(even) td { background: rgba(19,39,47,0.5); }
         .diagram-flow {
             display: flex;
             flex-wrap: wrap;
@@ -247,7 +247,7 @@
             text-align: center;
             white-space: nowrap;
         }
-        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .diagram-box.accent { border-color: var(--accent); color: var(--accent); background: rgba(144,123,195,0.08); }
         .diagram-box.dim { color: var(--text-secondary); border-color: var(--border); }
         .diagram-arrow { color: var(--accent); font-size: 1.3rem; font-weight: 700; }
         .diagram-vertical {
@@ -290,7 +290,7 @@
             border: 1px solid var(--border);
             color: var(--text-secondary);
         }
-        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(123, 97, 255, 0.08); }
+        .hierarchy-item.accent { border-color: var(--accent); color: var(--accent); background: rgba(144,123,195,0.08); }
         .diagram-grid {
             display: grid;
             gap: 0.75rem;
@@ -405,8 +405,8 @@
             margin-left: 0.3rem;
         }
         .badge.ok    { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
-        .badge.warn  { border-color: #ffa657; color: #ffa657; background: rgba(255,166,87,0.08); }
-        .badge.bad   { border-color: #ff7b72; color: #ff7b72; background: rgba(255,123,114,0.08); }
+        .badge.warn  { border-color: #eac48b; color: #eac48b; background: rgba(234,196,139,0.08); }
+        .badge.bad   { border-color: #f48f70; color: #f48f70; background: rgba(244,143,112,0.08); }
         @media (max-width: 640px) {
             .slide { padding: 3rem 1rem; min-height: auto; }
             .slide-number { font-size: 3rem; top: 1.5rem; right: 1rem; }
@@ -494,15 +494,15 @@
 <p>Qwen3-VL spans 2B to 235B-A22B, dense and MoE, each in Instruct and Thinking editions, with a native <strong>256K context covering text and interleaved multimodal input alike</strong>. Three named architectural changes distinguish it from Qwen2.5-VL.</p>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 280" width="720" height="280" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="p8v-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<defs><marker id="p8v-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#907bc3"/></marker></defs>
 <style>
-.p8v-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p8v-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
-.p8v-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
-.p8v-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p8v-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p8v-ar{stroke:#7B61FF;stroke-width:1.3;fill:none;marker-end:url(#p8v-a);}
-.p8v-vit{fill:#0d1117;stroke:#30363d;stroke-width:0.8;}
+.p8v-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p8v-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
+.p8v-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p8v-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p8v-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p8v-ar{stroke:#907bc3;stroke-width:1.3;fill:none;marker-end:url(#p8v-a);}
+.p8v-vit{fill:#13272f;stroke:#2f4d57;stroke-width:0.8;}
 </style>
 <text x="8" y="16" class="p8v-h">DeepStack &mdash; fuse features from several ViT depths, not just the last</text>
 
@@ -526,7 +526,7 @@
 <text x="576" y="90" class="p8v-s">small glyphs and thin lines survive &mdash;</text>
 <text x="582" y="104" class="p8v-s">which is exactly what dense OCR and charts need</text>
 
-<line x1="8" y1="140" x2="712" y2="140" stroke="#21262d" stroke-width="1"/>
+<line x1="8" y1="140" x2="712" y2="140" stroke="#23404a" stroke-width="1"/>
 
 <text x="8" y="162" class="p8v-h">Interleaved-MRoPE &mdash; full-frequency allocation across time, width and height</text>
 <text x="8" y="182" class="p8v-s" style="text-anchor:start">Qwen2-VL's M-RoPE split the rotary dimensions into contiguous blocks: one range for time, one for height, one for</text>
@@ -582,12 +582,12 @@
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 210" width="720" height="210" xmlns="http://www.w3.org/2000/svg">
 <style>
-.p8m-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p8m-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
-.p8m-bar{fill:#7B61FF;}
-.p8m-bar2{fill:#B87C22;}
-.p8m-bar3{fill:#1F9E8E;}
-.p8m-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9px;}
+.p8m-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p8m-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p8m-bar{fill:#907bc3;}
+.p8m-bar2{fill:#ae9361;}
+.p8m-bar3{fill:#74a096;}
+.p8m-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9px;}
 </style>
 <text x="8" y="16" class="p8m-h">Where the HBM goes on a VLM server &mdash; and which knob fixes each</text>
 
@@ -604,10 +604,10 @@
 <text x="412" y="115" class="p8m-s">--limit-mm-per-prompt, image resolution caps</text>
 
 <text x="8" y="148" class="p8m-l">activation / batching</text>
-<rect x="180" y="136" width="130" height="18" rx="3" fill="#30363d"/>
+<rect x="180" y="136" width="130" height="18" rx="3" fill="#2f4d57"/>
 <text x="322" y="149" class="p8m-s">--max-num-batched-tokens, --gpu-memory-utilization</text>
 
-<line x1="8" y1="170" x2="712" y2="170" stroke="#21262d" stroke-width="1"/>
+<line x1="8" y1="170" x2="712" y2="170" stroke="#23404a" stroke-width="1"/>
 <text x="8" y="190" class="p8m-s">A single high-resolution image can expand to thousands of visual tokens. Ten in one request is a 40K prompt you never wrote.</text>
 <text x="8" y="204" class="p8m-s">Set --limit-mm-per-prompt on every VLM endpoint. It is the difference between a bounded service and one a single user can crash.</text>
 </svg>
@@ -668,15 +668,15 @@ vllm serve Qwen/Qwen3-VL-8B-Instruct --limit-mm-per-prompt <span class="str">'{"
 <p>Released June 2025 in 0.6B, 4B and 8B, built on Qwen3 bases. The 8B embedding model took the top position on the MTEB multilingual leaderboard on release with a score of 70.58 &mdash; and the pair are designed to be used together, as the two stages of a retrieval cascade.</p>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 292" width="720" height="292" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="p8e-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<defs><marker id="p8e-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#907bc3"/></marker></defs>
 <style>
-.p8e-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p8e-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
-.p8e-bt{fill:rgba(31,158,142,0.10);stroke:#1F9E8E;stroke-width:1.2;}
-.p8e-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
-.p8e-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p8e-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p8e-ar{stroke:#7B61FF;stroke-width:1.3;fill:none;marker-end:url(#p8e-a);}
+.p8e-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p8e-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
+.p8e-bt{fill:rgba(116,160,150,0.10);stroke:#74a096;stroke-width:1.2;}
+.p8e-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p8e-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p8e-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p8e-ar{stroke:#907bc3;stroke-width:1.3;fill:none;marker-end:url(#p8e-a);}
 </style>
 <text x="8" y="16" class="p8e-h">The cascade &mdash; a bi-encoder narrows, a cross-encoder decides</text>
 
@@ -704,7 +704,7 @@ vllm serve Qwen/Qwen3-VL-8B-Instruct --limit-mm-per-prompt <span class="str">'{"
 <rect x="634" y="58" width="74" height="60" rx="5" class="p8e-b"/>
 <text x="671" y="84" class="p8e-l">context</text><text x="671" y="102" class="p8e-s">for the LLM</text>
 
-<line x1="8" y1="170" x2="712" y2="170" stroke="#21262d" stroke-width="1"/>
+<line x1="8" y1="170" x2="712" y2="170" stroke="#23404a" stroke-width="1"/>
 <text x="8" y="190" class="p8e-h">Two features worth exploiting</text>
 <text x="8" y="208" class="p8e-s" style="text-anchor:start">&bull; Instruction awareness &mdash; prepend a task description to the query and the embeddings shift accordingly.</text>
 <text x="8" y="222" class="p8e-s" style="text-anchor:start">&nbsp;&nbsp;One model therefore serves search, classification, clustering and semantic similarity.</text>
@@ -741,13 +741,13 @@ vllm serve Qwen/Qwen3-Reranker-4B --task score</code></pre>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 212" width="720" height="212" xmlns="http://www.w3.org/2000/svg">
 <style>
-.p8g-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p8g-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
-.p8g-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p8g-ok{fill:rgba(31,158,142,0.16);stroke:#1F9E8E;stroke-width:1;}
-.p8g-mid{fill:rgba(184,124,34,0.16);stroke:#B87C22;stroke-width:1;}
-.p8g-bad{fill:rgba(209,77,72,0.16);stroke:#D14D48;stroke-width:1;}
-.p8g-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p8g-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p8g-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p8g-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p8g-ok{fill:rgba(116,160,150,0.16);stroke:#74a096;stroke-width:1;}
+.p8g-mid{fill:rgba(174,147,97,0.16);stroke:#ae9361;stroke-width:1;}
+.p8g-bad{fill:rgba(193,95,64,0.16);stroke:#c15f40;stroke-width:1;}
+.p8g-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
 </style>
 <text x="8" y="16" class="p8g-h">Three tiers, not two &mdash; the design decision that makes it usable</text>
 
@@ -812,15 +812,15 @@ vllm serve Qwen/Qwen3-Reranker-4B --task score</code></pre>
 <p>A realistic production stack uses four or five Qwen models of very different sizes, each doing the job it is cheapest at. Here is a document-QA system with voice input, written out end to end.</p>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 320" width="720" height="320" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="p8c-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7B61FF"/></marker></defs>
+<defs><marker id="p8c-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#907bc3"/></marker></defs>
 <style>
-.p8c-b{fill:#161b22;stroke:#21262d;stroke-width:1;}
-.p8c-ba{fill:rgba(123,97,255,0.10);stroke:#7B61FF;stroke-width:1.2;}
-.p8c-bg{fill:rgba(31,158,142,0.10);stroke:#1F9E8E;stroke-width:1.2;}
-.p8c-l{fill:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:9px;text-anchor:middle;}
-.p8c-s{fill:#8b949e;font-family:'JetBrains Mono',monospace;font-size:8px;text-anchor:middle;}
-.p8c-h{fill:#7B61FF;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p8c-ar{stroke:#7B61FF;stroke-width:1.3;fill:none;marker-end:url(#p8c-a);}
+.p8c-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
+.p8c-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
+.p8c-bg{fill:rgba(116,160,150,0.10);stroke:#74a096;stroke-width:1.2;}
+.p8c-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9px;text-anchor:middle;}
+.p8c-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8px;text-anchor:middle;}
+.p8c-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p8c-ar{stroke:#907bc3;stroke-width:1.3;fill:none;marker-end:url(#p8c-a);}
 </style>
 <text x="8" y="16" class="p8c-h">Ingestion &mdash; offline, run once per document</text>
 <rect x="12" y="26" width="130" height="46" rx="5" class="p8c-b"/><text x="77" y="46" class="p8c-l">PDF / scan</text><text x="77" y="62" class="p8c-s">arrives</text>
