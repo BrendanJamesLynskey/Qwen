@@ -6,7 +6,7 @@
     <title>Qwen 08 &mdash; Multimodal &amp; Specialists</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=Source+Code+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-primary: #0f2027;
@@ -18,9 +18,9 @@
             --accent-dim: #907bc340;
             --accent-glow: #907bc330;
             --border: #23404a;
-            --font-display: 'Space Grotesk', sans-serif;
-            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-            --font-body: 'Inter', sans-serif;
+            --font-display: 'Sora', sans-serif;
+            --font-mono: 'Source Code Pro', 'Source Code Pro', monospace;
+            --font-body: 'Manrope', sans-serif;
             --max-width: 900px;
         }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -498,9 +498,9 @@
 <style>
 .p8v-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
 .p8v-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
-.p8v-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
-.p8v-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p8v-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p8v-l{fill:#ede7dd;font-family:'Source Code Pro',monospace;font-size:9.5px;text-anchor:middle;}
+.p8v-s{fill:#8ca5a9;font-family:'Source Code Pro',monospace;font-size:8.5px;text-anchor:middle;}
+.p8v-h{fill:#907bc3;font-family:'Sora',sans-serif;font-weight:600;font-size:11px;}
 .p8v-ar{stroke:#907bc3;stroke-width:1.3;fill:none;marker-end:url(#p8v-a);}
 .p8v-vit{fill:#13272f;stroke:#2f4d57;stroke-width:0.8;}
 </style>
@@ -582,12 +582,12 @@
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 210" width="720" height="210" xmlns="http://www.w3.org/2000/svg">
 <style>
-.p8m-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p8m-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p8m-h{fill:#907bc3;font-family:'Sora',sans-serif;font-weight:600;font-size:11px;}
+.p8m-s{fill:#8ca5a9;font-family:'Source Code Pro',monospace;font-size:8.5px;}
 .p8m-bar{fill:#907bc3;}
 .p8m-bar2{fill:#ae9361;}
 .p8m-bar3{fill:#74a096;}
-.p8m-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9px;}
+.p8m-l{fill:#ede7dd;font-family:'Source Code Pro',monospace;font-size:9px;}
 </style>
 <text x="8" y="16" class="p8m-h">Where the HBM goes on a VLM server &mdash; and which knob fixes each</text>
 
@@ -673,9 +673,9 @@ vllm serve Qwen/Qwen3-VL-8B-Instruct --limit-mm-per-prompt <span class="str">'{"
 .p8e-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
 .p8e-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
 .p8e-bt{fill:rgba(116,160,150,0.10);stroke:#74a096;stroke-width:1.2;}
-.p8e-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
-.p8e-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p8e-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p8e-l{fill:#ede7dd;font-family:'Source Code Pro',monospace;font-size:9.5px;text-anchor:middle;}
+.p8e-s{fill:#8ca5a9;font-family:'Source Code Pro',monospace;font-size:8.5px;text-anchor:middle;}
+.p8e-h{fill:#907bc3;font-family:'Sora',sans-serif;font-weight:600;font-size:11px;}
 .p8e-ar{stroke:#907bc3;stroke-width:1.3;fill:none;marker-end:url(#p8e-a);}
 </style>
 <text x="8" y="16" class="p8e-h">The cascade &mdash; a bi-encoder narrows, a cross-encoder decides</text>
@@ -741,13 +741,13 @@ vllm serve Qwen/Qwen3-Reranker-4B --task score</code></pre>
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 212" width="720" height="212" xmlns="http://www.w3.org/2000/svg">
 <style>
-.p8g-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p8g-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p8g-h{fill:#907bc3;font-family:'Sora',sans-serif;font-weight:600;font-size:11px;}
+.p8g-s{fill:#8ca5a9;font-family:'Source Code Pro',monospace;font-size:8.5px;}
 .p8g-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
 .p8g-ok{fill:rgba(116,160,150,0.16);stroke:#74a096;stroke-width:1;}
 .p8g-mid{fill:rgba(174,147,97,0.16);stroke:#ae9361;stroke-width:1;}
 .p8g-bad{fill:rgba(193,95,64,0.16);stroke:#c15f40;stroke-width:1;}
-.p8g-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
+.p8g-l{fill:#ede7dd;font-family:'Source Code Pro',monospace;font-size:9.5px;text-anchor:middle;}
 </style>
 <text x="8" y="16" class="p8g-h">Three tiers, not two &mdash; the design decision that makes it usable</text>
 
@@ -817,9 +817,9 @@ vllm serve Qwen/Qwen3-Reranker-4B --task score</code></pre>
 .p8c-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
 .p8c-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
 .p8c-bg{fill:rgba(116,160,150,0.10);stroke:#74a096;stroke-width:1.2;}
-.p8c-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9px;text-anchor:middle;}
-.p8c-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8px;text-anchor:middle;}
-.p8c-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p8c-l{fill:#ede7dd;font-family:'Source Code Pro',monospace;font-size:9px;text-anchor:middle;}
+.p8c-s{fill:#8ca5a9;font-family:'Source Code Pro',monospace;font-size:8px;text-anchor:middle;}
+.p8c-h{fill:#907bc3;font-family:'Sora',sans-serif;font-weight:600;font-size:11px;}
 .p8c-ar{stroke:#907bc3;stroke-width:1.3;fill:none;marker-end:url(#p8c-a);}
 </style>
 <text x="8" y="16" class="p8c-h">Ingestion &mdash; offline, run once per document</text>

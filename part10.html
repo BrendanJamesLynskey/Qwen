@@ -6,7 +6,7 @@
     <title>Qwen 10 &mdash; Qwen3.6 to Qwen3.8</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=Source+Code+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-primary: #0f2027;
@@ -18,9 +18,9 @@
             --accent-dim: #907bc340;
             --accent-glow: #907bc330;
             --border: #23404a;
-            --font-display: 'Space Grotesk', sans-serif;
-            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-            --font-body: 'Inter', sans-serif;
+            --font-display: 'Sora', sans-serif;
+            --font-mono: 'Source Code Pro', 'Source Code Pro', monospace;
+            --font-body: 'Manrope', sans-serif;
             --max-width: 900px;
         }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -496,10 +496,10 @@
 .p10a-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
 .p10a-dn{fill:rgba(116,160,150,0.14);stroke:#74a096;stroke-width:1;}
 .p10a-at{fill:rgba(144,123,195,0.22);stroke:#907bc3;stroke-width:1.2;}
-.p10a-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
-.p10a-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p10a-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p10a-v{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;text-anchor:middle;}
+.p10a-l{fill:#ede7dd;font-family:'Source Code Pro',monospace;font-size:9.5px;text-anchor:middle;}
+.p10a-s{fill:#8ca5a9;font-family:'Source Code Pro',monospace;font-size:8.5px;text-anchor:middle;}
+.p10a-h{fill:#907bc3;font-family:'Sora',sans-serif;font-weight:600;font-size:11px;}
+.p10a-v{fill:#907bc3;font-family:'Sora',sans-serif;font-weight:700;font-size:15px;text-anchor:middle;}
 </style>
 <text x="8" y="16" class="p10a-h">10 &times; (3 &times; (Gated DeltaNet &rarr; MoE) &rarr; 1 &times; (Gated Attention &rarr; MoE))  =  40 layers</text>
 
@@ -552,16 +552,16 @@
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 300" width="720" height="300" xmlns="http://www.w3.org/2000/svg">
 <style>
-.p10c-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p10c-h{fill:#907bc3;font-family:'Sora',sans-serif;font-weight:600;font-size:11px;}
 .p10c-ax{stroke:#2f4d57;stroke-width:1;}
 .p10c-gr{stroke:#23404a;stroke-width:1;}
 .p10c-a{fill:#907bc3;}
 .p10c-b{fill:#74a096;}
-.p10c-cat{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;}
-.p10c-val{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;}
-.p10c-tick{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p10c-leg{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9px;}
-.p10c-note{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p10c-cat{fill:#ede7dd;font-family:'Source Code Pro',monospace;font-size:9.5px;}
+.p10c-val{fill:#ede7dd;font-family:'Source Code Pro',monospace;font-size:9.5px;font-weight:700;}
+.p10c-tick{fill:#8ca5a9;font-family:'Source Code Pro',monospace;font-size:8.5px;text-anchor:middle;}
+.p10c-leg{fill:#ede7dd;font-family:'Source Code Pro',monospace;font-size:9px;}
+.p10c-note{fill:#8ca5a9;font-family:'Source Code Pro',monospace;font-size:8.5px;}
 </style>
 <rect x="8" y="8" width="12" height="12" rx="2" class="p10c-a"/><text x="26" y="18" class="p10c-leg">Qwen3.6-27B (dense, 27B active)</text>
 <rect x="270" y="8" width="12" height="12" rx="2" class="p10c-b"/><text x="288" y="18" class="p10c-leg">Qwen3.6-35B-A3B (MoE, 3B active)</text>
@@ -617,9 +617,9 @@
 .p10t-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
 .p10t-th{fill:rgba(144,123,195,0.16);stroke:#907bc3;stroke-width:1;}
 .p10t-gone{fill:#13272f;stroke:#2f4d57;stroke-width:1;stroke-dasharray:3,3;}
-.p10t-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9px;text-anchor:middle;}
-.p10t-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
-.p10t-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p10t-l{fill:#ede7dd;font-family:'Source Code Pro',monospace;font-size:9px;text-anchor:middle;}
+.p10t-s{fill:#8ca5a9;font-family:'Source Code Pro',monospace;font-size:8.5px;}
+.p10t-h{fill:#907bc3;font-family:'Sora',sans-serif;font-weight:600;font-size:11px;}
 </style>
 <text x="8" y="16" class="p10t-h">Default behaviour &mdash; the trace is discarded once the turn ends</text>
 <rect x="12" y="26" width="80" height="24" rx="3" class="p10t-b"/><text x="52" y="42" class="p10t-l">turn 1 ask</text>
@@ -691,10 +691,10 @@
 <style>
 .p10x-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
 .p10x-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
-.p10x-v{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px;text-anchor:middle;}
-.p10x-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
-.p10x-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p10x-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p10x-v{fill:#907bc3;font-family:'Sora',sans-serif;font-weight:700;font-size:22px;text-anchor:middle;}
+.p10x-l{fill:#ede7dd;font-family:'Source Code Pro',monospace;font-size:9.5px;text-anchor:middle;}
+.p10x-s{fill:#8ca5a9;font-family:'Source Code Pro',monospace;font-size:8.5px;text-anchor:middle;}
+.p10x-h{fill:#907bc3;font-family:'Sora',sans-serif;font-weight:600;font-size:11px;}
 </style>
 <text x="8" y="16" class="p10x-h">Qwen3.8-Max &mdash; as announced</text>
 

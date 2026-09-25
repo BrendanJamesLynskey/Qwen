@@ -6,7 +6,7 @@
     <title>Qwen 11 &mdash; Serving Qwen with vLLM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=Source+Code+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-primary: #0f2027;
@@ -18,9 +18,9 @@
             --accent-dim: #907bc340;
             --accent-glow: #907bc330;
             --border: #23404a;
-            --font-display: 'Space Grotesk', sans-serif;
-            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-            --font-body: 'Inter', sans-serif;
+            --font-display: 'Sora', sans-serif;
+            --font-mono: 'Source Code Pro', 'Source Code Pro', monospace;
+            --font-body: 'Manrope', sans-serif;
             --max-width: 900px;
         }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -529,9 +529,9 @@ Qwen3.5 / 3.6  &rarr; &ge; 0.17.0</code></pre>
 .p11p-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
 .p11p-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
 .p11p-bt{fill:rgba(116,160,150,0.10);stroke:#74a096;stroke-width:1.2;}
-.p11p-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;}
-.p11p-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
-.p11p-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
+.p11p-l{fill:#ede7dd;font-family:'Source Code Pro',monospace;font-size:9.5px;text-anchor:middle;}
+.p11p-s{fill:#8ca5a9;font-family:'Source Code Pro',monospace;font-size:8.5px;text-anchor:middle;}
+.p11p-h{fill:#907bc3;font-family:'Sora',sans-serif;font-weight:600;font-size:11px;}
 .p11p-ar{stroke:#907bc3;stroke-width:1.3;fill:none;marker-end:url(#p11p-a);}
 </style>
 <text x="8" y="16" class="p11p-h">Raw tokens &rarr; two parsers &rarr; three response fields</text>
@@ -633,10 +633,10 @@ vllm serve Qwen/Qwen3-Coder-480B-A35B-Instruct \
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 294" width="720" height="294" xmlns="http://www.w3.org/2000/svg">
 <style>
-.p11m-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p11m-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
-.p11m-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:9.5px;}
-.p11m-eq{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:11px;}
+.p11m-h{fill:#907bc3;font-family:'Sora',sans-serif;font-weight:600;font-size:11px;}
+.p11m-s{fill:#8ca5a9;font-family:'Source Code Pro',monospace;font-size:8.5px;}
+.p11m-l{fill:#ede7dd;font-family:'Source Code Pro',monospace;font-size:9.5px;}
+.p11m-eq{fill:#ede7dd;font-family:'Source Code Pro',monospace;font-size:11px;}
 .p11m-b{fill:#182f38;stroke:#23404a;stroke-width:1;}
 .p11m-ba{fill:rgba(144,123,195,0.10);stroke:#907bc3;stroke-width:1.2;}
 </style>
@@ -695,11 +695,11 @@ vllm serve Qwen/Qwen3-Coder-480B-A35B-Instruct \
 <div class="canvas-wrap">
 <svg viewBox="0 0 720 200" width="720" height="200" xmlns="http://www.w3.org/2000/svg">
 <style>
-.p11l-h{fill:#907bc3;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;}
-.p11l-s{fill:#8ca5a9;font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.p11l-h{fill:#907bc3;font-family:'Sora',sans-serif;font-weight:600;font-size:11px;}
+.p11l-s{fill:#8ca5a9;font-family:'Source Code Pro',monospace;font-size:8.5px;}
 .p11l-hit{fill:rgba(116,160,150,0.30);stroke:#74a096;stroke-width:1;}
 .p11l-new{fill:rgba(144,123,195,0.25);stroke:#907bc3;stroke-width:1;}
-.p11l-l{fill:#ede7dd;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-anchor:middle;}
+.p11l-l{fill:#ede7dd;font-family:'Source Code Pro',monospace;font-size:8.5px;text-anchor:middle;}
 </style>
 <text x="8" y="16" class="p11l-h">Why prefix caching is the highest-value flag for agentic Qwen workloads</text>
 
