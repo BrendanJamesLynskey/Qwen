@@ -1,3 +1,7 @@
+<!-- portfolio-strip:start (brief 40) -->
+<sub>**Brendan Lynskey** · [Portfolio home](https://brendanjameslynskey.github.io/) · [Interactive sites](https://brendanjameslynskey.github.io/#sites)</sub>
+<!-- portfolio-strip:end -->
+
 # Qwen &mdash; Presentation Series
 
 A comprehensive, high-quality, twelve-part visual exploration of **Qwen**, Alibaba's open-weight model family &mdash; from the 7B research release of August 2023 to the 2.4-trillion-parameter Qwen3.8-Max three years later. Every generation is covered, and every model within each generation. Presented for engineers: each deck answers *what the model is*, *how the mechanism works*, *what it is good and bad at*, *which options and flags matter*, and *how well it is served by vLLM* &mdash; with hand-drawn SVG diagrams throughout.
